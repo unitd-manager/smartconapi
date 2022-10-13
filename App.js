@@ -28,11 +28,13 @@ const project = require('./routes/project.js');
 const tender = require('./routes/tender.js');
 const Arouter = require('./routes/attachment.js');
 const employee = require('./routes/employee.js');
+const booking = require('./routes/booking.js');
 
 app.use('/project', project);
 app.use('/tender', tender);
 app.use('/attachment', Arouter);
 app.use('/employee', employee);
+app.use('/booking', booking);
 
 app.use(fileUpload({
     createParentPath: true
