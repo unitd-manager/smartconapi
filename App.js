@@ -35,7 +35,7 @@ const supplier = require('./routes/supplier.js');
 const subcon = require('./routes/subcon.js');
 const tabcostingsummary = require('./routes/tabcostingsummary.js');
 const quotation = require('./routes/quotation.js');
-
+const invoice = require('./routes/invoice.js');
 
 app.use('/project', project);
 app.use('/tender', tender);
@@ -48,7 +48,7 @@ app.use('/supplier', supplier);
 app.use('/subcon', subcon);
 app.use('/tabcostingsummary', tabcostingsummary);
 app.use('/quotation', quotation);
-
+app.use('/invoice', invoice);
 
 app.use(fileUpload({
     createParentPath: true
