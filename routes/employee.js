@@ -55,6 +55,25 @@ app.get('/getCostingSummary', (req, res, next) => {
     }
   );
 });
+app.get('/getTabEmployee', (req, res, next) => {
+  db.query("SELECT a.employee_id ,a.first_name AS title ,'' ,a.status FROM employee a LEFT JOIN (opportunity_employee pe) ON (pe.employee_id = a.employee_id) WHERE pe.opportunity_id != '' ORDER BY title",
+    (err, result) => {
+       
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');
