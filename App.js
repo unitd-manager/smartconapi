@@ -33,8 +33,9 @@ const timesheet = require('./routes/timesheet.js');
 const product = require('./routes/product.js');
 const supplier = require('./routes/supplier.js');
 const subcon = require('./routes/subcon.js');
-const invoice = require('./routes/invoice.js');
 const tabcostingsummary = require('./routes/tabcostingsummary.js');
+const quotation = require('./routes/quotation.js');
+
 
 app.use('/project', project);
 app.use('/tender', tender);
@@ -45,8 +46,9 @@ app.use('/timesheet', timesheet);
 app.use('/product', product);
 app.use('/supplier', supplier);
 app.use('/subcon', subcon);
-app.use('/invoice', invoice);
 app.use('/tabcostingsummary', tabcostingsummary);
+app.use('/quotation', quotation);
+
 
 app.use(fileUpload({
     createParentPath: true
