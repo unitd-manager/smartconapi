@@ -37,6 +37,27 @@ app.get('/getSupplier', (req, res, next) => {
   );
 });
 
+app.get('/getTabPurchaseOrderLinked', (req, res, next) => {
+  db.query(`SELECT p.purchase_order_id 
+            FROM purchase_order p 
+            WHERE p.company_id_supplier != '' AND (p.payment_status != 'Cancelled' OR p.payment_status IS NULL)`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+        }
+ 
+    }
+  );
+}); 
+
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');
