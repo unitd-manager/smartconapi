@@ -37,6 +37,27 @@ app.get('/getSubcon', (req, res, next) => {
   );
 });
 
+app.get('/getTabWorkOrder', (req, res, next) => {
+  db.query(`SELECT p.sub_con_work_order_id FROM sub_con_work_order p 
+            WHERE p.sub_con_id != '' AND (p.status != 'Cancelled' OR p.status IS NULL)`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+        }
+ 
+    }
+  );
+}); 
+
+
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');
