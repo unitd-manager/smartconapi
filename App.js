@@ -39,6 +39,8 @@ const invoice = require('./routes/invoice.js');
 const finance = require('./routes/finance.js');
 const materialpurchased = require('./routes/materialpurchased.js');
 const purchaseorder = require('./routes/purchaseorder.js');
+const tabsubconworkorder = require('./routes/tabsubconworkorder.js');
+
 
 
 
@@ -57,6 +59,8 @@ app.use('/invoice', invoice);
 app.use('/finance', finance);
 app.use('/materialpurchased', materialpurchased);
 app.use('/purchaseorder', purchaseorder);
+app.use('/tabsubconworkorder', tabsubconworkorder);
+
 
 
 app.use(fileUpload({
