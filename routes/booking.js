@@ -37,6 +37,25 @@ app.get('/getBooking', (req, res, next) => {
   );
 });
 
+app.get('/getTabServiceLink', (req, res, next) => {
+  db.query(`SELECT * FROM booking_service WHERE booking_id = '' ORDER BY booking_service_id`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+        }
+ 
+    }
+  );
+}); 
+
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');
