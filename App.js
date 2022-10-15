@@ -37,7 +37,7 @@ const tabcostingsummary = require('./routes/tabcostingsummary.js');
 const quotation = require('./routes/quotation.js');
 const invoice = require('./routes/invoice.js');
 const finance = require('./routes/finance.js');
-
+const tabsubconworkorder = require('./routes/tabsubconworkorder.js');
 
 app.use('/project', project);
 app.use('/tender', tender);
@@ -52,6 +52,7 @@ app.use('/tabcostingsummary', tabcostingsummary);
 app.use('/quotation', quotation);
 app.use('/invoice', invoice);
 app.use('/finance', finance);
+app.use('/tabsubconworkorder', tabsubconworkorder);
 
 app.use(fileUpload({
     createParentPath: true
