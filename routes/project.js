@@ -55,6 +55,67 @@ app.get('/getCostingSummary', (req, res, next) => {
     }
   );
 });
+
+app.get('/getTabQuote', (req, res, next) => {
+  db.query(`SELECT q.* FROM quote q  LEFT JOIN (project p) ON (p.project_id = q.project_id) WHERE p.project_id != '' ORDER BY q.quote_code DESC`,
+    (err, result) => {
+       
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
+app.get('/getTabQuoteLineItems', (req, res, next) => {
+  db.query(` SELECT qt.* FROM quote_items qt WHERE qt.opportunity_id != '' AND qt.quote_id != ''`,
+    (err, result) => {
+       
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
+
+app.get('/getTabCostingSummary', (req, res, next) => {
+  db.query("SELECT c.* FROM costing_summary c WHERE c.project_id != '' ORDER BY c.costing_summary_id DESC",
+    (err, result) => {
+       
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');
