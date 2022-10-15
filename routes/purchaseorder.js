@@ -17,52 +17,11 @@ app.use(fileUpload({
     createParentPath: true
 }));
 
-<<<<<<< HEAD
-app.get('/getTabClaimPaymentPortal', (req, res, next) => {
-  db.query(`SELECT cp.*
-            ,SUM(amount) AS claim_amount
-            ,count(claim_payment_id) AS countRec 
-            FROM claim_payment cp 
-            WHERE cp.project_id != '' AND cp.project_claim_id != '' GROUP BY cp.claim_seq`,
-    (err, result) => {
-     
-=======
 
 
-app.get('/WorkOrderPortal', (req, res, next) => {
-  db.query(`SELECT q.*,s.company_name FROM sub_con_work_order q LEFT JOIN (project p) ON (p.project_id = q.project_id) LEFT JOIN (sub_con s) ON (s.sub_con_id = q.sub_con_id) WHERE p.project_id !=''`,
-    (err, result) => {
-       
->>>>>>> d8ac22e80807875a34262911ba807add4c386651
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            });
-<<<<<<< HEAD
-=======
-
->>>>>>> d8ac22e80807875a34262911ba807add4c386651
-        }
- 
-    }
-  );
-<<<<<<< HEAD
-}); 
-
-
-
-=======
-});
-
-
-app.get('/PaymentHistoryPortal', (req, res, next) => {
-  db.query(`SELECT sr.amount,sr.creation_date AS date,sr.mode_of_payment,sr.status ,sr.sub_con_payments_id,sr.sub_con_id,srh.sub_con_work_order_id,sc.company_name FROM sub_con_payments_history srh LEFT JOIN (sub_con_payments sr) ON (sr.sub_con_payments_id = srh.sub_con_payments_id) LEFT JOIN (sub_con sc) ON (sc.sub_con_id = sr.sub_con_id) WHERE sr.project_id != '' AND sr.status != 'Cancelled'
-  ORDER BY srh.sub_con_payments_history_id`,
+app.get('/TabPurchaseOrder', (req, res, next) => {
+  db.query(`SELECT DISTINCT 
+  po.company_id_supplier,s.company_name,po.purchase_order_id FROM purchase_order po LEFT JOIN (supplier s) ON (po.company_id_supplier = s.supplier_id) WHERE po.project_id != '' ORDER BY po.purchase_order_id ASC`,
     (err, result) => {
        
       if (result.length == 0) {
@@ -81,9 +40,8 @@ app.get('/PaymentHistoryPortal', (req, res, next) => {
   );
 });
 
-app.get('/TabClaimPortal', (req, res, next) => {
-  db.query(`SELECT pc.*,c.company_name FROM project_claim pc LEFT JOIN (project p) ON (p.project_id = pc.project_id) LEFT JOIN (company c) ON (c.company_id = pc.client_id)
-  WHERE pc.project_id != ''`,
+app.get('/TabPurchaseOrderLineItem', (req, res, next) => {
+  db.query(`SELECT po.* FROM po_product po WHERE po.purchase_order_id != '' ORDER BY po.item_title ASC`,
     (err, result) => {
        
       if (result.length == 0) {
@@ -102,9 +60,8 @@ app.get('/TabClaimPortal', (req, res, next) => {
   );
 });
 
-app.get('/TabClaimPortalLineItem', (req, res, next) => {
-  db.query(`SELECT ct.* FROM claim_line_items ct LEFT JOIN project_claim pc ON (pc.project_claim_id = ct.project_claim_id) WHERE pc.project_id   != '' AND   ct.project_claim_id != ''
-  ORDER BY ct.claim_line_items_id ASC`,
+app.get('/TabMaterialUsedPortal', (req, res, next) => {
+  db.query(`SELECT pm.*,p.product_type FROM project_materials pm LEFT JOIN (product p) ON (p.product_id = pm.product_id) WHERE pm.project_id != '' ORDER BY pm.project_materials_id ASC`,
     (err, result) => {
        
       if (result.length == 0) {
@@ -122,7 +79,49 @@ app.get('/TabClaimPortalLineItem', (req, res, next) => {
     }
   );
 });
->>>>>>> d8ac22e80807875a34262911ba807add4c386651
+
+app.get('/TabMaterialTransferred', (req, res, next) => {
+  db.query(`SELECT st.*,p.title,p.price FROM stock_transfer st LEFT JOIN (product p) ON (p.product_id = st.product_id) WHERE st.to_project_id != '' ORDER BY st.creation_date ASC
+
+  `,
+    (err, result) => {
+       
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
+app.get('/TabDeliveryOrder', (req, res, next) => {
+db.query(`SELECT do.* FROM delivery_order do WHERE project_id != ''
+  `,
+    (err, result) => {
+       
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
