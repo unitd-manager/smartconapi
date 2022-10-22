@@ -54,12 +54,72 @@ app.get('/getTenders', (req, res, next) => {
   );
 });
 
-app.get('/getPortalDisplay', (req, res, next) => {
+app.get('/getTabCostingSummary', (req, res, next) => {
   db.query(`SELECT 
-  c.* 
+  c.total_material_price,c.transport_charges,c.total_labour_charges,c.salesman_commission,c.finance_charges,c.office_overheads,c.other_charges,c.total_cost
   FROM opportunity_costing_summary c 
   WHERE c.opportunity_id != '' 
   ORDER BY c.opportunity_costing_summary_id DESC`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+        }
+ 
+    }
+  );
+});
+
+
+app.get('/getTabCostingSummaryForm', (req, res, next) => {
+  db.query(`SELECT * FROM opportunity_costing_summary_history WHERE opportunity_costing_summary_id != ''`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+        }
+ 
+    }
+  );
+});
+
+app.get('/getTabquote', (req, res, next) => {
+  db.query(` SELECT q.quote_date,q.quote_code,q.quote_status,q.project_location,q.project_reference,q.payment_method,q.revision,q.intro_drawing_quote FROM quote q  WHERE q.opportunity_id != ''  ORDER BY quote_code DESC
+  `,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+        }
+ 
+    }
+  );
+});
+
+
+app.get('/getTabQuoteLine', (req, res, next) => {
+  db.query(`SELECT qt.title,qt.description,qt.quantity,qt.unit,qt.unit_price,qt.amount FROM quote_items qt WHERE qt.opportunity_id != '' AND qt.quote_id != ''`,
     (err, result) => {
      
       if (result.length == 0) {
