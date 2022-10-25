@@ -37,7 +37,7 @@ app.get('/getProjects', (req, res, next) => {
   );
 });
 app.get('/getCostingSummary', (req, res, next) => {
-  db.query("SELECT c.* FROM `opportunity_costing_summary` c WHERE c.opportunity_id =  ORDER BY c.opportunity_costing_summary_id DESC",
+  db.query("SELECT c.no_of_worker_used FROM `opportunity_costing_summary` c WHERE c.opportunity_id =  ORDER BY c.opportunity_costing_summary_id DESC",
     (err, result) => {
        
       if (result.length == 0) {
@@ -57,7 +57,7 @@ app.get('/getCostingSummary', (req, res, next) => {
 });
 
 app.get('/getTabQuote', (req, res, next) => {
-  db.query(`SELECT q.* FROM quote q  LEFT JOIN (project p) ON (p.project_id = q.project_id) WHERE p.project_id != '' ORDER BY q.quote_code DESC`,
+  db.query(`SELECT q.quote_date,q.quote_status,q.discount,q.drawing_nos,q.project_location,q.project_reference,q.payment_method,q.ref_no_quote,q.revision,q.condition FROM quote q LEFT JOIN (project p) ON (p.project_id = q.project_id) WHERE p.project_id != '' ORDER BY q.quote_code DESC;`,
     (err, result) => {
        
       if (result.length == 0) {
@@ -77,7 +77,7 @@ app.get('/getTabQuote', (req, res, next) => {
 });
 
 app.get('/getTabQuoteLineItems', (req, res, next) => {
-  db.query(` SELECT qt.* FROM quote_items qt WHERE qt.opportunity_id != '' AND qt.quote_id != ''`,
+  db.query(`SELECT qt.title,qt.description,qt.quantity,qt.unit,qt.unit_price FROM quote_items qt WHERE qt.opportunity_id != '' AND qt.quote_id != ''`,
     (err, result) => {
        
       if (result.length == 0) {
@@ -98,7 +98,22 @@ app.get('/getTabQuoteLineItems', (req, res, next) => {
 
 
 app.get('/getTabCostingSummary', (req, res, next) => {
-  db.query("SELECT c.* FROM costing_summary c WHERE c.project_id != '' ORDER BY c.costing_summary_id DESC",
+  db.query(`SELECT 
+  c.no_of_worker_used
+  ,c.no_of_days_worked
+  ,c.labour_rates_per_day
+  ,c.po_price
+  ,c.po_price_with_gst
+  ,c.profit_percentage
+  ,c.profit
+  ,c.total_material_price
+  ,c.transport_charges
+  ,c.total_labour_charges
+  ,c.salesman_commission
+  ,c.finance_charges
+  ,c.office_overheads
+  ,c.other_charges
+  ,c.total_cost of FROM costing_summary c WHERE c.project_id != '' ORDER BY c.costing_summary_id DESC`,
     (err, result) => {
        
       if (result.length == 0) {

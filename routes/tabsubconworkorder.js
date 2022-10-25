@@ -49,7 +49,16 @@ app.get('/getTabClaimPaymentPortal', (req, res, next) => {
 
 
 app.get('/WorkOrderPortal', (req, res, next) => {
-  db.query(`SELECT q.*,s.company_name FROM sub_con_work_order q LEFT JOIN (project p) ON (p.project_id = q.project_id) LEFT JOIN (sub_con s) ON (s.sub_con_id = q.sub_con_id) WHERE p.project_id !=''`,
+  db.query(`SELECT 
+  q.sub_con_work_order_id
+  ,q.status
+  ,q.project_location
+  ,q.project_reference
+  ,q.quote_reference
+  ,q.quote_date
+  ,q.project_location
+  ,s.company_name FROM sub_con_work_order q LEFT JOIN (project p) ON (p.project_id = q.project_id) LEFT JOIN (sub_con s) ON (s.sub_con_id = q.sub_con_id) WHERE p.project_id !='';
+  `,
     (err, result) => {
        
 
@@ -70,19 +79,8 @@ app.get('/WorkOrderPortal', (req, res, next) => {
   });
 
 app.get('/PaymentHistoryPortal', (req, res, next) => {
-  db.query(`SELECT sr.amount
-           ,sr.creation_date AS date
-           ,sr.mode_of_payment
-           ,sr.status 
-           ,sr.sub_con_payments_id
-           ,sr.sub_con_id
-           ,srh.sub_con_work_order_id
-           ,sc.company_name 
-           FROM sub_con_payments_history srh 
-           LEFT JOIN (sub_con_payments sr) ON (sr.sub_con_payments_id = srh.sub_con_payments_id) 
-           LEFT JOIN (sub_con sc) ON (sc.sub_con_id = sr.sub_con_id) 
-           WHERE sr.project_id != '' AND sr.status != 'Cancelled'
-           ORDER BY srh.sub_con_payments_history_id`,
+  db.query(`SELECT sr.amount,sr.creation_date AS date,sr.mode_of_payment,sr.status ,sr.sub_con_payments_id,sr.sub_con_id,srh.sub_con_work_order_id,sc.company_name FROM sub_con_payments_history srh LEFT JOIN (sub_con_payments sr) ON (sr.sub_con_payments_id = srh.sub_con_payments_id) LEFT JOIN (sub_con sc) ON (sc.sub_con_id = sr.sub_con_id) WHERE sr.project_id != '' AND sr.status != 'Cancelled'
+  ORDER BY srh.sub_con_payments_history_id`,
     (err, result) => {
        
       if (result.length == 0) {
@@ -102,8 +100,18 @@ app.get('/PaymentHistoryPortal', (req, res, next) => {
 });
 
 app.get('/TabClaimPortal', (req, res, next) => {
-  db.query(`SELECT pc.*,c.company_name FROM project_claim pc LEFT JOIN (project p) ON (p.project_id = pc.project_id) LEFT JOIN (company c) ON (c.company_id = pc.client_id)
-  WHERE pc.project_id != ''`,
+  db.query(`SELECT 
+  pc.claim_date
+  ,pc.project_title
+  ,pc.ref_no
+  ,pc.variation_order_submission
+  ,pc.vo_claim_work_done
+  ,pc.status,pc.description
+  ,pc.po_quote_no
+  ,pc.value_of_contract_work_done
+  ,pc.less_previous_retention
+  ,c.company_name FROM project_claim pc 
+  LEFT JOIN (project p) ON (p.project_id = pc.project_id) LEFT JOIN (company c) ON (c.company_id = pc.client_id) WHERE pc.project_id != '';`,
     (err, result) => {
        
       if (result.length == 0) {
@@ -123,8 +131,11 @@ app.get('/TabClaimPortal', (req, res, next) => {
 });
 
 app.get('/TabClaimPortalLineItem', (req, res, next) => {
-  db.query(`SELECT ct.* FROM claim_line_items ct LEFT JOIN project_claim pc ON (pc.project_claim_id = ct.project_claim_id) WHERE pc.project_id   != '' AND   ct.project_claim_id != ''
-  ORDER BY ct.claim_line_items_id ASC`,
+  db.query(`SELECT 
+  ct.title
+  ,ct.description
+  ,ct.amount
+  ,ct.status FROM claim_line_items ct LEFT JOIN project_claim pc ON (pc.project_claim_id = ct.project_claim_id) WHERE pc.project_id != '' AND ct.project_claim_id != '' ORDER BY ct.claim_line_items_id ASC`,
     (err, result) => {
        
       if (result.length == 0) {
