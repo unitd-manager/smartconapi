@@ -40,7 +40,14 @@ app.get('/TabMaterialRequest', (req, res, next) => {
 });
 
 app.get('/TabMaterialRequestlineitems', (req, res, next) => {
-  db.query(`SELECT mrli.*,s.company_name FROM materials_request_line_items mrli LEFT JOIN supplier s ON (s.supplier_id = mrli.supplier_id) WHERE mrli.materials_request_id != '' ORDER BY mrli.item_title ASC`,
+  db.query(`SELECT 
+  mrli.quantity
+  ,mrli.unit
+  ,mrli.amount
+  ,mrli.item_title
+  ,mrli.supplier_id
+  ,mrli.description FROM materials_request_line_items mrli 
+  LEFT JOIN supplier s ON (s.supplier_id = mrli.supplier_id) WHERE mrli.materials_request_id != '' ORDER BY mrli.item_title ASC`,
     (err, result) => {
        
       if (result.length == 0) {

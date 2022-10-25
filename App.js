@@ -39,6 +39,11 @@ const invoice = require('./routes/invoice.js');
 const finance = require('./routes/finance.js');
 const tabsubconworkorder = require('./routes/tabsubconworkorder.js');
 const tabfinanaceportal = require('./routes/tabfinanaceportal.js');
+const purchaseorder = require('./routes/purchaseorder.js');
+const materialpurchased = require('./routes/materialpurchased.js');
+
+
+
 
 
 app.use('/project', project);
@@ -56,6 +61,11 @@ app.use('/invoice', invoice);
 app.use('/finance', finance);
 app.use('/tabsubconworkorder', tabsubconworkorder);
 app.use('/tabfinanaceportal', tabfinanaceportal);
+app.use('/purchaseorder', purchaseorder);
+app.use('/materialpurchased', materialpurchased);
+
+
+
 
 app.use(fileUpload({
     createParentPath: true
