@@ -37,7 +37,7 @@ app.get('/getProjects', (req, res, next) => {
   );
 });
 app.get('/getCostingSummary', (req, res, next) => {
-  db.query("SELECT c.no_of_worker_used FROM `opportunity_costing_summary` c WHERE c.opportunity_id =  ORDER BY c.opportunity_costing_summary_id DESC",
+  db.query("SELECT c.no_of_worker_used FROM opportunity_costing_summary c WHERE c.opportunity_id =  ORDER BY c.opportunity_costing_summary_id DESC",
     (err, result) => {
        
       if (result.length == 0) {
