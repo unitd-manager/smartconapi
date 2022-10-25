@@ -18,7 +18,7 @@ app.use(fileUpload({
 }));
 
 app.get('/getBooking', (req, res, next) => {
-  db.query("SELECT b.*,c.company_name AS c_company_name,c.email AS c_email, c.address_flat AS c_address_flat,c.address_street AS c_address_street,c.address_town AS c_address_town,c.address_state AS c_address_state,c.address_country AS c_address_country, c.address_po_code AS c_address_po_code,c.phone AS c_phone,c.fax AS c_fax,c.status AS c_status,c.website AS c_website,c.category AS c_category,CONCAT_WS(' ', e.first_name, e.last_name) AS employee_name FROM booking b LEFT JOIN employee e ON (e.employee_id = b.employee_id) LEFT JOIN (company c) ON ( c.company_id = b.customer_id )",
+  db.query("SELECT b.booking_date,b.assign_time,b.status,b.gps_parameter,c.company_name AS c_company_name,c.email AS c_email, c.address_flat AS c_address_flat,c.address_street AS c_address_street,c.address_town AS c_address_town,c.address_state AS c_address_state,c.address_country AS c_address_country, c.address_po_code AS c_address_po_code,c.phone AS c_phone,c.fax AS c_fax,c.status AS c_status,c.website AS c_website,c.category AS c_category,CONCAT_WS(' ', e.first_name, e.last_name) AS employee_name FROM booking b LEFT JOIN employee e ON (e.employee_id = b.employee_id) LEFT JOIN (company c) ON ( c.company_id = b.customer_id )",
     (err, result) => {
        
       if (result.length == 0) {

@@ -18,7 +18,7 @@ app.use(fileUpload({
 }));
 
 app.get('/getTimeSheet', (req, res, next) => {
-  db.query("SELECT a.*,CONCAT_WS(' ', s.first_name, s.last_name) AS staff_name ,s.team AS staff_team FROM attendance a LEFT JOIN (staff s) ON (a.staff_id = s.staff_id) WHERE attendance_id = ''",
+  db.query("SELECT a.staff_id,a.record_date,a.type_of_leave,a.latitude,a.longitude,a.notes,a.time_in,a.leave_time,a.description,CONCAT_WS(' ', s.first_name, s.last_name) AS staff_name ,s.team AS staff_team FROM attendance a LEFT JOIN (staff s) ON (a.staff_id = s.staff_id) WHERE attendance_id = ''",
     (err, result) => {
        
       if (result.length == 0) {

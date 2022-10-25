@@ -18,7 +18,7 @@ app.use(fileUpload({
 }));
 
 app.get('/getSupplier', (req, res, next) => {
-  db.query("SELECT s.*,gc.name AS country_name FROM supplier s LEFT JOIN (geo_country gc) ON (s.address_country = gc.country_code) WHERE s.supplier_id != ''",
+  db.query("SELECT s.company_name,s.email,s.fax,s.mobile,s.status,s.gst_no,s.contact_person,s.address_flat,s.address_street,s.address_state,s.address_country,s.address_po_code,s.payment_details,s.terms,gc.name AS country_name FROM supplier s LEFT JOIN (geo_country gc) ON (s.address_country = gc.country_code) WHERE s.supplier_id != ''",
     (err, result) => {
        
       if (result.length == 0) {

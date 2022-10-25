@@ -56,7 +56,7 @@ app.get('/getCostingSummary', (req, res, next) => {
   );
 });
 app.get('/getTabEmployee', (req, res, next) => {
-  db.query("SELECT a.employee_id ,a.first_name AS title ,'' ,a.status FROM employee a LEFT JOIN (opportunity_employee pe) ON (pe.employee_id = a.employee_id) WHERE pe.opportunity_id != '' ORDER BY title",
+  db.query(" SELECT a.employee_id ,a.first_name AS title ,'' ,a.status FROM employee a LEFT JOIN (opportunity_employee pe) ON (pe.employee_id = a.employee_id) WHERE pe.opportunity_id != '' ORDER BY title",
     (err, result) => {
        
       if (result.length == 0) {
