@@ -38,7 +38,26 @@ app.get('/getFinances', (req, res, next) => {
 });
 
 app.get('/getTabOrderItemPanel', (req, res, next) => {
-  db.query(`SELECT * FROM order_item WHERE order_id != '' ORDER BY order_item_id ASC`,
+  db.query(`SELECT order_item_id, unit_price,qty,discount_percentage,description,remarks FROM order_item WHERE order_id != '' ORDER BY order_item_id ASC;`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+        }
+ 
+    }
+  );
+});
+app.get('/getTabInvoicePortalDisplay', (req, res, next) => {
+  db.query(`SELECT i.quote_code
+  ,i.po_number,i.project_location,i.project_reference,i.discount,i.code,i.so_ref_no,i.site_code,i.attention,i.reference,i.invoice_date,invoice_terms,i.title,(SELECT GROUP_CONCAT(r.receipt_code ORDER BY r.receipt_code SEPARATOR ', ') FROM receipt r, invoice_receipt_history invrecpt WHERE r.receipt_id = invrecpt.receipt_id AND i.invoice_id = invrecpt.invoice_id) AS receipt_codes_history FROM invoice i WHERE i.order_id != '' ORDER BY i.invoice_id DESC`,
     (err, result) => {
      
       if (result.length == 0) {
@@ -56,28 +75,10 @@ app.get('/getTabOrderItemPanel', (req, res, next) => {
   );
 }); 
 
-app.get('/getTabInvoicePortalDisplay', (req, res, next) => {
-  db.query(`SELECT i.* ,(SELECT GROUP_CONCAT(r.receipt_code ORDER BY r.receipt_code SEPARATOR ', ') FROM receipt r, invoice_receipt_history invrecpt WHERE r.receipt_id = invrecpt.receipt_id AND i.invoice_id = invrecpt.invoice_id) AS receipt_codes_history FROM invoice i 
-            WHERE i.order_id != '' ORDER BY i.invoice_id DESC`,
-    (err, result) => {
-     
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            });
-        }
- 
-    }
-  );
-}); 
+
 
 app.get('/getTabReceiptPortalDisplay', (req, res, next) => {
-  db.query(`SELECT DISTINCT r.receipt_id,r.* 
+  db.query(`SELECT DISTINCT r.receipt_id,r.receipt_id,r.receipt_code,r.receipt_status,r.date,r.amount,r.mode_of_payment,r.remarks,r.creation_date,r.created_by,r.modification_date,r.modified_by 
             FROM receipt r 
             LEFT JOIN (invoice_receipt_history irh) ON (r.receipt_id = irh.receipt_id) WHERE r.order_id != '' 
             ORDER BY r.receipt_id DESC`,
@@ -99,8 +100,8 @@ app.get('/getTabReceiptPortalDisplay', (req, res, next) => {
 }); 
 
 app.get('/getTabCreditNotePortalDisplay', (req, res, next) => {
-  db.query(`SELECT DISTINCT cn.credit_note_id,cn.* 
-            FROM credit_note cn WHERE cn.order_id != '' ORDER BY cn.credit_note_id DESC`,
+  db.query(`
+  SELECT DISTINCT cn.credit_note_id,cn.credit_note_code,cn.amount,cn.gst_amount,cn.date FROM credit_note cn WHERE cn.order_id != '' ORDER BY cn.credit_note_id DESC`,
     (err, result) => {
      
       if (result.length == 0) {
