@@ -149,7 +149,7 @@ app.get('/getTabQuoteLine', (req, res, next) => {
   );
 });
 
-app.post('/edit-Tenders', (req, res, next) => {
+app.post('/editTenders', (req, res, next) => {
   db.query(`UPDATE opportunity 
             SET office_ref_no=${db.escape(req.body.office_ref_no)}
             ,company_id=${db.escape(req.body.company_id)}
@@ -157,7 +157,6 @@ app.post('/edit-Tenders', (req, res, next) => {
             ,mode_of_submission=${db.escape(req.body.mode_of_submission)}
             ,services=${db.escape(req.body.services)}
             ,site_show_date=${db.escape(req.body.site_show_date)}
-            ,project_end_date=${db.escape(req.body.project_end_date)}
             ,site_show_attendee=${db.escape(req.body.site_show_attendee)}
             ,actual_submission_date=${db.escape(req.body.actual_submission_date)}
             ,email=${db.escape(req.body.email)}
