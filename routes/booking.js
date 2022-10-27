@@ -36,7 +36,6 @@ app.get('/getBooking', (req, res, next) => {
     }
   );
 });
-
 app.get('/getTabServiceLink', (req, res, next) => {
   db.query(`SELECT * FROM booking_service WHERE booking_id = '' ORDER BY booking_service_id`,
     (err, result) => {

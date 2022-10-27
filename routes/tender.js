@@ -91,7 +91,7 @@ app.get('/getTabCostingSummary', (req, res, next) => {
 
 
 app.get('/getTabCostingSummaryForm', (req, res, next) => {
-  db.query(`SELECT * FROM opportunity_costing_summary_history WHERE opportunity_costing_summary_id != ''`,
+  db.query(`SELECT c.no_of_worker_used,c.no_of_days_worked,c.labour_rates_per_day,c.po_price,c.profit_percentage,c.profit,c.total_material_price,c.transport_charges,c.total_labour_charges,c.salesman_commission,c.finance_charges,c.office_overheads,c.other_charges,c.total_cost FROM opportunity_costing_summary c WHERE c.opportunity_costing_summary_id != '' `,
     (err, result) => {
      
       if (result.length == 0) {
@@ -106,6 +106,35 @@ app.get('/getTabCostingSummaryForm', (req, res, next) => {
         }
  
     }
+  );
+});
+
+
+app.post('/edit-TabCostingSummaryForm', (req, res, next) => {
+  db.query(`UPDATE opportunity_costing_summary 
+            SET no_of_worker_used=${db.escape(req.body.no_of_worker_used)}
+            ,no_of_days_worked=${db.escape(req.body.no_of_days_worked)}
+            ,labour_rates_per_day=${db.escape(req.body.labour_rates_per_day)}
+            ,po_price=${db.escape(req.body.po_price)}
+            ,transport_charges=${db.escape(req.body.transport_charges)}
+            ,salesman_commission=${db.escape(req.body.salesman_commission)}
+            ,office_overheads=${db.escape(req.body.office_overheads)}
+            ,other_charges=${db.escape(req.body.other_charges)}
+            ,total_cost =${db.escape(req.body.total_cost)}
+            WHERE opportunity_costing_summary_id = ${db.escape(req.body.opportunity_costing_summary_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
   );
 });
 
@@ -149,7 +178,38 @@ app.get('/getTabQuoteLine', (req, res, next) => {
   );
 });
 
+<<<<<<< HEAD
 app.post('/editTenders', (req, res, next) => {
+=======
+
+
+app.post('/edit-TabQuoteLine', (req, res, next) => {
+  db.query(`UPDATE quote_items
+            SET title=${db.escape(req.body.title)}
+            ,description=${db.escape(req.body.description)}
+            ,quantity=${db.escape(req.body.quantity)}
+            ,unit=${db.escape(req.body.unit)}
+            ,unit_price=${db.escape(req.body.unit_price)}
+            ,amount=${db.escape(req.body.amount)}
+            WHERE opportunity_id =  ${db.escape(req.body.opportunity_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
+
+app.post('/edit-Tenders', (req, res, next) => {
+>>>>>>> e9b2b43 (tender-main,tender-tabcosting summary,tender-tabcosting summary form,invoice-main,booking-nothing)
   db.query(`UPDATE opportunity 
             SET office_ref_no=${db.escape(req.body.office_ref_no)}
             ,company_id=${db.escape(req.body.company_id)}
