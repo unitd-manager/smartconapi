@@ -57,7 +57,17 @@ app.get('/getCostingSummary', (req, res, next) => {
 });
 
 app.get('/getTabQuote', (req, res, next) => {
-  db.query(`SELECT q.quote_date,q.quote_status,q.discount,q.drawing_nos,q.project_location,q.project_reference,q.payment_method,q.ref_no_quote,q.revision,q.condition FROM quote q LEFT JOIN (project p) ON (p.project_id = q.project_id) WHERE p.project_id != '' ORDER BY q.quote_code DESC;`,
+  db.query(`SELECT 
+  q.quote_date
+  ,q.quote_status
+  ,q.project_location
+  ,q.project_reference
+  ,q.payment_method
+  ,q.ref_no_quote
+  ,q.revision
+  ,q.drawing_nos
+  ,q.condition FROM quote q 
+  LEFT JOIN (project p) ON (p.project_id = q.project_id) WHERE p.project_id != '' ORDER BY q.quote_code DESC;`,
     (err, result) => {
        
       if (result.length == 0) {
@@ -76,8 +86,12 @@ app.get('/getTabQuote', (req, res, next) => {
   );
 });
 
-app.get('/getTabQuoteLineItems', (req, res, next) => {
-  db.query(`SELECT qt.title,qt.description,qt.quantity,qt.unit,qt.unit_price FROM quote_items qt WHERE qt.opportunity_id != '' AND qt.quote_id != ''`,
+app.get('/SalemanCommission', (req, res, next) => {
+  db.query(`SELECT 
+  a.date
+  ,a.amount
+  ,a.title
+  ,a.description FROM actual_costing_summary a WHERE title = "salesman commission" AND project_id = ${db.escape(req.body.project_id)};`,
     (err, result) => {
        
       if (result.length == 0) {
@@ -93,6 +107,340 @@ app.get('/getTabQuoteLineItems', (req, res, next) => {
         }
  
     }
+  );
+});
+
+app.post('/editSalesmanCommission', (req, res, next) => {
+  db.query(`UPDATE actual_costing_summary
+            SET date=${db.escape(req.body.date)}
+            ,amount=${db.escape(req.body.company_id)}
+            ,description=${db.escape(req.body.contact_id)}
+            ,title=${db.escape(req.body.mode_of_submission)}
+            WHERE title =  ${db.escape(req.body.title)} AND project_id = ${db.escape(req.body.project_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
+
+app.get('/TotalLabourCharges', (req, res, next) => {
+  db.query(`SELECT 
+  a.date
+  ,a.amount
+  ,a.title
+  ,a.description FROM actual_costing_summary a WHERE title = "total labour charges" AND project_id = ${db.escape(req.body.project_id)};`,
+    (err, result) => {
+       
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
+app.post('/editTotalLabourCharges', (req, res, next) => {
+  db.query(`UPDATE actual_costing_summary
+            SET date=${db.escape(req.body.date)}
+            ,amount=${db.escape(req.body.company_id)}
+            ,description=${db.escape(req.body.contact_id)}
+            ,title=${db.escape(req.body.mode_of_submission)}
+            WHERE title =  ${db.escape(req.body.title)} AND project_id = ${db.escape(req.body.project_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
+
+app.get('/FinanceCharges', (req, res, next) => {
+  db.query(`SELECT 
+  a.date
+  ,a.amount
+  ,a.title
+  ,a.description FROM actual_costing_summary a WHERE title = "finance charges" AND project_id = ${db.escape(req.body.project_id)};`,
+    (err, result) => {
+       
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
+app.post('/editFinanceCharges', (req, res, next) => {
+  db.query(`UPDATE actual_costing_summary
+            SET date=${db.escape(req.body.date)}
+            ,amount=${db.escape(req.body.company_id)}
+            ,description=${db.escape(req.body.contact_id)}
+            ,title=${db.escape(req.body.mode_of_submission)}
+            WHERE title =  ${db.escape(req.body.title)} AND project_id = ${db.escape(req.body.project_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
+
+app.get('/OtherCharges', (req, res, next) => {
+  db.query(`SELECT 
+  a.date
+  ,a.amount
+  ,a.title
+  ,a.description FROM actual_costing_summary a WHERE title = "other charges" AND project_id = ${db.escape(req.body.project_id)};`,
+    (err, result) => {
+       
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
+app.post('/editOtherCharges', (req, res, next) => {
+  db.query(`UPDATE actual_costing_summary
+            SET date=${db.escape(req.body.date)}
+            ,amount=${db.escape(req.body.company_id)}
+            ,description=${db.escape(req.body.contact_id)}
+            ,title=${db.escape(req.body.mode_of_submission)}
+            WHERE title =  ${db.escape(req.body.title)} AND project_id = ${db.escape(req.body.project_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
+
+app.get('/TransportCharges', (req, res, next) => {
+  db.query(`SELECT 
+  a.date
+  ,a.amount
+  ,a.title
+  ,a.description FROM actual_costing_summary a WHERE title = "transport charges" AND project_id = ${db.escape(req.body.project_id)};`,
+    (err, result) => {
+       
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
+app.post('/editTransportCharges', (req, res, next) => {
+  db.query(`UPDATE actual_costing_summary
+            SET date=${db.escape(req.body.date)}
+            ,amount=${db.escape(req.body.company_id)}
+            ,description=${db.escape(req.body.contact_id)}
+            ,title=${db.escape(req.body.mode_of_submission)}
+            WHERE title =  ${db.escape(req.body.title)} AND project_id = ${db.escape(req.body.project_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
+
+app.get('/OfficeOverHeads', (req, res, next) => {
+  db.query(`SELECT 
+  a.date
+  ,a.amount
+  ,a.title
+  ,a.description FROM actual_costing_summary a WHERE title = "office overheads" AND project_id = ${db.escape(req.body.project_id)};`,
+    (err, result) => {
+       
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
+app.post('/editOfficeOverHeads', (req, res, next) => {
+  db.query(`UPDATE actual_costing_summary
+            SET date=${db.escape(req.body.date)}
+            ,amount=${db.escape(req.body.company_id)}
+            ,description=${db.escape(req.body.contact_id)}
+            ,title=${db.escape(req.body.mode_of_submission)}
+            WHERE title =  ${db.escape(req.body.title)} AND project_id = ${db.escape(req.body.project_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
+app.post('/TabQuote', (req, res, next) => {
+  db.query(`UPDATE quote
+            SET  quote_date=${db.escape(req.body.quote_date)}
+            ,discount=${db.escape(req.body.discount)}
+            ,project_location=${db.escape(req.body.project_location)}
+            ,project_reference=${db.escape(req.body.project_reference)}
+            ,ref_no_quote=${db.escape(req.body.ref_no_quote)}
+            ,revision=${db.escape(req.body.revision)}
+            WHERE  project_id = ${db.escape(req.body.project_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
+
+
+app.get('/getTabQuoteLineItems', (req, res, next) => {
+  db.query(`SELECT 
+  qt.title
+  ,qt.description
+  ,qt.quantity
+  ,qt.unit
+  ,qt.unit_price
+  ,qt.amount FROM quote_items qt WHERE qt.opportunity_id != '' AND qt.quote_id != ''`,
+    (err, result) => {
+       
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
+app.post('/editTabQuoteLineItems', (req, res, next) => {
+  db.query(`UPDATE quote_items
+            SET title=${db.escape(req.body.title)}
+            ,description=${db.escape(req.body.description)}
+            ,quantity=${db.escape(req.body.quantity)}
+            ,unit=${db.escape(req.body.unit)}
+            ,unit_price=${db.escape(req.body.unit_price)}
+            ,amount=${db.escape(req.body.amount)}
+            WHERE opportunity_id = ${db.escape(req.body.opportunity_id)}  AND quote_id =${db.escape(req.body.quote_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
   );
 });
 
