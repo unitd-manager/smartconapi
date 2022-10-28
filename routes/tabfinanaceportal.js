@@ -19,8 +19,10 @@ app.use(fileUpload({
 
 app.get('/getInvoiceTab', (req, res, next) => {
   db.query(`SELECT i.quote_code
-           ,i.po_number,i.project_location
-           ,i.project_reference,i.discount
+           ,i.po_number
+           ,i.project_location
+           ,i.project_reference
+           ,i.discount
            ,i.code
            ,i.so_ref_no
            ,i.site_code
@@ -49,6 +51,37 @@ app.get('/getInvoiceTab', (req, res, next) => {
     }
   );
 }); 
+
+app.post('/editInvoiceTab', (req, res, next) => {
+  db.query(`UPDATE invoice 
+            SET quote_code =${db.escape(req.body.quote_code)}
+            ,po_number=${db.escape(req.body.po_number)}
+            ,project_location=${db.escape(req.body.project_location)}
+            ,project_reference=${db.escape(req.body.project_reference)}
+            ,discount=${db.escape(req.body.discount)}
+            ,code=${db.escape(req.body.code)}
+            ,so_ref_no=${db.escape(req.body.so_ref_no)}
+            ,attention=${db.escape(req.body.attention)}
+            ,site_code=${db.escape(req.body.site_code)}
+            ,reference=${db.escape(req.body.reference)}
+            ,invoice_date=${db.escape(req.body.invoice_date)}
+            ,invoice_terms=${db.escape(req.body.invoice_terms)}
+           
+             WHERE order_id =  ${db.escape(req.body.order_id)}`,
+    (err, result) => {
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
 
 app.get('/getReceiptTab', (req, res, next) => {
   db.query(`SELECT DISTINCT r.receipt_id
@@ -80,6 +113,37 @@ app.get('/getReceiptTab', (req, res, next) => {
     }
   );
 }); 
+
+app.post('/editReceiptTab', (req, res, next) => {
+  db.query(`UPDATE receipt 
+             r.receipt_id=${db.escape(req.body.r.receipt_id)}
+            ,r.receipt_code=${db.escape(req.body.r.receipt_code)}
+            ,r.receipt_status=${db.escape(req.body.r.receipt_status)}
+            ,r.date=${db.escape(req.body.r.date)}
+            ,r.amount=${db.escape(req.body.r.amount)}
+            ,r.mode_of_payment=${db.escape(req.body.r.mode_of_payment)}
+            ,r.remarks=${db.escape(req.body.r.remarks)}
+            ,r.creation_date=${db.escape(req.body.r.creation_date)}
+            ,r.created_by=${db.escape(req.body.r.created_by)}
+            ,r.modification_date=${db.escape(req.body.r.modification_date)}
+            ,r.modified_by=${db.escape(req.body.r.modified_by)}
+            WHERE = r.order_id != '' ${db.escape(req.body.r.order_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
+
 
 app.get('/getTabEmployeePortal', (req, res, next) => {
   db.query(`SELECT a.employee_id
