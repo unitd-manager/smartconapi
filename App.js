@@ -41,10 +41,7 @@ const tabsubconworkorder = require('./routes/tabsubconworkorder.js');
 const tabfinanaceportal = require('./routes/tabfinanaceportal.js');
 const purchaseorder = require('./routes/purchaseorder.js');
 const materialpurchased = require('./routes/materialpurchased.js');
-
-
-
-
+const company = require('./routes/company.js');
 
 app.use('/project', project);
 app.use('/tender', tender);
@@ -63,7 +60,7 @@ app.use('/tabsubconworkorder', tabsubconworkorder);
 app.use('/tabfinanaceportal', tabfinanaceportal);
 app.use('/purchaseorder', purchaseorder);
 app.use('/materialpurchased', materialpurchased);
-
+app.use('/company', company);
 
 
 
