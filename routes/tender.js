@@ -26,7 +26,6 @@ app.get('/getTenders', (req, res, next) => {
   ,o.mode_of_submission
   ,o.services
   ,o.site_show_date
-  ,o.project_end_date
   ,o.site_show_attendee
   ,o.actual_submission_date
   ,o.status
@@ -50,7 +49,11 @@ app.get('/getTenders', (req, res, next) => {
   LEFT JOIN (project p)   ON (p.project_id   = o.project_id) 
   ORDER BY o.opportunity_code DESC`,
     (err, result) => {
-     
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      }
       if (result.length == 0) {
         return res.status(400).send({
           msg: 'No result found'
@@ -178,9 +181,6 @@ app.get('/getTabQuoteLine', (req, res, next) => {
   );
 });
 
-<<<<<<< HEAD
-app.post('/editTenders', (req, res, next) => {
-=======
 
 
 app.post('/edit-TabQuoteLine', (req, res, next) => {
@@ -209,7 +209,6 @@ app.post('/edit-TabQuoteLine', (req, res, next) => {
 });
 
 app.post('/edit-Tenders', (req, res, next) => {
->>>>>>> e9b2b43 (tender-main,tender-tabcosting summary,tender-tabcosting summary form,invoice-main,booking-nothing)
   db.query(`UPDATE opportunity 
             SET office_ref_no=${db.escape(req.body.office_ref_no)}
             ,company_id=${db.escape(req.body.company_id)}
@@ -307,6 +306,44 @@ app.post('/getQuoteById', (req, res, next) => {
     }
   );
 });
+
+app.post('/insertTender', (req, res, next) => {
+
+  let data = {title: req.body.title, company_id: req.body.company_id, contact_id: req.body.contact_id, category_id: req.body.category_id};
+  let sql = "INSERT INTO opportunity SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+app.post('/deleteTender', (req, res, next) => {
+
+  let data = {opportunity_id: req.body.opportunity_id};
+  let sql = "DELETE FROM opportunity WHERE opportunity_id = ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
+
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');
