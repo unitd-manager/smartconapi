@@ -18,7 +18,21 @@ app.use(fileUpload({
 }));
 
 app.get('/getSupplier', (req, res, next) => {
-  db.query("SELECT s.company_name,s.email,s.fax,s.mobile,s.status,s.gst_no,s.contact_person,s.address_flat,s.address_street,s.address_state,s.address_country,s.address_po_code,s.payment_details,s.terms,gc.name AS country_name FROM supplier s LEFT JOIN (geo_country gc) ON (s.address_country = gc.country_code) WHERE s.supplier_id != ''",
+  db.query(`SELECT s.company_name
+  ,s.email
+  ,s.fax
+  ,s.mobile
+  ,s.status
+  ,s.gst_no
+  ,s.contact_person
+  ,s.address_flat
+  ,s.address_street
+  ,s.address_state
+  ,s.address_country
+  ,s.address_po_code
+  ,s.payment_details
+  ,s.terms
+  ,gc.name AS country_name FROM supplier s LEFT JOIN (geo_country gc) ON (s.address_country = gc.country_code) WHERE s.supplier_id != ''`,
     (err, result) => {
        
       if (result.length == 0) {
@@ -37,6 +51,39 @@ app.get('/getSupplier', (req, res, next) => {
   );
 });
 
+
+app.post('/editSupplier', (req, res, next) => {
+  db.query(`UPDATE supplier 
+            SET company_name=${db.escape(req.body.company_name)}
+            ,email=${db.escape(req.body.email)}
+            ,fax=${db.escape(req.body.fax)}
+            ,mobile=${db.escape(req.body.mobile)}
+            ,status=${db.escape(req.body.status)}
+            ,gst_no=${db.escape(req.body.gst_no)}
+            ,contact_person=${db.escape(req.body.contact_person)}
+            ,address_flat=${db.escape(req.body.address_flat)}
+            ,address_street=${db.escape(req.body.address_street)}
+            ,address_state=${db.escape(req.body.address_state)}
+            ,address_country=${db.escape(req.body.address_country)}
+            ,address_po_code=${db.escape(req.body.address_po_code)}
+            ,payment_details=${db.escape(req.body.payment_details)}
+            ,terms=${db.escape(req.body.terms)}
+            WHERE supplier_id =  ${db.escape(req.body.supplier_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
 app.get('/getTabPurchaseOrderLinked', (req, res, next) => {
   db.query(`SELECT p.purchase_order_id 
             FROM purchase_order p 
