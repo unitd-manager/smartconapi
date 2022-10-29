@@ -18,7 +18,17 @@ app.use(fileUpload({
 }));
 
 app.get('/getSubcon', (req, res, next) => {
-  db.query("SELECT s.company_name,s.email,s.fax,s.mobile,s.status,s.address_flat,s.address_street,s.address_state,s.address_country,gc.name AS country_name FROM sub_con s LEFT JOIN (geo_country gc) ON (s.address_country = gc.country_code) WHERE s.sub_con_id != ''",
+  db.query(`SELECT s.company_name
+  ,s.email,
+  s.fax
+  ,s.mobile
+  ,s.status
+  ,s.address_flat
+  ,s.address_street
+  ,s.address_state
+  ,s.address_country
+  ,gc.name AS country_name 
+  FROM sub_con s LEFT JOIN (geo_country gc) ON (s.address_country = gc.country_code) WHERE s.sub_con_id != ''`,
     (err, result) => {
        
       if (result.length == 0) {
@@ -34,6 +44,35 @@ app.get('/getSubcon', (req, res, next) => {
         }
  
     }
+  );
+});
+
+
+app.post('/edit-Subcon', (req, res, next) => {
+  db.query(`UPDATE sub_con 
+            SET company_name=${db.escape(req.body.company_name)}
+            ,email=${db.escape(req.body.email)}
+            ,fax=${db.escape(req.body.fax)}
+            ,mobile=${db.escape(req.body.mobile)}
+            ,status=${db.escape(req.body.status)}
+            ,address_flat=${db.escape(req.body.address_flat)}
+            ,address_street=${db.escape(req.body.address_street)}
+            ,address_state=${db.escape(req.body.address_state)}
+            ,address_country=${db.escape(req.body.address_country)}
+            WHERE sub_con_id =  ${db.escape(req.body.sub_con_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
   );
 });
 

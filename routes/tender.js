@@ -113,6 +113,7 @@ app.get('/getTabCostingSummaryForm', (req, res, next) => {
 });
 
 
+
 app.post('/edit-TabCostingSummaryForm', (req, res, next) => {
   db.query(`UPDATE opportunity_costing_summary 
             SET no_of_worker_used=${db.escape(req.body.no_of_worker_used)}
@@ -141,6 +142,8 @@ app.post('/edit-TabCostingSummaryForm', (req, res, next) => {
   );
 });
 
+
+
 app.get('/getTabquote', (req, res, next) => {
   db.query(` SELECT q.quote_date,q.quote_code,q.quote_status,q.project_location,q.project_reference,q.payment_method,q.revision,q.intro_drawing_quote FROM quote q  WHERE q.opportunity_id != ''  ORDER BY quote_code DESC
   `,
@@ -163,7 +166,13 @@ app.get('/getTabquote', (req, res, next) => {
 
 
 app.get('/getTabQuoteLine', (req, res, next) => {
-  db.query(`SELECT qt.title,qt.description,qt.quantity,qt.unit,qt.unit_price,qt.amount FROM quote_items qt WHERE qt.opportunity_id != '' AND qt.quote_id != ''`,
+  db.query(`SELECT qt.title
+  ,qt.description
+  ,qt.quantity
+  ,qt.unit
+  ,qt.unit_price
+  ,qt.amount FROM quote_items qt 
+  WHERE qt.opportunity_id != '' AND qt.quote_id != ''`,
     (err, result) => {
      
       if (result.length == 0) {
@@ -180,8 +189,6 @@ app.get('/getTabQuoteLine', (req, res, next) => {
     }
   );
 });
-
-
 
 app.post('/edit-TabQuoteLine', (req, res, next) => {
   db.query(`UPDATE quote_items
