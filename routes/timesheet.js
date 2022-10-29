@@ -37,6 +37,32 @@ app.get('/getTimeSheet', (req, res, next) => {
   );
 });
 
+
+
+app.post('/editTimeSheet', (req, res, next) => {
+  db.query(`UPDATE attendance 
+            SET staff_id=${db.escape(req.body.staff_id)}
+            ,record_date=${db.escape(req.body.record_date)}
+            ,type_of_leave=${db.escape(req.body.type_of_leave)}
+            ,notes=${db.escape(req.body.notes)}
+            ,description=${db.escape(req.body.description)}
+            WHERE attendance_id =  ${db.escape(req.body.attendance_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
+
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');

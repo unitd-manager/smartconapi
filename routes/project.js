@@ -36,6 +36,34 @@ app.get('/getProjects', (req, res, next) => {
     }
   );
 });
+
+
+app.post('/edit-Project', (req, res, next) => {
+  db.query(`UPDATE project 
+            SET title=${db.escape(req.body.title)}
+            ,category=${db.escape(req.body.category)}
+            ,status=${db.escape(req.body.status)}
+            ,contact_id=${db.escape(req.body.contact_id)}
+            ,start_date=${db.escape(req.body.start_date)}
+            ,estimated_finish_date=${db.escape(req.body.estimated_finish_date)}
+            ,description=${db.escape(req.body.description)}
+            ,project_manager_id=${db.escape(req.body.project_manager_id)}
+            WHERE project_id =  ${db.escape(req.body.project_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
 app.get('/getCostingSummary', (req, res, next) => {
   db.query("SELECT c.no_of_worker_used FROM opportunity_costing_summary c WHERE c.opportunity_id =  ORDER BY c.opportunity_costing_summary_id DESC",
     (err, result) => {

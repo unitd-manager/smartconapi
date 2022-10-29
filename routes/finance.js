@@ -75,6 +75,36 @@ app.get('/getTabInvoicePortalDisplay', (req, res, next) => {
   );
 }); 
 
+app.post('/editTabInvoicePortalDisplay', (req, res, next) => {
+  db.query(`UPDATE invoice 
+            SET quote_code =${db.escape(req.body.quote_code)}
+            ,po_number=${db.escape(req.body.po_number)}
+            ,project_location=${db.escape(req.body.project_location)}
+            ,project_reference=${db.escape(req.body.project_reference)}
+            ,discount=${db.escape(req.body.discount)}
+            ,code=${db.escape(req.body.code)}
+            ,so_ref_no=${db.escape(req.body.so_ref_no)}
+            ,attention=${db.escape(req.body.attention)}
+            ,site_code=${db.escape(req.body.site_code)}
+            ,reference=${db.escape(req.body.reference)}
+            ,invoice_date=${db.escape(req.body.invoice_date)}
+            ,invoice_terms=${db.escape(req.body.invoice_terms)}
+           
+             WHERE order_id =  ${db.escape(req.body.order_id)}`,
+    (err, result) => {
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
 
 
 app.get('/getTabReceiptPortalDisplay', (req, res, next) => {
