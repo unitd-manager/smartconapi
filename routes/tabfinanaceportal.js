@@ -84,7 +84,8 @@ app.post('/editInvoiceTab', (req, res, next) => {
 });
 
 app.get('/getReceiptTab', (req, res, next) => {
-  db.query(`SELECT DISTINCT r.receipt_id
+  db.query(`SELECT DISTINCT 
+             r.receipt_id
             ,r.receipt_code
             ,r.receipt_status
             ,r.date
@@ -94,7 +95,8 @@ app.get('/getReceiptTab', (req, res, next) => {
             ,r.creation_date
             ,r.created_by
             ,r.modification_date
-            ,r.modified_by FROM receipt r 
+            ,r.modified_by 
+            FROM receipt r 
             LEFT JOIN (invoice_receipt_history irh) ON (r.receipt_id = irh.receipt_id) 
             WHERE r.order_id != '' ORDER BY r.receipt_id DESC;`,
     (err, result) => {
@@ -116,18 +118,18 @@ app.get('/getReceiptTab', (req, res, next) => {
 
 app.post('/editReceiptTab', (req, res, next) => {
   db.query(`UPDATE receipt 
-             r.receipt_id=${db.escape(req.body.r.receipt_id)}
-            ,r.receipt_code=${db.escape(req.body.r.receipt_code)}
-            ,r.receipt_status=${db.escape(req.body.r.receipt_status)}
-            ,r.date=${db.escape(req.body.r.date)}
-            ,r.amount=${db.escape(req.body.r.amount)}
-            ,r.mode_of_payment=${db.escape(req.body.r.mode_of_payment)}
-            ,r.remarks=${db.escape(req.body.r.remarks)}
-            ,r.creation_date=${db.escape(req.body.r.creation_date)}
-            ,r.created_by=${db.escape(req.body.r.created_by)}
-            ,r.modification_date=${db.escape(req.body.r.modification_date)}
-            ,r.modified_by=${db.escape(req.body.r.modified_by)}
-            WHERE = r.order_id != '' ${db.escape(req.body.r.order_id)}`,
+            SET receipt_id=${db.escape(req.body.receipt_id)}
+            ,receipt_code=${db.escape(req.body.receipt_code)}
+            ,receipt_status=${db.escape(req.body.receipt_status)}
+            ,date=${db.escape(req.body.date)}s
+            ,amount=${db.escape(req.body.amount)}
+            ,mode_of_payment=${db.escape(req.body.mode_of_payment)}
+            ,remarks=${db.escape(req.body.remarks)}
+            ,creation_date=${db.escape(req.body.creation_date)}
+            ,created_by=${db.escape(req.body.created_by)}
+            ,modification_date=${db.escape(req.body.modification_date)}
+            ,modified_by=${db.escape(req.body.modified_by)}
+            WHERE order_id  =  ${db.escape(req.body.order_id)}`,
     (err, result) => {
      
       if (result.length == 0) {
@@ -145,63 +147,6 @@ app.post('/editReceiptTab', (req, res, next) => {
 });
 
 
-app.get('/getTabEmployeePortal', (req, res, next) => {
-  db.query(`SELECT a.employee_id
-            ,a.first_name AS title,''
-            ,a.status,IF(pe.active_in_project = '1' 
-            ,CONCAT_WS('', '<input type=checkbox checked class=project_employee_in name=active_in_project value=',a.employee_id,'>') 
-            ,CONCAT_WS('', '<input type=checkbox class=project_employee_in name=active_in_project value=',a.employee_id,'>')) 
-            AS project_Select 
-            FROM employee a 
-            LEFT JOIN (project_employee pe) ON (pe.employee_id = a.employee_id) 
-            WHERE pe.project_id != '' 
-            ORDER BY title`,
-    (err, result) => {
-     
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            });
-        }
- 
-    }
-  );
-}); 
-
-app.get('/getTabEmployeeTimeSheet', (req, res, next) => {
-  db.query(`SELECT DATE_FORMAT(et.date, '%Y-%m') AS dateMonth
-            ,DATE_FORMAT(et.date, '%M') AS Month
-            ,DATE_FORMAT(et.date, '%m') AS month_req
-            ,DATE_FORMAT(et.date, '%Y') AS year_req
-            ,DATE_FORMAT(et.date, '%Y-%m') AS year_Months
-            ,SUM(et.employee_hours) AS totalHours
-            ,SUM(et.employee_ot_hours) AS totalOTHours
-            ,SUM(et.employee_ph_hours) AS totalPHHours
-            ,et.project_id FROM employee_timesheet et 
-            WHERE et.project_id != '' 
-            GROUP BY DATE_FORMAT(et.date, '%Y-%m') 
-            ORDER BY et.date DESC`,
-    (err, result) => {
-     
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            });
-        }
- 
-    }
-  );
-}); 
 
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {

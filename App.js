@@ -42,6 +42,8 @@ const tabfinanaceportal = require('./routes/tabfinanaceportal.js');
 const purchaseorder = require('./routes/purchaseorder.js');
 const materialpurchased = require('./routes/materialpurchased.js');
 const company = require('./routes/company.js');
+const employeesportal = require('./routes/employeesportal.js');
+const claim = require('./routes/claim.js');
 
 app.use('/project', project);
 app.use('/tender', tender);
@@ -61,6 +63,8 @@ app.use('/tabfinanaceportal', tabfinanaceportal);
 app.use('/purchaseorder', purchaseorder);
 app.use('/materialpurchased', materialpurchased);
 app.use('/company', company);
+app.use('/employeesportal', employeesportal);
+app.use('/claim', claim);
 
 
 

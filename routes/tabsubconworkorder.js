@@ -17,38 +17,6 @@ app.use(fileUpload({
     createParentPath: true
 }));
 
-
-app.get('/getTabClaimPaymentPortal', (req, res, next) => {
-  db.query(`SELECT cp.date,cp.claim_seq
-            ,cp.claim_payment_id
-            ,cp.amount
-            ,cp.created_by
-            ,cp.creation_date
-            ,cp.status
-            ,cp.claim_amount
-            , SUM(amount) AS claim_amount,count(claim_payment_id) AS countRec 
-            FROM claim_payment cp WHERE cp.project_id != ' ' AND cp.project_claim_id != '' 
-            GROUP BY cp.claim_seq;`,
-    (err, result) => {
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            });
-
-          }
-   
-      }
-    );
-  });
-     
-
-
-
 app.get('/WorkOrderPortal', (req, res, next) => {
   db.query(`SELECT 
   q.sub_con_work_order_id 
