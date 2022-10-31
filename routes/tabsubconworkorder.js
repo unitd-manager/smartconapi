@@ -80,7 +80,6 @@ app.get('/PaymentHistoryPortal', (req, res, next) => {
   sr.amount
   ,sr.creation_date AS date
   ,sr.mode_of_payment
-  ,sr.status 
   ,sr.sub_con_payments_id
   ,sr.sub_con_id
   ,srh.sub_con_work_order_id
@@ -103,6 +102,8 @@ app.get('/PaymentHistoryPortal', (req, res, next) => {
     }
   );
 });
+
+
 
 app.get('/TabClaimPortal', (req, res, next) => {
   db.query(`SELECT 

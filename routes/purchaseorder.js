@@ -21,10 +21,21 @@ app.use(fileUpload({
 
 app.get('/TabPurchaseOrder', (req, res, next) => {
   db.query(`SELECT DISTINCT 
-  po.company_id_supplier
+  po.title
+  ,po.status
+  ,po.company_id_supplier
+  ,po.priority
+  ,po.notes
+  ,po.purchase_order_date
+  ,po.follow_up_date
+  ,po.delivery_terms
+  ,po.payment_terms
+  ,po.payment_status
+  ,po.supplier_inv_code
+  ,po.po_code
   ,s.company_name
-  ,po.purchase_order_id FROM purchase_order po 
-  LEFT JOIN (supplier s) ON (po.company_id_supplier = s.supplier_id) WHERE po.project_id != '' ORDER BY po.purchase_order_id ASC`,
+  FROM purchase_order po 
+  LEFT JOIN (supplier s) ON (po.company_id_supplier = s.supplier_id) WHERE po.project_id != '' ORDER BY po.purchase_order_id ASC;`,
     (err, result) => {
        
       if (result.length == 0) {
@@ -40,6 +51,33 @@ app.get('/TabPurchaseOrder', (req, res, next) => {
         }
  
     }
+  );
+});
+
+app.post('/editTabPurchaseOrder', (req, res, next) => {
+  db.query(`UPDATE purchase_order
+            SET title=${db.escape(req.body.title)}
+            ,company_id_supplier=${db.escape(req.body.company_id_supplier)}
+            ,notes=${db.escape(req.body.notes)}
+            ,purchase_order_date=${db.escape(req.body.purchase_order_date)}
+            ,follow_up_date=${db.escape(req.body.follow_up_date)}
+            ,delivery_terms=${db.escape(req.body.delivery_terms)}
+            ,payment_terms=${db.escape(req.body.payment_terms)}
+            ,supplier_inv_code=${db.escape(req.body.supplier_inv_code)}
+            WHERE project_id = ${db.escape(req.body.project_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
   );
 });
 
