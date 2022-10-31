@@ -136,6 +136,31 @@ app.get('/PaymentHistoryPortal', (req, res, next) => {
   );
 });
 
+app.post('/editPaymentHistoryPortal', (req, res, next) => {
+  db.query(`UPDATE sub_con_payments_history
+            SET work_order_due_date=${db.escape(req.body.work_order_due_date)}
+            ,completed_date=${db.escape(req.body.completed_date)}
+            ,project_location=${db.escape(req.body.project_location)}
+            ,project_reference=${db.escape(req.body.project_reference)}
+            ,quote_date=${db.escape(req.body.quote_date)}
+            WHERE project_id = ${db.escape(req.body.project_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
+
+
 app.get('/TabClaimPortal', (req, res, next) => {
   db.query(`SELECT 
   pc.claim_date
