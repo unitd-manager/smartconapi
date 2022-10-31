@@ -332,10 +332,10 @@ app.post('/insertTender', (req, res, next) => {
   });
 });
 
-app.post('/deleteTender', (req, res, next) => {
+app.delete('/deleteTender', (req, res, next) => {
 
   let data = {opportunity_id: req.body.opportunity_id};
-  let sql = "DELETE FROM opportunity WHERE opportunity_id = ?";
+  let sql = "DELETE FROM opportunity WHERE ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
