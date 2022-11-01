@@ -316,7 +316,19 @@ app.post('/getQuoteById', (req, res, next) => {
 
 app.post('/insertTender', (req, res, next) => {
 
-  let data = {title: req.body.title, company_id: req.body.company_id, contact_id: req.body.contact_id, category_id: req.body.category_id};
+  let data = {title: req.body.title
+    , company_id: req.body.company_id
+    , contact_id: req.body.contact_id
+    , category_id: req.body.category_id
+    , office_ref_no: req.body.office_ref_no
+    , mode_of_submission: req.body.mode_of_submission
+    , services: req.body.services
+    , site_show_date: req.body.site_show_date
+    , site_show_attendee: req.body.site_show_attendee
+    , actual_submission_date: req.body.actual_submission_date
+    , status: req.body.status
+    , email: req.body.email
+    , price: req.body.price};
   let sql = "INSERT INTO opportunity SET ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
@@ -331,6 +343,55 @@ app.post('/insertTender', (req, res, next) => {
     }
   });
 });
+
+
+
+app.post('/insertCompany', (req, res, next) => {
+
+  let data = {company_name: req.body.company_name, website: req.body.website, phone: req.body.phone, fax: req.body.fax, address_flat: req.body.address_flat, address_street: req.body.address_street, address_po_code: req.body.address_po_code, address_country: req.body.address_country, supplier_type: req.body.supplier_type, industry: req.body.industry, company_size: req.body.company_size, source: req.body.source};
+  let sql = "INSERT INTO company SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+
+
+app.post('/insertContact', (req, res, next) => {
+
+  let data = {salutation: req.body.salutation
+    , first_name: req.body.first_name
+    , email: req.body.email
+    , position: req.body.position
+    , department: req.body.department
+    , phone_direct: req.body.phone_direct
+    , fax: req.body.fax
+    , mobile: req.body.mobile};
+  let sql = "INSERT INTO contact SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+
 
 app.delete('/deleteTender', (req, res, next) => {
 
