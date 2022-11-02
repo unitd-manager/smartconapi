@@ -395,6 +395,76 @@ app.post('/editOfficeOverHeads', (req, res, next) => {
      }
   );
 });
+
+app.post('/insertQuote', (req, res, next) => {
+
+  let data = {
+     opportunity_id: req.body.opportunity_id
+    , project_id: req.body.project_id
+    , quote_code: req.body.quote_code
+    , quote_date: req.body.quote_date
+    , quote_status: req.body.quote_status
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date
+    , currency_item: req.body.currency_item
+    , note: req.body.note
+    , condition: req.body.condition
+    , quote_type: req.body.quote_type
+    , quote_sequence: req.body.quote_sequence
+    , template: req.body.template
+    , template_title: req.body.template_title
+    , created_by: req.body.created_by
+    , sign_staff_id: req.body.sign_staff_id
+    , flag: req.body.flag
+    , sort_order: req.body.sort_order
+    , modified_by: req.body.modified_by
+    , title: req.body.title
+    , signatory_name: req.body.signatory_name
+    , signatory_position: req.body.signatory_position
+    , quote_code_user: req.body.quote_code_user
+    , quote_intro_text_1: req.body.quote_intro_text_1
+    , invoices_payment_terms: req.body.invoices_payment_terms
+    , responsibility: req.body.responsibility
+    , provision_by_client: req.body.provision_by_client
+    , provision_by_krs: req.body.provision_by_krs
+    , monday_to_friday_normal_timing: req.body.monday_to_friday_normal_timing
+    , saturday_normal_timing: req.body.saturday_normal_timing
+    , monday_to_friday_ot_timing: req.body.monday_to_friday_ot_timing
+    , saturday_ot_timing: req.body.saturday_ot_timing
+    , sunday_and_publicholiday_ot_timing: req.body.sunday_and_publicholiday_ot_timing
+    , timesheet_type: req.body.timesheet_type
+    , site_address: req.body.site_address
+    , project_location: req.body.project_location
+    , project_reference: req.body.project_reference
+    , discount: req.body.discount
+    , gst: req.body.gst
+    , payment_method: req.body.payment_method
+    , drawing_nos: req.body.drawing_nos
+    , intro_quote: req.body.intro_quote
+    , our_reference: req.body.our_reference
+    , total_amount: req.body.total_amount
+    , revision: req.body.revision
+    , employee_id: req.body.employee_id
+    , ref_no_quote: req.body.ref_no_quote
+    , intro_drawing_quote: req.body.intro_drawing_quote
+    , show_project_manager: req.body.show_project_manager
+  };
+  let sql = "INSERT INTO quote SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+
 app.post('/TabQuote', (req, res, next) => {
   db.query(`UPDATE quote
             SET  quote_date=${db.escape(req.body.quote_date)}
