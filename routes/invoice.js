@@ -112,4 +112,28 @@ app.post('/insertInvoice', (req, res, next) => {
     }
   });
 });
+
+app.post('/insertBranch', (req, res, next) => {
+
+  let data = {
+    title: req.body.title
+    , currency: req.body.currency
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date
+ };
+  let sql = "INSERT INTO branch SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
 module.exports = app;
