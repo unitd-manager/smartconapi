@@ -61,6 +61,35 @@ app.post('/insertCompany', (req, res, next) => {
   });
 });
 
+app.post('/insertCompanyAddress', (req, res, next) => {
+
+  let data = {
+    address_street: req.body.address_street
+    , address_town: req.body.address_town
+    , address_state: req.body.address_state
+    , address_country: req.body.address_country
+    , address_po_code: req.body.address_po_code
+    , phone: req.body.phone
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date
+    , address_flat: req.body.address_flat
+    , company_id: req.body.company_id
+ };
+  let sql = "INSERT INTO company_address SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+}); 
+
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
