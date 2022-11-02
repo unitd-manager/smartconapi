@@ -208,6 +208,70 @@ app.get('/getTabCreditNotePortalDisplay', (req, res, next) => {
   );
 }); 
 
+app.post('/insertreceipt', (req, res, next) => {
+
+  let data = {receipt_code: req.body.receipt_code,
+              amount: req.body.amount,
+              mode_of_payment: req.body.mode_of_payment,
+              remarks: req.body.remarks,
+              date: req.body.date,
+              published: req.body.published,
+              flag: req.body.flag,
+              creation_date: req.body.creation_date,
+              modification_date: req.body.modification_date,
+              created_by: req.body.created_by,
+              modified_by: req.body.modified_by,
+              order_id: req.body.order_id,
+              receipt_status: req.body.receipt_status,
+              cheque_date: req.body.cheque_date,
+              bank_name: req.body.bank_name,
+              site_id: req.body.site_id,
+              cheque_no: req.body.cheque_no,
+          };
+
+  let sql = "INSERT INTO receipt SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+app.post('/insertInvoiceReceiptHistory', (req, res, next) => {
+
+  let data = {invoice_id: req.body.invoice_id,
+              receipt_id: req.body.receipt_id,
+              published: req.body.published,
+              flag: req.body.flag,
+              creation_date: req.body.creation_date,
+              modification_date: req.body.modification_date,
+              created_by: req.body.created_by,
+              modified_by: req.body.modified_by,
+              amount: req.body.amount,
+              site_id: req.body.site_id,
+            };
+
+  let sql = "INSERT INTO invoice_receipt_history  SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);

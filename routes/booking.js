@@ -79,6 +79,8 @@ app.post('/edit-Booking', (req, res, next) => {
   );
 });
 
+
+
 app.get('/getTabServiceLink', (req, res, next) => {
   db.query(`SELECT * FROM booking_service WHERE booking_id = '' ORDER BY booking_service_id`,
     (err, result) => {
@@ -97,6 +99,30 @@ app.get('/getTabServiceLink', (req, res, next) => {
     }
   );
 }); 
+
+app.post('/insertbooking_service', (req, res, next) => {
+
+  let data = {booking_id: req.body.booking_id,
+              service: req.body.service,
+              creation_date: req.body.creation_date,
+              modification_date: req.body.modification_date,
+              modified_by: req.body.modified_by,
+              created_by: req.body.created_by};
+  let sql = "INSERT INTO booking_service SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);

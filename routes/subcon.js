@@ -143,7 +143,8 @@ app.post('/insertsub_con_payments_history', (req, res, next) => {
               work_order_date: req.body.work_order_date,
               invoice_paid_status: req.body.invoice_paid_status,
               title: req.body.title,
-              related_sub_con_work_order_id: req.body.related_sub_con_work_order_id,};
+              receipt_type: req.body.receipt_type,
+              related_sub_con_work_order_id: req.body.related_sub_con_work_order_id};
   let sql = "INSERT INTO sub_con_payments_history SET ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
@@ -158,6 +159,35 @@ app.post('/insertsub_con_payments_history', (req, res, next) => {
     }
   });
 });
+
+app.post('/insertsub_con_payments', (req, res, next) => {
+
+  let data = {project_id: req.body.project_id,
+              sub_con_id: req.body.sub_con_id,
+              work_order: req.body.work_order,
+              amount: req.body.amount,
+              status: req.body.status,
+              remarks: req.body.remarks,
+              mode_of_payment: req.body.mode_of_payment,
+              creation_date: req.body.creation_date,
+              modification_date: req.body.modification_date,
+              created_by: req.body.created_by,
+              modified_by: req.body.modified_by};
+  let sql = "INSERT INTO sub_con_payments SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
