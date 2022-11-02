@@ -83,6 +83,7 @@ app.post('/editInvoiceTab', (req, res, next) => {
   );
 });
 
+
 app.get('/getReceiptTab', (req, res, next) => {
   db.query(`SELECT DISTINCT 
              r.receipt_id
