@@ -411,6 +411,65 @@ app.delete('/deleteTender', (req, res, next) => {
   });
 });
 
+app.post('/getQuotePDF', (req, res, next) => {
+    db.query(`SELECT q.*
+    ,qi.title AS quote_item_title
+    ,qi.quantity
+    ,qi.unit
+    ,qi.description
+    ,qi.amount
+    ,qi.unit_price
+    ,qi.remarks
+    ,o.opportunity_id
+    ,o.opportunity_code
+    ,o.company_id
+    ,c.company_name
+    ,c.address_flat AS billing_address_flat
+    ,c.address_street AS billing_address_street
+    ,c.address_town AS billing_address_town
+    ,c.address_state AS billing_address_state
+    ,gc.name AS billing_address_country
+    ,c.address_po_code AS billing_address_po_code
+    ,c.company_id
+    ,co.email
+    ,c.phone
+    ,c.fax
+    ,c.mobile
+    ,co.salutation
+    ,co.first_name
+    ,s.email AS employee_email
+    ,e.mobile AS employee_mobile
+  FROM quote q
+  LEFT JOIN (quote_items qi) ON (qi.quote_id = q.quote_id)
+  LEFT JOIN (opportunity o) ON (o.opportunity_id = q.opportunity_id)
+  LEFT JOIN (company c) ON (c.company_id = o.company_id)
+  LEFT JOIN (contact co) ON (co.contact_id = o.contact_id)
+  LEFT JOIN (geo_country gc) ON (gc.country_code = c.address_country)
+  LEFT JOIN (employee e) ON (e.employee_id = q.employee_id)
+  LEFT JOIN (staff s) ON (s.employee_id = q.employee_id)
+  WHERE q.quote_id = ${db.escape(req.body.quote_id)}
+  ORDER BY qi.quote_items_id ASC`,
+    (err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      } 
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
