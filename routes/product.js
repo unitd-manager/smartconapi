@@ -106,6 +106,30 @@ app.post('/edit-Product', (req, res, next) => {
   );
 });
 
+
+
+app.post('/insertProduct_Company', (req, res, next) => {
+
+  let data = {
+              product_id: req.body.product_id,
+              company_id: req.body.company_id,
+              creation_date: req.body.creation_date,
+              modification_date: req.body.modification_date};
+  let sql = "INSERT INTO product_company SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');
