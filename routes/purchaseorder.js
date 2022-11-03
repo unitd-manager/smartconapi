@@ -234,6 +234,30 @@ app.post('/editTabMaterialTransferred', (req, res, next) => {
   );
 });
 
+app.post('/insertstock_transfer', (req, res, next) => {
+
+  let data = {from_project_id: req.body.from_project_id,
+              to_project_id: req.body.to_project_id,
+              product_id: req.body.product_id,
+              quantity: req.body.quantity,
+              creation_date: req.body.creation_date,
+              modification_date: req.body.modification_date,
+               };
+
+  let sql = "INSERT INTO stock_transfer  SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
 app.get('/TabDeliveryOrder', (req, res, next) => {
   db.query(`SELECT do.date FROM delivery_order do WHERE project_id != ''`,
       (err, result) => {
@@ -272,6 +296,33 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
         }
        }
     );
+  });
+
+  app.post('/insertdelivery_order', (req, res, next) => {
+
+    let data = {project_id: req.body.project_id,
+                company_id: req.body.company_id,
+                date: req.body.date,
+                created_by: req.body.created_by,
+                creation_date: req.body.creation_date,
+                modified_by: req.body.modified_by,
+                modification_date: req.body.modification_date,
+                purchase_order_id: req.body.purchase_order_id,
+                 };
+  
+    let sql = "INSERT INTO delivery_order SET ?";
+    let query = db.query(sql, data,(err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'New Tender has been created successfully'
+            });
+      }
+    });
   });
   
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {

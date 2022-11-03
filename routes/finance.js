@@ -273,6 +273,39 @@ app.post('/insertInvoiceReceiptHistory', (req, res, next) => {
   });
 });
 
+app.post('/insertcredit_note', (req, res, next) => {
+
+  let data = {credit_note_code: req.body.credit_note_code,
+              amount: req.body.amount,
+              gst_amount: req.body.gst_amount,
+              remarks: req.body.remarks,
+              date: req.body.date,
+              flag: req.body.flag,
+              creation_date: req.body.creation_date,
+              modification_date: req.body.modification_date,
+              created_by: req.body.created_by,
+              modified_by: req.body.modified_by,
+              order_id: req.body.order_id,
+              credit_note_status: req.body.credit_note_status,
+              site_id: req.body.site_id,
+              gst_percentage: req.body.gst_percentage,
+            };
+
+  let sql = "INSERT INTO credit_note SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');

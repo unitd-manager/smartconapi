@@ -75,6 +75,65 @@ app.get('/getTabEmployeeTimeSheet', (req, res, next) => {
   );
 }); 
 
+app.post('/insertemployee_timesheet', (req, res, next) => {
+
+  let data = {creation_date: req.body.creation_date,
+              modification_date: req.body.modification_date,
+              employee_hours: req.body.employee_hours,
+              date: req.body.date,
+              hourly_rate: req.body.hourly_rate,
+              month: req.body.month,
+              year: req.body.year,
+              description: req.body.description,
+              employee_ot_hours: req.body.employee_ot_hours,
+              employee_ph_hours: req.body.employee_ph_hours,
+              ot_hourly_rate: req.body.ot_hourly_rate,
+              ph_hourly_rate: req.body.ph_hourly_rate,
+              admin_charges: req.body.admin_charges,
+              transport_charges: req.body.transport_charges,
+              sign_staff_id: req.body.sign_staff_id,
+
+               };
+
+  let sql = "INSERT INTO employee_timesheet  SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+app.post('/insertproject_employee', (req, res, next) => {
+
+  let data = {creation_date: req.body.creation_date,
+              modification_date: req.body.modification_date,
+              active_in_project: req.body.active_in_project,
+              category_type: req.body.category_type,
+              
+               };
+
+  let sql = "INSERT INTO project_employee SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
