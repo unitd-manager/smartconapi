@@ -668,6 +668,54 @@ app.post('/insertOpportunityCostingSummary', (req, res, next) => {
   });
 });
 
+app.post('/insertQuoteItems', (req, res, next) => {
+
+  let data = {
+    quote_category_id:req.body.quote_category_id
+     ,description: req.body.description
+    , amount: req.body.amount
+    , amount_other: req.body.amount_other
+    , item_type: req.body.item_type
+    , sort_order: req.body.sort_order
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date
+    , title: req.body.title
+    , quote_id: req.body.quote_id
+    , opportunity_id: req.body.opportunity_id
+    , actual_amount: req.body.actual_amount
+    , supplier_amount	: req.body.supplier_amount	
+    , quantity: req.body.quantity
+    , project_id: req.body.project_id
+    , created_by: req.body.created_by
+    , modified_by: req.body.modified_by
+    , unit: req.body.unit
+    , remarks: req.body.remarks
+    , part_no: req.body.part_no
+    , nationality: req.body.nationality
+    , ot_rate: req.body.ot_rate
+    , ph_rate: req.body.ph_rate
+    , scaffold_code: req.body.scaffold_code
+    , erection: req.body.erection
+    , dismantle: req.body.dismantle
+    , unit_price: req.body.unit_price
+    , drawing_number: req.body.drawing_number
+    , drawing_title: req.body.drawing_title
+    , drawing_revision: req.body.drawing_revision
+ };
+  let sql = "INSERT INTO quote_items SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
 
 app.delete('/deleteTender', (req, res, next) => {
 
