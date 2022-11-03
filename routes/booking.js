@@ -100,6 +100,34 @@ app.get('/getTabServiceLink', (req, res, next) => {
   );
 }); 
 
+
+app.post('/insertBooking', (req, res, next) => {
+
+  let data = {customer_id: req.body.customer_id
+    , employee_id: req.body.employee_id
+    , assign_time: req.body.assign_time
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date
+    , modified_by: req.body.modified_by
+    , gps_parameter: req.body.gps_parameter
+    , status: req.body.status
+    , booking_date: req.body.booking_date
+    , latitude: req.body.latitude
+    , longitude: req.body.longitude};
+  let sql = "INSERT INTO booking SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
 app.post('/insertbooking_service', (req, res, next) => {
 
   let data = {booking_id: req.body.booking_id,
