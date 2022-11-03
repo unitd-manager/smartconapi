@@ -74,6 +74,33 @@ app.get('/getTabEmployee', (req, res, next) => {
     }
   );
 });
+
+app.post('/insertOpportunityEmployee', (req, res, next) => {
+
+  let data = {
+    opportunity_id:req.body.opportunity_id
+     ,employee_id: req.body.employee_id
+    , category_type: req.body.category_type
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date
+    , active_in_project: req.body.active_in_project
+    
+    };
+  let sql = "INSERT INTO opportunity_employee SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');
