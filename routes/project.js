@@ -647,6 +647,27 @@ app.post('/insertProject', (req, res, next) => {
   });
 });
 
+app.post('/insertProjectStaff', (req, res, next) => {
+
+  let data = {
+    creation_date:req.body.creation_date
+     ,modification_date: req.body.modification_date
+    , active_in_project: req.body.active_in_project
+     };
+  let sql = "INSERT INTO project_staff SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
