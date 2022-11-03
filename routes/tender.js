@@ -614,8 +614,9 @@ app.post('/insertCostingSummary', (req, res, next) => {
 
 app.post('/insertOpportunityCostingSummary', (req, res, next) => {
 
-  let data = {supplier_id: req.body.supplier_id
-    , sub_con_id: req.body.sub_con_id
+  let data = {
+    supplier_id:req.body.supplier_id
+     ,sub_con_id: req.body.sub_con_id
     , product_id: req.body.product_id
     , opportunity_id: req.body.opportunity_id
     , sketch: req.body.sketch
@@ -628,7 +629,7 @@ app.post('/insertOpportunityCostingSummary', (req, res, next) => {
     , unit: req.body.unit
     
     };
-  let sql = "INSERT INTO opportunity_costing_summary SET ?";
+  let sql = "INSERT INTO opportunity_costing_summary_history SET ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
