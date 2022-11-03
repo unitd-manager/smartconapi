@@ -669,6 +669,34 @@ app.post('/insertProjectStaff', (req, res, next) => {
   });
 });
 
+app.post('/insertThirdParty', (req, res, next) => {
+
+  let data = {
+    item_title:req.body.item_title
+     ,budget_amount: req.body.budget_amount
+    , actual_amount: req.body.actual_amount
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date
+    , sort_order: req.body.sort_order
+    , published: req.body.published
+    , flag: req.body.flag
+
+  };
+  let sql = "INSERT INTO third_party_cost SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');
