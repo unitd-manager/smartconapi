@@ -393,6 +393,99 @@ app.post('/insertContact', (req, res, next) => {
 
 
 
+app.post('/insertService', (req, res, next) => {
+
+  let data = {service_id: req.body.service_id
+    , title: req.body.title
+    , service_code: req.body.service_code
+    , description: req.body.description
+    , price: req.body.price
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date
+    , flag: req.body.flag};
+  let sql = "INSERT INTO service SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+
+
+app.post('/insertStaff', (req, res, next) => {
+
+  let data = {staff_id: req.body.staff_id
+    , staff_rate: req.body.staff_rate
+    , user_group_id: req.body.user_group_id
+    , name: req.body.name
+    , company_name: req.body.company_name
+    , position: req.body.position
+    , email: req.body.email
+    , address_street: req.body.address_street
+    , address_town: req.body.address_town
+    , address_state: req.body.address_state
+    , address_country: req.body.address_country
+    , address_po_code: req.body.address_po_code
+    , phone: req.body.phone
+    , fax: req.body.fax
+    , notes: req.body.notes
+    , sort_order: req.body.sort_order
+    , published: req.body.published
+    , creation_date : req.body. creation_date 
+    , modification_date: req.body.modification_date
+    , protected: req.body.protected
+    , user_name: req.body.user_name
+    , pass_word: req.body.pass_word
+    , first_name: req.body.first_name
+    , last_name: req.body.last_name
+    , mobile: req.body.mobile
+    , religion: req.body.religion
+    , address: req.body.address
+    , relationship: req.body.relationship
+    , known_as_name: req.body.known_as_name
+    , address_street1: req.body.address_street1
+    , address_town1: req.body.address_town1
+    , address_country1: req.body.address_country1
+    , flag: req.body.flag
+    , sex: req.body.sex
+    , date_of_birth: req.body.date_of_birth
+    , random_no: req.body.random_no
+    , login_count: req.body.login_count
+    , member_status: req.body.member_status
+    , team: req.body.team
+    , section_name: req.body.section_name
+    , staff_type: req.body.staff_type
+    , status: req.body.status
+    , content_update_alert: req.body.content_update_alert
+    , show_sensitive_details: req.body.show_sensitive_details
+    , current_status: req.body.current_status
+    , developer : req.body. developer 
+    , joined_date: req.body.joined_date
+    , employee_id: req.body.employee_id};
+  let sql = "INSERT INTO staff SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+
 app.delete('/deleteTender', (req, res, next) => {
 
   let data = {opportunity_id: req.body.opportunity_id};
