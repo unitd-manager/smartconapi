@@ -471,6 +471,55 @@ app.post('/getQuotePDF', (req, res, next) => {
   );
 });
 
+app.post('/insertCostingSummary', (req, res, next) => {
+
+  let data = {
+    po_code: req.body.po_code
+    , invoice_code: req.body.invoice_code
+    , delivery_date: req.body.delivery_date
+    , no_of_worker_used: req.body.no_of_worker_used
+    , no_of_days_worked: req.body.no_of_days_worked
+    , labour_rates_per_day: req.body.labour_rates_per_day
+    , po_price: req.body.po_price
+    , po_price_with_gst: req.body.po_price_with_gst
+    , invoiced_price: req.body.invoiced_price
+    , invoiced_price_with_gst: req.body.invoiced_price_with_gst
+    , profit_percentage: req.body.profit_percentage
+    , profit: req.body.profit
+    , total_material_price: req.body.total_material_price
+    , transport_charges: req.body.transport_charges
+    , total_labour_charges: req.body.total_labour_charges
+    , salesman_commission: req.body.salesman_commission
+    , finance_charges: req.body.finance_charges
+    , office_overheads: req.body.office_overheads
+    , other_charges: req.body.other_charges
+    , created_by: req.body.created_by
+    , creation_date: req.body.creation_date
+    , modified_by: req.body.modified_by
+    , modification_date: req.body.modification_date
+    , total_cost: req.body.total_cost
+    , project_id: req.body.project_id
+    , salesman_commission_percentage: req.body.salesman_commission_percentage
+    , finance_charges_percentage: req.body.finance_charges_percentage
+    , office_overheads_percentage: req.body.office_overheads_percentage
+    , transport_charges_percentage: req.body.transport_charges_percentage
+    };
+  let sql = "INSERT INTO costing_summary SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');
