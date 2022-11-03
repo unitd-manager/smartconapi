@@ -18,7 +18,19 @@ app.use(fileUpload({
 }));
 
 app.get('/getTimeSheet', (req, res, next) => {
-  db.query("SELECT a.staff_id,a.record_date,a.type_of_leave,a.latitude,a.longitude,a.notes,a.time_in,a.leave_time,a.description,CONCAT_WS(' ', s.first_name, s.last_name) AS staff_name ,s.team AS staff_team FROM attendance a LEFT JOIN (staff s) ON (a.staff_id = s.staff_id) WHERE attendance_id = ''",
+  db.query(`SELECT a.staff_id
+  ,a.record_date
+  ,a.type_of_leave
+  ,a.latitude
+  ,a.longitude
+  ,a.notes
+  ,a.time_in
+  ,a.leave_time
+  ,a.description
+  ,CONCAT_WS(' ', s.first_name, s.last_name) AS staff_name 
+  ,s.team AS staff_team 
+  FROM attendance a LEFT JOIN (staff s) ON (a.staff_id = s.staff_id) 
+  WHERE attendance_id = ''`,
     (err, result) => {
        
       if (result.length == 0) {
@@ -38,6 +50,39 @@ app.get('/getTimeSheet', (req, res, next) => {
 });
 
 
+app.post('/insertAttendance', (req, res, next) => {
+
+  let data = {staff_id: req.body.staff_id
+    , leave_time: req.body.leave_time
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date
+    , notes: req.body.notes
+    , record_date: req.body.record_date
+    , on_leave: req.body.on_leave
+    , time_in: req.body.time_in
+    , over_time: req.body.over_time
+    , due_time: req.body.due_time
+    , description: req.body.description
+    , type_of_leave: req.body.type_of_leave
+    , created_by: req.body.created_by
+    , modified_by: req.body.modified_by
+    , task: req.body.task
+    , latitude: req.body.latitude
+    , longitude: req.body.longitude};
+  let sql = "INSERT INTO attendance SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
 
 app.post('/editTimeSheet', (req, res, next) => {
   db.query(`UPDATE attendance 
@@ -62,6 +107,7 @@ app.post('/editTimeSheet', (req, res, next) => {
      }
   );
 });
+
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
