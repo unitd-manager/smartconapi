@@ -577,6 +577,77 @@ app.get('/getTabCostingSummary', (req, res, next) => {
     }
   );
 });
+
+
+
+app.post('/insertProject', (req, res, next) => {
+
+  let data = {title: req.body.title
+    , description: req.body.description
+    , published: req.body.published
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date
+    , content_date: req.body.content_date
+    , service_id: req.body.service_id
+    , contact_id: req.body.contact_id
+    , task_id : req.body. task_id 
+    , enquiry_date: req.body.enquiry_date
+    , follow_up_date: req.body.follow_up_date
+    , start_date: req.body.start_date
+    , estimated_finish_date: req.body.estimated_finish_date
+    , actual_finish_date: req.body.actual_finish_date
+    , project_value: req.body.project_value
+    , notes: req.body.notes
+    , project_code: req.body.project_code
+    , status: req.body.status
+    , staff_id: req.body.staff_id
+    , project_manager_id: req.body.project_manager_id
+    , per_completed: req.body.per_completed
+    , opportunity_id: req.body.opportunity_id
+    , category: req.body.category
+    , percent_used: req.body.percent_used
+    , invoice: req.body.invoice
+    , quote_ref: req.body.quote_ref
+    , client_type: req.body.client_type
+    , difficulty: req.body.difficulty
+    , created_by: req.body.created_by
+    , modified_by: req.body.modified_by
+    , flag: req.body.flag
+    , deposit_inv_ref: req.body.deposit_inv_ref
+    , project_commission: req.body.project_commission
+    , payment_terms: req.body.payment_terms
+    , confirmed_quote_id: req.body.confirmed_quote_id
+    , target_left: req.body.target_left
+    , budget_inhouse: req.body.budget_inhouse
+    , budget_third_party: req.body.budget_third_party
+    , used_third_party: req.body.used_third_party
+    , used_inhouse: req.body.used_inhouse
+    , net_third_party: req.body.net_third_party
+    , stage: req.body.stage
+    , currency: req.body.currency
+    , branch_id: req.body.branch_id
+    , project_value_base: req.body.project_value_base
+    ,  project_value_ref : req.body. project_value_ref 
+    , paid_on: req.body.paid_on
+    , quote_id: req.body.quote_id
+    , site: req.body.site
+  };
+  let sql = "INSERT INTO project SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');

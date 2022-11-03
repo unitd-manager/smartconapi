@@ -392,6 +392,123 @@ app.post('/insertContact', (req, res, next) => {
 });
 
 
+app.post('/insertValueList', (req, res, next) => {
+
+  let data = {key_text: req.body.key_text
+    , value: req.body.value
+    , chi_value: req.body.chi_value
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date
+    , sort_order: req.body.sort_order
+    , flag: req.body.flag
+    , code: req.body.code};
+  let sql = "INSERT INTO valuelist SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+app.post('/insertService', (req, res, next) => {
+
+  let data = {service_id: req.body.service_id
+    , title: req.body.title
+    , service_code: req.body.service_code
+    , description: req.body.description
+    , price: req.body.price
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date
+    , flag: req.body.flag};
+  let sql = "INSERT INTO service SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+
+
+app.post('/insertStaff', (req, res, next) => {
+
+  let data = {staff_id: req.body.staff_id
+    , staff_rate: req.body.staff_rate
+    , user_group_id: req.body.user_group_id
+    , name: req.body.name
+    , company_name: req.body.company_name
+    , position: req.body.position
+    , email: req.body.email
+    , address_street: req.body.address_street
+    , address_town: req.body.address_town
+    , address_state: req.body.address_state
+    , address_country: req.body.address_country
+    , address_po_code: req.body.address_po_code
+    , phone: req.body.phone
+    , fax: req.body.fax
+    , notes: req.body.notes
+    , sort_order: req.body.sort_order
+    , published: req.body.published
+    , creation_date : req.body. creation_date 
+    , modification_date: req.body.modification_date
+    , protected: req.body.protected
+    , user_name: req.body.user_name
+    , pass_word: req.body.pass_word
+    , first_name: req.body.first_name
+    , last_name: req.body.last_name
+    , mobile: req.body.mobile
+    , religion: req.body.religion
+    , address: req.body.address
+    , relationship: req.body.relationship
+    , known_as_name: req.body.known_as_name
+    , address_street1: req.body.address_street1
+    , address_town1: req.body.address_town1
+    , address_country1: req.body.address_country1
+    , flag: req.body.flag
+    , sex: req.body.sex
+    , date_of_birth: req.body.date_of_birth
+    , random_no: req.body.random_no
+    , login_count: req.body.login_count
+    , member_status: req.body.member_status
+    , team: req.body.team
+    , section_name: req.body.section_name
+    , staff_type: req.body.staff_type
+    , status: req.body.status
+    , content_update_alert: req.body.content_update_alert
+    , show_sensitive_details: req.body.show_sensitive_details
+    , current_status: req.body.current_status
+    , developer : req.body. developer 
+    , joined_date: req.body.joined_date
+    , employee_id: req.body.employee_id};
+  let sql = "INSERT INTO staff SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
 
 app.delete('/deleteTender', (req, res, next) => {
 
@@ -470,6 +587,106 @@ app.post('/getQuotePDF', (req, res, next) => {
     }
   );
 });
+
+app.post('/insertCostingSummary', (req, res, next) => {
+
+  let data = {
+    po_code: req.body.po_code
+    , invoice_code: req.body.invoice_code
+    , delivery_date: req.body.delivery_date
+    , no_of_worker_used: req.body.no_of_worker_used
+    , no_of_days_worked: req.body.no_of_days_worked
+    , labour_rates_per_day: req.body.labour_rates_per_day
+    , po_price: req.body.po_price
+    , po_price_with_gst: req.body.po_price_with_gst
+    , invoiced_price: req.body.invoiced_price
+    , invoiced_price_with_gst: req.body.invoiced_price_with_gst
+    , profit_percentage: req.body.profit_percentage
+    , profit: req.body.profit
+    , total_material_price: req.body.total_material_price
+    , transport_charges: req.body.transport_charges
+    , total_labour_charges: req.body.total_labour_charges
+    , salesman_commission: req.body.salesman_commission
+    , finance_charges: req.body.finance_charges
+    , office_overheads: req.body.office_overheads
+    , other_charges: req.body.other_charges
+    , created_by: req.body.created_by
+    , creation_date: req.body.creation_date
+    , modified_by: req.body.modified_by
+    , modification_date: req.body.modification_date
+    , total_cost: req.body.total_cost
+    , project_id: req.body.project_id
+    , salesman_commission_percentage: req.body.salesman_commission_percentage
+    , finance_charges_percentage: req.body.finance_charges_percentage
+    , office_overheads_percentage: req.body.office_overheads_percentage
+    , transport_charges_percentage: req.body.transport_charges_percentage
+    };
+  let sql = "INSERT INTO costing_summary SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+app.post('/insertOpportunityCostingSummary', (req, res, next) => {
+
+  let data = {
+    supplier_id:req.body.supplier_id
+     ,sub_con_id: req.body.sub_con_id
+    , product_id: req.body.product_id
+    , opportunity_id: req.body.opportunity_id
+    , sketch: req.body.sketch
+    , quantity: req.body.quantity
+    , unit_price: req.body.unit_price
+    , amount: req.body.amount
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date
+    , opportunity_costing_summary_id: req.body.opportunity_costing_summary_id
+    , unit: req.body.unit
+    
+    };
+  let sql = "INSERT INTO opportunity_costing_summary_history SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+
+app.delete('/deleteTender', (req, res, next) => {
+
+  let data = {opportunity_id: req.body.opportunity_id};
+  let sql = "DELETE FROM opportunity WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
