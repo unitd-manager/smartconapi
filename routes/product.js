@@ -211,6 +211,44 @@ app.post('/insertProduct_Company', (req, res, next) => {
   });
 });
 
+
+app.post('/insertCategory', (req, res, next) => {
+
+  let data = {section_id: req.body.section_id
+    , title: req.body.title
+    , description: req.body.description
+    , sort_order: req.body.sort_order
+    ,  published : req.body. published 
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date
+    , chi_title : req.body. chi_title 
+    , chi_description: req.body.chi_description
+    , display_type: req.body.display_type
+    , template: req.body.template
+    , category_type: req.body.category_type
+    , show_navigation_panel: req.body.show_navigation_panel
+    ,  external_link : req.body. external_link 
+    , meta_title: req.body.meta_title
+    , meta_keyword: req.body.meta_keyword
+    , meta_description : req.body. meta_description 
+    , category_filter: req.body.category_filter
+    , internal_link: req.body.internal_link
+    , show_in_nav: req.body.show_in_nav};
+  let sql = "INSERT INTO category SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');
