@@ -366,7 +366,7 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
      , project: req.body.project
       
    };
-    let sql = "INSERT INTO materials_request_line_items SET ?";
+    let sql = "INSERT INTO purchase_order SET ?";
     let query = db.query(sql, data,(err, result) => {
       if (err) {
         console.log("error: ", err);
