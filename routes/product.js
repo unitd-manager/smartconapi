@@ -249,6 +249,48 @@ app.post('/insertCategory', (req, res, next) => {
   });
 });
 
+
+app.post('/insertSection', (req, res, next) => {
+
+  let data = { title : req.body. title 
+    , display_type: req.body.display_type
+    , show_navigation_panel: req.body.show_navigation_panel
+    , description: req.body.description
+    ,  sort_order : req.body. sort_order 
+    , published: req.body.published
+    , creation_date: req.body.creation_date
+    , modification_date : req.body. modification_date 
+    , external_link: req.body.external_link
+    , chi_title: req.body.chi_title
+    , chi_description: req.body.chi_description
+    , button_position: req.body.button_position
+    , template: req.body.template
+    ,  section_type : req.body. section_type 
+    , meta_title: req.body.meta_title
+    , meta_keyword: req.body.meta_keyword
+    , meta_description : req.body. meta_description 
+    , access_to: req.body.access_to
+    , published_test: req.body.published_test
+    , top_section_id: req.body.top_section_id
+    , internal_link: req.body.internal_link
+    , show_in_nav: req.body.show_in_nav
+    , seo_title: req.body.seo_title};
+  let sql = "INSERT INTO section SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');
