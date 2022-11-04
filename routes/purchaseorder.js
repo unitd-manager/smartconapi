@@ -325,6 +325,80 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
     });
   });
 
+  app.post('/insertPoProduct', (req, res, next) => {
+
+    let data = {
+      purchase_order_id:req.body.purchase_order_id
+       ,item_title: req.body.item_title
+      , quantity: req.body.quantity
+      , unit: req.body.unit
+      , amount: req.body.amount
+      , description: req.body.description
+      , creation_date: req.body.creation_date
+      , modification_date: req.body.modification_date
+      , created_by: req.body.created_by
+      , modified_by: req.body.modified_by
+      , status: req.body.status
+      , cost_price	: req.body.cost_price	
+      , selling_price: req.body.selling_price
+      , qty_updated: req.body.qty_updated
+      , qty: req.body.qty
+      , product_id: req.body.product_id
+      , supplier_id: req.body.supplier_id
+      , gst: req.body.gst
+      , damage_qty: req.body.damage_qty
+      , brand: req.body.brand
+      , qty_requested: req.body.qty_requested
+      , qty_delivered: req.body.qty_delivered
+      , price: req.body.price
+      
+   };
+    let sql = "INSERT INTO po_product SET ?";
+    let query = db.query(sql, data,(err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'New Tender has been created successfully'
+            });
+      }
+    });
+  });
+
+  app.post('/insertPoProduct', (req, res, next) => {
+
+    let data = {
+      purchase_order_id:req.body.purchase_order_id
+       ,item_title: req.body.item_title
+      , quantity: req.body.quantity
+      , unit: req.body.unit
+      , amount: req.body.amount
+      , description: req.body.description
+      , creation_date: req.body.creation_date
+      , modification_date: req.body.modification_date
+      , created_by: req.body.created_by
+      , modified_by: req.body.modified_by
+      , status: req.body.status
+      
+   };
+    let sql = "INSERT INTO po_product SET ?";
+    let query = db.query(sql, data,(err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'New Tender has been created successfully'
+            });
+      }
+    });
+  });
+
   app.post('/insertPurchaseOrder', (req, res, next) => {
 
     let data = {po_code:req.body.mr_code
