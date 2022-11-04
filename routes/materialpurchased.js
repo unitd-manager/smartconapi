@@ -184,6 +184,46 @@ app.post('/insertMaterialRequest', (req, res, next) => {
   });
 });
 
+app.post('/insertMaterialRequestLineItems', (req, res, next) => {
+
+  let data = {
+    materials_request_id:req.body.materials_request_id
+     ,item_title: req.body.item_title
+    , quantity: req.body.quantity
+    , unit: req.body.unit
+    , amount: req.body.amount
+    , description: req.body.description
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date
+    , created_by: req.body.created_by
+    , modified_by: req.body.modified_by
+    , status: req.body.status
+    , cost_price: req.body.cost_price
+    , selling_price	: req.body.selling_price	
+    , qty_requested: req.body.qty_requested
+    , qty: req.body.qty
+    , product_id: req.body.product_id
+    , supplier_id: req.body.supplier_id
+    , gst: req.body.gst
+    , damage_qty: req.body.damage_qty
+    , brand: req.body.brand
+    
+ };
+  let sql = "INSERT INTO materials_request_line_items SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');
