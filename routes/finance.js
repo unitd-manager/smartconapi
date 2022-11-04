@@ -206,7 +206,144 @@ app.get('/getTabCreditNotePortalDisplay', (req, res, next) => {
  
     }
   );
-}); 
+});
+
+
+app.post('/insertorder', (req, res, next) => {
+
+  let data = {order_status: req.body.order_status,
+    payment_method: req.body.payment_method,
+    shipping_first_name: req.body.shipping_first_name,
+    shipping_last_name: req.body.shipping_last_name,
+    shipping_email: req.body.shipping_email,
+    shipping_address1: req.body.shipping_address1,
+    shipping_address2: req.body.shipping_address2,
+    shipping_address_city: req.body.shipping_address_city,
+    shipping_address_area: req.body.shipping_address_area,
+    shipping_address_state: req.body.shipping_address_state,
+    shipping_address_country_code: req.body.shipping_address_country_code,
+    shipping_address_po_code: req.body.shipping_address_po_code,
+    shipping_phone: req.body.shipping_phone,
+    cust_first_name: req.body.cust_first_name,
+    cust_last_name: req.body.cust_last_name,
+    cust_email: req.body.cust_email,
+    cust_address1: req.body.cust_address1,
+    cust_address2: req.body.cust_address2,
+    cust_address_city: req.body.cust_address_city,
+    cust_address_area: req.body.cust_address_area,
+    cust_address_state: req.body.cust_address_state,
+    cust_address_country: req.body.cust_address_country,
+    cust_address_po_code: req.body.cust_address_po_code,
+    cust_phone: req.body.cust_phone,
+    memo: req.body.memo,
+    creation_date: req.body.creation_date,
+    modification_date: req.body.modification_date,
+    flag: req.body.flag,
+    record_type: req.body.record_type,
+    module: req.body.module,
+    currency: req.body.currency,
+    order_date: req.body.order_date,
+    order_code: req.body.order_code,
+    shipping_charge: req.body.shipping_charge,
+    add_gst_to_total: req.body.add_gst_to_total,
+    invoice_terms: req.body.invoice_terms,
+    notes: req.body.notes,
+    shipping_address_country: req.body.shipping_address_country,
+    address_country: req.body.address_country,
+    delivery_to_text: req.body.delivery_to_text,
+    created_by: req.body.created_by,
+    modified_by: req.body.modified_by,
+    discount: req.body.discount,
+    name_of_company: req.body.name_of_company,
+    vat: req.body.vat,
+    cust_company_name: req.body.cust_company_name,
+    site_id: req.body.site_id,
+    manual_invoice: req.body.manual_invoice,
+    apply_general_vat: req.body.apply_general_vat,
+    link_stock: req.body.link_stock,
+    selling_company: req.body.selling_company,
+    link_account: req.body.link_account,
+    project_id: req.body.project_id,
+    start_date : req.body. start_date ,
+    end_date: req.body.end_date,
+    auto_create_invoice: req.body.auto_create_invoice,
+    delivery_date: req.body.delivery_date,
+    delivery_terms: req.body.delivery_terms,
+    quote_title: req.body.quote_title,
+    project_type: req.body.project_type,
+    cust_fax: req.body.cust_fax,
+    shipping_fax: req.body.shipping_fax,
+  
+            };
+
+  let sql = "INSERT INTO order SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+
+app.post('/insertorder_item', (req, res, next) => {
+
+  let data = {qty: req.body.qty,
+              unit_price: req.body.unit_price,
+              item_title: req.body.item_title,
+              model: req.body.model,
+              module: req.body.module,
+              cost_price: req.body.cost_price,
+              discount_percentage: req.body.discount_percentage,
+              mark_up: req.body.mark_up,
+              qty_for_invoice: req.body.qty_for_invoice,
+              mark_up_type: req.body.mark_up_type,
+              item_code: req.body.item_code,
+              price_from_supplier: req.body.price_from_supplier,
+              ref_code: req.body.ref_code,
+              discount_type: req.body.discount_type,
+              vat: req.body.vat,
+              site_id: req.body.site_id,
+              item_code_backup: req.body.item_code_backup,
+              unit: req.body.unit,
+              description: req.body.description,
+              remarks: req.body.remarks,
+              month: req.body.month,
+              year: req.body.year,
+              ot_hourly_rate: req.body.ot_hourly_rate,
+              ph_hourly_rate: req.body.ph_hourly_rate,
+              employee_ot_hours: req.body.employee_ot_hours,
+              employee_ph_hours: req.body.employee_ph_hours,
+              part_no: req.body.part_no,
+              admin_charges: req.body.admin_charges,
+              transport_charges: req.body.transport_charges,
+              quote_id: req.body.quote_id,
+              drawing_number: req.body.drawing_number,
+              drawing_title: req.body.drawing_title,
+              drawing_revision: req.body.drawing_revision,
+            
+            };
+
+  let sql = "INSERT INTO order_item SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
 
 app.post('/insertreceipt', (req, res, next) => {
 
