@@ -127,6 +127,102 @@ app.post('/editTabMaterialRequestlineitems', (req, res, next) => {
   );
 });
 
+app.post('/insertMaterialRequest', (req, res, next) => {
+
+  let data = {
+    mr_code:req.body.mr_code
+     ,company_id_supplier: req.body.company_id_supplier
+    , contact_id_supplier: req.body.contact_id_supplier
+    , delivery_terms: req.body.delivery_terms
+    , status: req.body.status
+    , project_id: req.body.project_id
+    , flag: req.body.flag
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date
+    , created_by: req.body.created_by
+    , modified_by: req.body.modified_by
+    , supplier_reference_no: req.body.supplier_reference_no
+    , our_reference_no	: req.body.our_reference_no	
+    , shipping_method: req.body.shipping_method
+    , payment_terms: req.body.payment_terms
+    , delivery_date: req.body.delivery_date
+    , mr_date: req.body.mr_date
+    , shipping_address_flat: req.body.shipping_address_flat
+    , shipping_address_street: req.body.shipping_address_street
+    , shipping_address_country: req.body.shipping_address_country
+    , shipping_address_po_code: req.body.shipping_address_po_code
+    , expense_id: req.body.expense_id
+    , staff_id: req.body.staff_id
+    , materials_request_date: req.body.materials_request_date
+    , payment_status: req.body.payment_status
+    , title: req.body.title
+    , priority: req.body.priority
+    , follow_up_date: req.body.follow_up_date
+    , notes: req.body.notes
+    , supplier_inv_code: req.body.supplier_inv_code
+    , gst: req.body.gst
+    , gst_percentage: req.body.gst_percentage
+    , project_name: req.body.project_name
+    , site_reference: req.body.site_reference
+    , request_by: req.body.request_by
+    , request_date: req.body.request_date
+    , approved_by: req.body.approved_by
+    , approved_date: req.body.approved_date
+ };
+  let sql = "INSERT INTO materials_request SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+app.post('/insertMaterialRequestLineItems', (req, res, next) => {
+
+  let data = {
+    materials_request_id:req.body.materials_request_id
+     ,item_title: req.body.item_title
+    , quantity: req.body.quantity
+    , unit: req.body.unit
+    , amount: req.body.amount
+    , description: req.body.description
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date
+    , created_by: req.body.created_by
+    , modified_by: req.body.modified_by
+    , status: req.body.status
+    , cost_price: req.body.cost_price
+    , selling_price	: req.body.selling_price	
+    , qty_requested: req.body.qty_requested
+    , qty: req.body.qty
+    , product_id: req.body.product_id
+    , supplier_id: req.body.supplier_id
+    , gst: req.body.gst
+    , damage_qty: req.body.damage_qty
+    , brand: req.body.brand
+    
+ };
+  let sql = "INSERT INTO materials_request_line_items SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
