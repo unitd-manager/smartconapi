@@ -368,13 +368,12 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
     });
   });
 
-  app.post('/insertPoProduct', (req, res, next) => {
+  app.post('/insertProjectMaterials', (req, res, next) => {
 
     let data = {
-      purchase_order_id:req.body.purchase_order_id
-       ,item_title: req.body.item_title
+      project_id:req.body.project_id
+       ,title: req.body.title
       , quantity: req.body.quantity
-      , unit: req.body.unit
       , amount: req.body.amount
       , description: req.body.description
       , creation_date: req.body.creation_date
@@ -382,9 +381,13 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
       , created_by: req.body.created_by
       , modified_by: req.body.modified_by
       , status: req.body.status
-      
+      , unit: req.body.unit
+      , material_used_date: req.body.material_used_date
+      , part_no: req.body.part_no
+      , product_id: req.body.product_id
+      , viresco_factory: req.body.viresco_factory
    };
-    let sql = "INSERT INTO po_product SET ?";
+    let sql = "INSERT INTO project_materials SET ?";
     let query = db.query(sql, data,(err, result) => {
       if (err) {
         console.log("error: ", err);
