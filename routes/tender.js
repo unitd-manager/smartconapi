@@ -510,6 +510,132 @@ app.post('/insertStaff', (req, res, next) => {
 });
 
 
+
+app.post('/insertEmployee', (req, res, next) => {
+
+  let data = {company_name: req.body.company_name
+    , position: req.body.position
+    , email: req.body.email
+    , address_street: req.body.address_street
+    , address_area: req.body.address_area
+    , address_town: req.body.address_town
+    , address_state: req.body.address_state
+    , address_country: req.body.address_country
+    , address_po_code: req.body.address_po_code
+    , phone: req.body.phone
+    , fax: req.body.fax
+    , sort_order: req.body.sort_order
+    , published: req.body.published
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date
+    , protected: req.body.protected
+    , pass_word: req.body.pass_word
+    , subscribe : req.body. subscribe 
+    , mobile: req.body.mobile
+    , religion: req.body.religion
+    , relationship: req.body.relationship
+    , known_as_name: req.body.known_as_name
+    , address_street1: req.body.address_street1
+    , address_town1 : req.body. address_town1 
+    , address_country1: req.body.address_country1
+    , flag: req.body.flag
+    , sex: req.body.sex
+    , date_of_birth: req.body.date_of_birth
+    , random_no: req.body.random_no
+    , member_status: req.body.member_status
+    , direct_tel: req.body.direct_tel
+    , member_type: req.body.member_type
+    , address_flat: req.body.address_flat
+    , phone_direct: req.body.phone_direct
+    , salutation: req.body.salutation
+    , department: req.body.department
+    , created_by: req.body.created_by
+    , modified_by: req.body.modified_by
+    , published_test: req.body.published_test
+    , company_address_street: req.body.company_address_street
+    , company_address_flat: req.body.company_address_flat
+    , company_address_town: req.body.company_address_town
+    , company_address_state : req.body. company_address_state 
+    , company_address_country: req.body.company_address_country
+    , company_address_id: req.body.company_address_id
+    , category : req.body. category 
+    , status: req.body.status
+    , user_group_id: req.body.user_group_id
+    , employee_name: req.body.employee_name
+    , notes: req.body.notes
+    , user_name: req.body.user_name
+    , address: req.body.address
+    , login_count: req.body.login_count
+    , passport: req.body.passport
+    , nric_no: req.body.nric_no
+    , employee_work_type : req.body. employee_work_type 
+    , add_hourly_rate: req.body.add_hourly_rate
+    , salary: req.body.salary
+    , spass_no: req.body.spass_no
+    , date_of_expiry: req.body.date_of_expiry
+    , day_rate: req.body.day_rate
+    , overtime_rate: req.body.overtime_rate
+    , emp_code: req.body.emp_code
+    , gender: req.body.gender
+    , relegion : req.body. relegion 
+    , nationality: req.body.nationality
+    , foreign_addrs_street: req.body.foreign_addrs_street
+    , foreign_addrs_area: req.body.foreign_addrs_area
+    ,  foreign_addrs_city : req.body. foreign_addrs_city 
+    , foreign_addrs_postal_code: req.body.foreign_addrs_postal_code
+    , foreign_addrs_country : req.body. foreign_addrs_country 
+    , emergency_contact_name: req.body.emergency_contact_name
+    , emergency_contact_phone: req.body.emergency_contact_phone
+    , emergency_contact_phone2: req.body.emergency_contact_phone2
+    , emergency_contact_address: req.body.emergency_contact_address
+    , degree1: req.body.degree1
+    , educational_qualitifcation1: req.body.educational_qualitifcation1
+    , year_of_completion1: req.body.year_of_completion1
+    , degree2: req.body.degree2
+    , educational_qualitifcation2: req.body.educational_qualitifcation2
+    , year_of_completion2: req.body.year_of_completion2
+    , degree3: req.body.degree3
+    , department: req.body.department
+    , educational_qualitifcation3: req.body.educational_qualitifcation3
+    , year_of_completion3: req.body.year_of_completion3
+    , fin_no: req.body.fin_no
+    , marital_status: req.body.marital_status
+    , is_citizen: req.body.is_citizen
+    , race: req.body.race
+    , employee_group : req.body. employee_group 
+    , first_name: req.body.first_name
+    , last_name: req.body.last_name
+    , foreign_mobile : req.body. foreign_mobile 
+    , foreign_email: req.body.foreign_email
+    , spr_year: req.body.spr_year
+    , citizen: req.body.citizen
+    , date_of_issue: req.body.date_of_issue
+    , work_permit: req.body.work_permit
+    , fin_no_expiry_date: req.body.fin_no_expiry_date
+    , work_permit_expiry_date : req.body. work_permit_expiry_date 
+    , ir21_filed: req.body.ir21_filed
+    , site_id: req.body.site_id
+    , room_no : req.body. room_no 
+    , dormitory_id: req.body.dormitory_id
+    , employee_type: req.body.employee_type
+    , project_designation: req.body.project_designation
+    , team : req.body. team 
+    , project_manager: req.body.project_manager
+    , admin_staff: req.body.admin_staff};
+  let sql = "INSERT INTO employee SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
 app.delete('/deleteTender', (req, res, next) => {
 
   let data = {opportunity_id: req.body.opportunity_id};
