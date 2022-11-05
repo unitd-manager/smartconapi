@@ -18,7 +18,30 @@ app.use(fileUpload({
 }));
 
 app.get('/getProjects', (req, res, next) => {
-  db.query("SELECT p.title,p.category,p.status,p.contact_id,p.start_date,p.estimated_finish_date,p.description,p.project_manager_id, CONCAT_WS(' ', cont.first_name, cont.last_name) AS contact_name ,c.company_name ,c.company_size ,c.source ,c.industry ,o.opportunity_code ,( SELECT GROUP_CONCAT( CONCAT_WS(' ', stf.first_name, stf.last_name) ORDER BY CONCAT_WS(' ', stf.first_name, stf.last_name) SEPARATOR ', ' ) FROM staff stf ,project_staff ts WHERE ts.project_id = p.project_id AND stf.staff_id = ts.staff_id ) AS staff_name ,ser.title as service_title ,CONCAT_WS(' ', s.first_name, s.last_name) AS project_manager_name ,(p.project_value - (IF(ISNULL(( SELECT SUM(invoice_amount) FROM invoice i LEFT JOIN (`order` o) ON (i.order_id = o.order_id) WHERE o.project_id = p.project_id AND LOWER(i.status) != 'cancelled' ) ),0, ( SELECT SUM(invoice_amount) FROM invoice i LEFT JOIN (`order` o) ON (i.order_id = o.order_id) WHERE o.project_id = p.project_id AND LOWER(i.status) != 'cancelled' ) ))) AS still_to_bill FROM project p LEFT JOIN (contact cont)  ON (p.contact_id         = cont.contact_id) LEFT JOIN (company c)     ON (p.company_id         = c.company_id) LEFT JOIN (service ser)   ON (p.service_id         = ser.service_id) LEFT JOIN (staff   s)     ON (p.project_manager_id = s.staff_id) LEFT JOIN (opportunity o) ON (p.opportunity_id     = o.opportunity_id) WHERE ( LOWER(p.status) = 'wip' OR LOWER(p.status) = 'billable' OR LOWER(p.status) = 'billed' ) AND ( LOWER(p.status) = 'wip' OR LOWER(p.status) = 'billable' OR LOWER(p.status) = 'billed' ) ORDER BY p.project_code DESC",
+  db.query(`SELECT p.title
+  ,p.category
+  ,p.status
+  ,p.contact_id
+  ,p.start_date
+  ,p.estimated_finish_date
+  ,p.description
+  ,p.project_manager_id
+  ,CONCAT_WS(' ', cont.first_name, cont.last_name) AS contact_name 
+  ,c.company_name 
+  ,c.company_size 
+  ,c.source ,c.industry 
+  ,o.opportunity_code 
+  ,( SELECT GROUP_CONCAT( CONCAT_WS(' ', stf.first_name, stf.last_name) 
+  ORDER BY CONCAT_WS(' ', stf.first_name, stf.last_name) SEPARATOR ', ' ) 
+  FROM staff stf ,project_staff ts 
+  WHERE ts.project_id = p.project_id AND stf.staff_id = ts.staff_id ) 
+  AS staff_name ,ser.title as service_title ,CONCAT_WS(' ', s.first_name, s.last_name) 
+  AS project_manager_name ,(p.project_value - (IF(ISNULL(( SELECT SUM(invoice_amount) 
+  FROM invoice i LEFT JOIN (orders o) ON (i.order_id = o.order_id)
+ WHERE o.project_id = p.project_id AND LOWER(i.status) != 'cancelled' ) ),0, ( SELECT SUM(invoice_amount) 
+  FROM invoice i LEFT JOIN (orders o) ON (i.order_id = o.order_id) 
+  WHERE o.project_id = p.project_id AND LOWER(i.status) != 'cancelled' ) ))) AS still_to_bill FROM project p LEFT JOIN (contact cont) ON (p.contact_id = cont.contact_id)LEFT JOIN (company c)ON (p.company_id = c.company_id) 
+  LEFT JOIN (service ser) ON (p.service_id = ser.service_id) LEFT JOIN (staff s) ON (p.project_manager_id = s.staff_id) LEFT JOIN (opportunity o) ON (p.opportunity_id = o.opportunity_id) WHERE ( LOWER(p.status) = 'wip' OR LOWER(p.status) = 'billable' OR LOWER(p.status) = 'billed' ) AND ( LOWER(p.status) = 'wip' OR LOWER(p.status) ='billable' OR LOWER(p.status) = 'billed') ORDER BY p.project_code DESC`,
     (err, result) => {
        
       if (result.length == 0) {
@@ -64,8 +87,90 @@ app.post('/edit-Project', (req, res, next) => {
      }
   );
 });
+
+
+
+app.post('/insertOrder', (req, res, next) => {
+
+  let data = {order_status: req.body.order_status,
+    payment_method: req.body.payment_method,
+    shipping_first_name: req.body.shipping_first_name,
+    shipping_last_name: req.body.shipping_last_name,
+    shipping_email: req.body.shipping_email,
+    shipping_address1: req.body.shipping_address1,
+    shipping_address2: req.body.shipping_address2,
+    shipping_address_city: req.body.shipping_address_city,
+    shipping_address_area: req.body.shipping_address_area,
+    shipping_address_state: req.body.shipping_address_state,
+    shipping_address_country_code: req.body.shipping_address_country_code,
+    shipping_address_po_code: req.body.shipping_address_po_code,
+    shipping_phone: req.body.shipping_phone,
+    cust_first_name: req.body.cust_first_name,
+    cust_last_name: req.body.cust_last_name,
+    cust_email: req.body.cust_email,
+    cust_address1: req.body.cust_address1,
+    cust_address2: req.body.cust_address2,
+    cust_address_city: req.body.cust_address_city,
+    cust_address_area: req.body.cust_address_area,
+    cust_address_state: req.body.cust_address_state,
+    cust_address_country: req.body.cust_address_country,
+    cust_address_po_code: req.body.cust_address_po_code,
+    cust_phone: req.body.cust_phone,
+    memo: req.body.memo,
+    creation_date: req.body.creation_date,
+    modification_date: req.body.modification_date,
+    flag: req.body.flag,
+    record_type: req.body.record_type,
+    module: req.body.module,
+    currency: req.body.currency,
+    order_date: req.body.order_date,
+    order_code: req.body.order_code,
+    shipping_charge: req.body.shipping_charge,
+    add_gst_to_total: req.body.add_gst_to_total,
+    invoice_terms: req.body.invoice_terms,
+    notes: req.body.notes,
+    shipping_address_country: req.body.shipping_address_country,
+    address_country: req.body.address_country,
+    delivery_to_text: req.body.delivery_to_text,
+    created_by: req.body.created_by,
+    modified_by: req.body.modified_by,
+    discount: req.body.discount,
+    name_of_company: req.body.name_of_company,
+    vat: req.body.vat,
+    cust_company_name: req.body.cust_company_name,
+    site_id: req.body.site_id,
+    manual_invoice: req.body.manual_invoice,
+    apply_general_vat: req.body.apply_general_vat,
+    link_stock: req.body.link_stock,
+    selling_company: req.body.selling_company,
+    link_account: req.body.link_account,
+    project_id: req.body.project_id,
+    start_date : req.body. start_date ,
+    end_date: req.body.end_date,
+    auto_create_invoice: req.body.auto_create_invoice,
+    delivery_date: req.body.delivery_date,
+    delivery_terms: req.body.delivery_terms,
+    quote_title: req.body.quote_title,
+    project_type: req.body.project_type,
+    cust_fax: req.body.cust_fax,
+    shipping_fax: req.body.shipping_fax};
+
+  let sql = "INSERT INTO orders SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
 app.get('/getCostingSummary', (req, res, next) => {
-  db.query("SELECT c.no_of_worker_used FROM opportunity_costing_summary c WHERE c.opportunity_id =  ORDER BY c.opportunity_costing_summary_id DESC",
+  db.query(`SELECT c.no_of_worker_used FROM opportunity_costing_summary c WHERE c.opportunity_id =  ORDER BY c.opportunity_costing_summary_id DESC`,
     (err, result) => {
        
       if (result.length == 0) {
