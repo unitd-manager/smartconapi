@@ -127,6 +127,24 @@ app.post('/editTabMaterialRequestlineitems', (req, res, next) => {
   );
 });
 
+app.delete('/deleteMaterialsRequest', (req, res, next) => {
+
+  let data = {mr_code: req.body.mr_code};
+  let sql = "DELETE FROM materials_request WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
 app.post('/insertMaterialRequest', (req, res, next) => {
 
   let data = {
@@ -219,6 +237,24 @@ app.post('/insertMaterialRequestLineItems', (req, res, next) => {
           return res.status(200).send({
             data: result,
             msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+app.delete('/deleteMaterialsRequestLineItems', (req, res, next) => {
+
+  let data = {materials_request_id: req.body.materials_request_id};
+  let sql = "DELETE FROM materials_request_line_items WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
           });
     }
   });

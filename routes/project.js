@@ -792,6 +792,25 @@ app.post('/insertProjectStaff', (req, res, next) => {
   });
 });
 
+app.delete('/deleteProjectStaff', (req, res, next) => {
+
+  let data = {creation_date: req.body.creation_date};
+  let sql = "DELETE FROM project_staff WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
+
 app.post('/insertThirdParty', (req, res, next) => {
 
   let data = {
@@ -815,6 +834,24 @@ app.post('/insertThirdParty', (req, res, next) => {
           return res.status(200).send({
             data: result,
             msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+app.delete('/deleteThirdPartyCost', (req, res, next) => {
+
+  let data = {item_title: req.body.item_title};
+  let sql = "DELETE FROM third_party_cost WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
           });
     }
   });
