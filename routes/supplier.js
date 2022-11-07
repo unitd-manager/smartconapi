@@ -161,6 +161,27 @@ app.post('/insertSupplier', (req, res, next) => {
 });
 
 
+
+
+app.delete('/deleteSupplier', (req, res, next) => {
+
+  let data = {supplier_id : req.body.supplier_id  };
+  let sql = "DELETE FROM supplier WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
+
 app.post('/insertGeo_country', (req, res, next) => {
 
   let data = {country_code: req.body.country_code,
