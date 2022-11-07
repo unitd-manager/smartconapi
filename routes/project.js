@@ -770,6 +770,26 @@ app.post('/insertProject', (req, res, next) => {
   });
 });
 
+
+app.delete('/deleteProject', (req, res, next) => {
+
+  let data = {project_id : req.body.project_id };
+  let sql = "DELETE FROM project WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
+
 app.post('/insertProjectStaff', (req, res, next) => {
 
   let data = {

@@ -297,6 +297,26 @@ app.post('/insertsub_con', (req, res, next) => {
 });
 
 
+
+app.delete('/deleteSub_Con', (req, res, next) => {
+
+  let data = {sub_con_id   : req.body.sub_con_id    };
+  let sql = "DELETE FROM sub_con WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
+
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');

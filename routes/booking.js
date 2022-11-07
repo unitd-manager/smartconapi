@@ -128,6 +128,26 @@ app.post('/insertBooking', (req, res, next) => {
     }
   });
 });
+
+
+app.delete('/deleteBooking', (req, res, next) => {
+
+  let data = {booking_id  : req.body.booking_id  };
+  let sql = "DELETE FROM booking WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
 app.post('/insertbooking_service', (req, res, next) => {
 
   let data = {booking_id: req.body.booking_id,
