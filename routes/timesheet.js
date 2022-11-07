@@ -84,6 +84,26 @@ app.post('/insertAttendance', (req, res, next) => {
   });
 });
 
+
+
+app.delete('/deleteAttendance', (req, res, next) => {
+
+  let data = {attendance_id:req.body.attendance_id   };
+  let sql = "DELETE FROM attendance WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
 app.post('/editTimeSheet', (req, res, next) => {
   db.query(`UPDATE attendance 
             SET staff_id=${db.escape(req.body.staff_id)}
