@@ -346,6 +346,26 @@ app.post('/insertTender', (req, res, next) => {
 
 
 
+
+app.delete('/deleteCompany', (req, res, next) => {
+
+  let data = {company_id : req.body.company_id };
+  let sql = "DELETE FROM company WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
+
 app.post('/insertCompany', (req, res, next) => {
 
   let data = {company_name: req.body.company_name, website: req.body.website, phone: req.body.phone, fax: req.body.fax, address_flat: req.body.address_flat, address_street: req.body.address_street, address_po_code: req.body.address_po_code, address_country: req.body.address_country, supplier_type: req.body.supplier_type, industry: req.body.industry, company_size: req.body.company_size, source: req.body.source};
@@ -392,6 +412,25 @@ app.post('/insertContact', (req, res, next) => {
 });
 
 
+
+app.delete('/deleteContact', (req, res, next) => {
+
+  let data = {contact_id  : req.body.contact_id  };
+  let sql = "DELETE FROM contact WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
 app.post('/insertValueList', (req, res, next) => {
 
   let data = {key_text: req.body.key_text
@@ -416,6 +455,26 @@ app.post('/insertValueList', (req, res, next) => {
     }
   });
 });
+
+
+app.delete('/deletevaluelist', (req, res, next) => {
+
+  let data = {valuelist_id : req.body.valuelist_id};
+  let sql = "DELETE FROM valuelist WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
 
 app.post('/insertService', (req, res, next) => {
 
@@ -442,6 +501,44 @@ app.post('/insertService', (req, res, next) => {
   });
 });
 
+
+app.delete('/deleteservice', (req, res, next) => {
+
+  let data = {service_id  : req.body.service_id };
+  let sql = "DELETE FROM service WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
+
+
+app.delete('/deletestaff', (req, res, next) => {
+
+  let data = {staff_id : req.body.staff_id  };
+  let sql = "DELETE FROM staff WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
 
 
 app.post('/insertStaff', (req, res, next) => {
@@ -636,6 +733,27 @@ app.post('/insertEmployee', (req, res, next) => {
     }
   });
 });
+
+
+app.delete('/deleteemployee', (req, res, next) => {
+
+  let data = {employee_id:req.body.employee_id };
+  let sql = "DELETE FROM employee WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
+
 app.delete('/deleteTender', (req, res, next) => {
 
   let data = {opportunity_id: req.body.opportunity_id};
