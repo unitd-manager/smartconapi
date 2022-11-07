@@ -368,6 +368,26 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
     });
   });
 
+  app.delete('/deletePurchaseOrder', (req, res, next) => {
+
+    let data = {company_id_supplier: req.body.company_id_supplier};
+    let sql = "DELETE FROM purchase_order WHERE ?";
+    let query = db.query(sql, data,(err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Tender has been removed successfully'
+            });
+      }
+    });
+  });
+
+
+
   app.post('/insertProjectMaterials', (req, res, next) => {
 
     let data = {
@@ -404,7 +424,7 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
 
   app.post('/insertPurchaseOrder', (req, res, next) => {
 
-    let data = {po_code:req.body.mr_code
+    let data = {po_code:req.body.po_code
       ,company_id_supplier: req.body.company_id_supplier
      , contact_id_supplier: req.body.contact_id_supplier
      , delivery_terms: req.body.delivery_terms
@@ -458,6 +478,43 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
     });
   });
   
+  app.delete('/deletePoProduct', (req, res, next) => {
+
+    let data = {purchase_order_id: req.body.purchase_order_id};
+    let sql = "DELETE FROM po_product WHERE ?";
+    let query = db.query(sql, data,(err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Tender has been removed successfully'
+            });
+      }
+    });
+  });
+
+  app.delete('/deleteProjectMaterials', (req, res, next) => {
+
+    let data = {project_id: req.body.project_id};
+    let sql = "DELETE FROM project_materials WHERE ?";
+    let query = db.query(sql, data,(err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Tender has been removed successfully'
+            });
+      }
+    });
+  });
+
+
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');
