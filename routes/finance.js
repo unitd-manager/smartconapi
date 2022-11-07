@@ -18,7 +18,45 @@ app.use(fileUpload({
 }));
 
 app.get('/getFinances', (req, res, next) => {
+<<<<<<< HEAD
   db.query("SELECT o.project_id,o.project_type,o.creation_date,o.order_status,o.invoice_terms,o.notes,o.shipping_first_name,o.shipping_address1,o.shipping_address2,o.shipping_address_country,o.delivery_date,o.delivery_terms,o.cust_address1,o.cust_address2,o.cust_address_country,o.cust_address_po_code,gc2.name AS shipping_country_name,c.company_name AS company_name,c.website AS company_website,c.fax AS company_fax ,c.phone AS company_phone,c.address_flat AS company_address_flat ,c.address_street AS company_address_street,c.address_town AS company_address_town,c.address_state AS company_address_state ,gc3.name AS company_country_name,(SELECT (SUM(oi.unit_price * oi.qty) + o.shipping_charge) FROM order_item oi WHERE oi.order_id = o.order_id) AS order_amount,q.quote_code,p.project_code FROM `orders` o LEFT JOIN geo_country gc2 ON (o.shipping_address_country_code = gc2.country_code) LEFT JOIN company c ON (o.company_id = c.company_id) LEFT JOIN geo_country gc3 ON (c.address_country = gc3.country_code) LEFT JOIN quote q ON o.quote_id = q.quote_id LEFT JOIN project p ON o.project_id = p.project_id WHERE o.order_id !='' ",
+=======
+  db.query(`SELECT o.project_id
+  ,o.project_type
+  ,o.creation_date
+  ,o.order_status
+  ,o.invoice_terms
+  ,o.notes
+  ,o.shipping_first_name
+  ,o.shipping_address1
+  ,o.shipping_address2
+  ,o.shipping_address_country
+  ,o.delivery_date
+  ,o.delivery_terms
+  ,o.cust_address1
+  ,o.cust_address2
+  ,o.cust_address_country
+  ,o.cust_address_po_code
+  ,gc2.name AS shipping_country_name
+  ,c.company_name AS company_name
+  ,c.website AS company_website
+  ,c.fax AS company_fax
+  ,c.phone AS company_phone
+  ,c.address_flat AS company_address_flat
+  ,c.address_street AS company_address_street
+  ,c.address_town AS company_address_town
+  ,c.address_state AS company_address_state
+  ,gc3.name AS company_country_name
+  ,(SELECT (SUM(oi.unit_price * oi.qty) + o.shipping_charge) 
+  FROM order_item oi 
+  WHERE oi.order_id = o.order_id) AS order_amount
+  ,q.quote_code,p.project_code FROM orders o 
+  LEFT JOIN geo_country gc2 ON (o.shipping_address_country_code = gc2.country_code) 
+  LEFT JOIN company c ON (o.company_id = c.company_id) 
+  LEFT JOIN geo_country gc3 ON (c.address_country = gc3.country_code) 
+  LEFT JOIN quote q ON o.quote_id = q.quote_id 
+  LEFT JOIN project p ON o.project_id = p.project_id WHERE o.order_id !='' `,
+>>>>>>> 4b3aea87c76242d204c3bd5cfac727a9dfac0891
     (err, result) => {
 
       if (result.length == 0) {
@@ -87,6 +125,34 @@ app.get('/getTabInvoicePortalDisplay', (req, res, next) => {
     }
   );
 }); 
+
+app.post('/editFinances', (req, res, next) => {
+  db.query(`UPDATE orders
+            SET invoice_terms=${db.escape(req.body.invoice_terms)}
+            ,notes=${db.escape(req.body.notes)}
+            ,shipping_first_name=${db.escape(req.body.shipping_first_name)}
+            ,shipping_address1=${db.escape(req.body.shipping_address1)}
+            ,shipping_address2=${db.escape(req.body.shipping_address2)}
+            ,shipping_address_country=${db.escape(req.body.shipping_address_country)}
+            ,shipping_address_po_code=${db.escape(req.body.shipping_address_po_code)}
+            ,delivery_date=${db.escape(req.body.delivery_date)}
+            ,delivery_terms=${db.escape(req.body.delivery_terms)}
+            WHERE order_id =  ${db.escape(req.body.order_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
 
 app.post('/editTabInvoicePortalDisplay', (req, res, next) => {
   db.query(`UPDATE invoice 
@@ -209,7 +275,7 @@ app.get('/getTabCreditNotePortalDisplay', (req, res, next) => {
 });
 
 
-app.post('/insertorder', (req, res, next) => {
+app.post('/insertOrder', (req, res, next) => {
 
   let data = {order_status: req.body.order_status,
     payment_method: req.body.payment_method,
@@ -272,11 +338,9 @@ app.post('/insertorder', (req, res, next) => {
     quote_title: req.body.quote_title,
     project_type: req.body.project_type,
     cust_fax: req.body.cust_fax,
-    shipping_fax: req.body.shipping_fax,
-  
-            };
+    shipping_fax: req.body.shipping_fax};
 
-  let sql = "INSERT INTO order SET ?";
+  let sql = "INSERT INTO orders SET ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);

@@ -159,6 +159,31 @@ app.post('/insertSupplier', (req, res, next) => {
     }
   });
 });
+
+
+app.post('/insertGeo_country', (req, res, next) => {
+
+  let data = {country_code: req.body.country_code,
+              name: req.body.name,
+              latitude: req.body.latitude,
+              longitude: req.body.longitude,
+              published: req.body.published,
+              flag: req.body.flag,
+              chi_name: req.body.chi_name};
+  let sql = "INSERT INTO geo_country SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');
