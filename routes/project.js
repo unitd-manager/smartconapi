@@ -569,6 +569,24 @@ app.post('/insertQuote', (req, res, next) => {
   });
 });
 
+app.delete('/deleteQuote', (req, res, next) => {
+
+  let data = {opportunity_id: req.body.opportunity_id};
+  let sql = "DELETE FROM quote WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
 
 app.post('/TabQuote', (req, res, next) => {
   db.query(`UPDATE quote

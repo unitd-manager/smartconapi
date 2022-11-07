@@ -113,6 +113,24 @@ app.post('/insertInvoice', (req, res, next) => {
   });
 });
 
+app.delete('/deleteInvoice', (req, res, next) => {
+
+  let data = {invoice_code: req.body.invoice_code};
+  let sql = "DELETE FROM invoice WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
 app.post('/insertBranch', (req, res, next) => {
 
   let data = {
