@@ -101,6 +101,25 @@ app.post('/insertOpportunityEmployee', (req, res, next) => {
   });
 });
 
+app.delete('/deleteOpportunityEmployee', (req, res, next) => {
+
+  let data = {opportunity_id: req.body.opportunity_id};
+  let sql = "DELETE FROM opportunity_employee WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
+
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');
