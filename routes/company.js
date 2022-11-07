@@ -90,6 +90,24 @@ app.post('/insertCompanyAddress', (req, res, next) => {
   });
 }); 
 
+app.delete('/deleteCompanyAddress', (req, res, next) => {
+
+  let data = {company_id: req.body.company_id};
+  let sql = "DELETE FROM company_address WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
