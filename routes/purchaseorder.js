@@ -258,6 +258,25 @@ app.post('/insertstock_transfer', (req, res, next) => {
     }
   });
 });
+
+app.delete('/deletestock_transfer', (req, res, next) => {
+
+  let data = {stock_transfer_id : req.body.stock_transfer_id };
+  let sql = "DELETE FROM stock_transfer WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
 app.get('/TabDeliveryOrder', (req, res, next) => {
   db.query(`SELECT do.date FROM delivery_order do WHERE project_id != ''`,
       (err, result) => {
@@ -320,6 +339,24 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
             return res.status(200).send({
               data: result,
               msg:'New Tender has been created successfully'
+            });
+      }
+    });
+  });
+
+  app.delete('/deletedelivery_order', (req, res, next) => {
+
+    let data = {delivery_order_id : req.body.delivery_order_id};
+    let sql = "DELETE FROM delivery_order WHERE ?";
+    let query = db.query(sql, data,(err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Tender has been removed successfully'
             });
       }
     });

@@ -151,6 +151,24 @@ app.post('/insertbooking_service', (req, res, next) => {
   });
 });
 
+app.delete('/deleteBooking_service', (req, res, next) => {
+
+  let data = {booking_service_id : req.body.booking_service_id };
+  let sql = "DELETE FROM booking_service WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);

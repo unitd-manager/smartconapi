@@ -129,6 +129,25 @@ app.post('/insertsub_con_work_order', (req, res, next) => {
   });
 });
 
+app.delete('/deletesub_con_work_order', (req, res, next) => {
+
+  let data = {sub_con_work_order_id : req.body.sub_con_work_order_id };
+  let sql = "DELETE FROM sub_con_work_order WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
+
 app.post('/insertsub_con_payments_history', (req, res, next) => {
 
   let data = {sub_con_work_order_id: req.body.sub_con_work_order_id,
@@ -155,6 +174,24 @@ app.post('/insertsub_con_payments_history', (req, res, next) => {
           return res.status(200).send({
             data: result,
             msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+app.delete('/deletesub_con_payments_history', (req, res, next) => {
+
+  let data = {sub_con_payments_history_id : req.body.sub_con_payments_history_id };
+  let sql = "DELETE FROM sub_con_payments_history WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
           });
     }
   });
@@ -187,7 +224,24 @@ app.post('/insertsub_con_payments', (req, res, next) => {
     }
   });
 });
+ 
+app.delete('/deletesub_con_payments', (req, res, next) => {
 
+  let data = {sub_con_payments_id : req.body.sub_con_payments_id };
+  let sql = "DELETE FROM sub_con_payments WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
 
 
 app.post('/insertsub_con', (req, res, next) => {

@@ -110,6 +110,25 @@ app.post('/insertemployee_timesheet', (req, res, next) => {
   });
 });
 
+app.delete('/deleteEmployee_timesheet', (req, res, next) => {
+
+  let data = {employee_timesheet_id : req.body.employee_timesheet_id };
+  let sql = "DELETE FROM employee_timesheet WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
+
 app.post('/insertproject_employee', (req, res, next) => {
 
   let data = {creation_date: req.body.creation_date,
@@ -134,6 +153,23 @@ app.post('/insertproject_employee', (req, res, next) => {
   });
 });
 
+app.delete('/deleteProject_employee', (req, res, next) => {
+
+  let data = {project_employee_id : req.body.project_employee_id };
+  let sql = "DELETE FROM project_employee WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);

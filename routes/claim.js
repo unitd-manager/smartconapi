@@ -150,6 +150,64 @@ app.get('/getTabClaimPaymentPortal', (req, res, next) => {
     });
   });
 
+  app.delete('/deleteproject_claim', (req, res, next) => {
+
+    let data = {project_claim_id : req.body.project_claim_id};
+    let sql = "DELETE FROM project_claim WHERE ?";
+    let query = db.query(sql, data,(err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Tender has been removed successfully'
+            });
+      }
+    });
+  });
+
+  app.delete('/deleteclaim_line_items', (req, res, next) => {
+
+    let data = {claim_line_items_id : req.body.claim_line_items_id };
+    let sql = "DELETE FROM claim_line_items WHERE ?";
+    let query = db.query(sql, data,(err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Tender has been removed successfully'
+            });
+      }
+    });
+  });
+
+  app.delete('/deleteclaim_payment', (req, res, next) => {
+
+    let data = {claim_payment_id : req.body.claim_payment_id };
+    let sql = "DELETE FROM claim_payment WHERE ?";
+    let query = db.query(sql, data,(err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Tender has been removed successfully'
+            });
+      }
+    });
+  });
+  
+  
+
+  
+
   app.get('/TabClaimPortal', (req, res, next) => {
     db.query(`SELECT 
     pc.claim_date
