@@ -352,6 +352,26 @@ app.post('/insertOrder', (req, res, next) => {
 });
 
 
+app.delete('/deleteorders', (req, res, next) => {
+
+  let data = {order_id  : req.body.order_id,};
+  let sql = "DELETE FROM orders WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+
+
 app.post('/insertorder_item', (req, res, next) => {
 
   let data = {qty: req.body.qty,
@@ -405,6 +425,26 @@ app.post('/insertorder_item', (req, res, next) => {
   });
 });
 
+
+app.delete('/deleteorder_item', (req, res, next) => {
+
+  let data = {order_item_id : req.body.order_item_id };
+  let sql = "DELETE FROM order_item  WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
+
 app.post('/insertreceipt', (req, res, next) => {
 
   let data = {receipt_code: req.body.receipt_code,
@@ -441,6 +481,26 @@ app.post('/insertreceipt', (req, res, next) => {
   });
 });
 
+
+app.delete('/deleteReceipt', (req, res, next) => {
+
+  let data = {receipt_id : req.body.receipt_id };
+  let sql = "DELETE FROM receipt WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
+
 app.post('/insertInvoiceReceiptHistory', (req, res, next) => {
 
   let data = {invoice_id: req.body.invoice_id,
@@ -469,6 +529,27 @@ app.post('/insertInvoiceReceiptHistory', (req, res, next) => {
     }
   });
 });
+
+
+app.delete('/deleteInvoice_receipt_history', (req, res, next) => {
+
+  let data = {invoice_receipt_history_id : req.body.invoice_receipt_history_id};
+  let sql = "DELETE FROM invoice_receipt_history WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
+
 
 app.post('/insertcredit_note', (req, res, next) => {
 
@@ -502,6 +583,29 @@ app.post('/insertcredit_note', (req, res, next) => {
     }
   });
 });
+
+
+
+app.delete('/deletecredit_note', (req, res, next) => {
+
+  let data = {credit_note_id : req.body.credit_note_id};
+  let sql = "DELETE FROM credit_note WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
+
+
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
