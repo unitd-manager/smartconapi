@@ -762,6 +762,24 @@ app.post('/insertCostingSummary', (req, res, next) => {
   });
 });
 
+app.delete('/deleteCostingSummary', (req, res, next) => {
+
+  let data = {po_code: req.body.po_code};
+  let sql = "DELETE FROM costing_summary WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
 app.post('/insertOpportunityCostingSummary', (req, res, next) => {
 
   let data = {
@@ -789,6 +807,24 @@ app.post('/insertOpportunityCostingSummary', (req, res, next) => {
           return res.status(200).send({
             data: result,
             msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+app.delete('/deleteOpportunityCostingSummary', (req, res, next) => {
+
+  let data = {supplier_id: req.body.supplier_id};
+  let sql = "DELETE FROM opportunity_costing_summary_history WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
           });
     }
   });
@@ -838,6 +874,24 @@ app.post('/insertQuoteItems', (req, res, next) => {
           return res.status(200).send({
             data: result,
             msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+app.delete('/deleteQuoteItems', (req, res, next) => {
+
+  let data = {quote_category_id: req.body.quote_category_id};
+  let sql = "DELETE FROM quote_items WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
           });
     }
   });
