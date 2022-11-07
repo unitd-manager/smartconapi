@@ -189,6 +189,27 @@ app.post('/insertProduct', (req, res, next) => {
   });
 });
 
+
+
+app.delete('/deleteProduct', (req, res, next) => {
+
+  let data = {product_id : req.body.product_id  };
+  let sql = "DELETE FROM product WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
+
 app.post('/insertProduct_Company', (req, res, next) => {
 
   let data = {
@@ -211,6 +232,23 @@ app.post('/insertProduct_Company', (req, res, next) => {
   });
 });
 
+app.delete('/deleteProduct_Company', (req, res, next) => {
+
+  let data = {product_company_id  : req.body.product_company_id   };
+  let sql = "DELETE FROM product_company WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
 
 app.post('/insertCategory', (req, res, next) => {
 
@@ -249,6 +287,24 @@ app.post('/insertCategory', (req, res, next) => {
   });
 });
 
+
+app.delete('/deleteCategory', (req, res, next) => {
+
+  let data = {category_id : req.body.category_id };
+  let sql = "DELETE FROM category WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
 
 app.post('/insertSection', (req, res, next) => {
 
@@ -291,6 +347,25 @@ app.post('/insertSection', (req, res, next) => {
 });
 
 
+app.delete('/deleteSection', (req, res, next) => {
+
+  let data = {section_id  : req.body.section_id  };
+  let sql = "DELETE FROM section WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
+
 app.post('/insertSubCategory', (req, res, next) => {
 
   let data = { category_id : req.body. category_id 
@@ -318,6 +393,24 @@ app.post('/insertSubCategory', (req, res, next) => {
           return res.status(200).send({
             data: result,
             msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+app.delete('/deleteSub_Category', (req, res, next) => {
+
+  let data = { sub_category_id: req.body.sub_category_id };
+  let sql = "DELETE FROM sub_category WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
           });
     }
   });
