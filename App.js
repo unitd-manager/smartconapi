@@ -45,6 +45,7 @@ const company = require('./routes/company.js');
 const employeesportal = require('./routes/employeesportal.js');
 const claim = require('./routes/claim.js');
 const loan = require('./routes/loan.js');
+const training = require('./routes/training.js');
 
 
 
@@ -71,8 +72,7 @@ app.use('/company', company);
 app.use('/employeesportal', employeesportal);
 app.use('/claim', claim);
 app.use('/loan', loan);
-
-
+app.use('/training', training);
 
 
 
