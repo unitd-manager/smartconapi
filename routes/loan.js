@@ -20,11 +20,19 @@ app.use(fileUpload({
 
 
 app.get('/TabLoan', (req, res, next) => {
-  db.query(`SELECT l.*
-  ,CONCAT_WS(' ', e.first_name, e.last_name) AS employee_name
-FROM loan l
-LEFT JOIN (employee e) ON (e.employee_id = l.employee_id)
-WHERE l.loan_id !=''`,
+  db.query(`SELECT l.employee_id
+  ,l.status
+  ,l.amount
+  ,l.type
+  ,l.month_amount
+  ,l.loan_closing_date
+  ,l.notes
+  ,l.loan_start_date
+  ,l.date
+    ,CONCAT_WS(' ', e.first_name, e.last_name) AS employee_name
+  FROM loan l
+  LEFT JOIN (employee e) ON (e.employee_id = l.employee_id)
+  WHERE l.loan_id !=''`,
     (err, result) => {
        
       if (result.length == 0) {
@@ -42,6 +50,29 @@ WHERE l.loan_id !=''`,
     }
   );
 });
+
+app.post('/editTabLoan', (req, res, next) => {
+    db.query(`UPDATE loan
+              SET amount=${db.escape(req.body.amount)}
+              ,month_amount=${db.escape(req.body.month_amount)}
+              ,notes=${db.escape(req.body.notes)}
+              ,date=${db.escape(req.body.date)}
+              ,type=${db.escape(req.body.type)}
+              WHERE loan_id = ${db.escape(req.body.loan_id)}`,
+              (err, result) => {
+       
+                if (err) {
+                    console.log("error: ", err);
+                    result(err, null);
+                    return;
+                  } else {
+                        return res.status(200).send({
+                          data: result,
+                          msg:'Tender has been removed successfully'
+                        });
+                  }
+                });
+              });
 
 app.get('/TabPaymentHistory', (req, res, next) => {
     db.query(`SELECT lrh.loan_repayment_history_id
@@ -73,9 +104,17 @@ ORDER BY lrh.generated_date DESC`,
   });
 
   app.get('/TabPreviousEarlierLoan', (req, res, next) => {
-    db.query(`SELECT * FROM loan l
-    WHERE l.employee_id != ''
-    AND date < l.date`,
+    db.query(`SELECT l.date
+    ,l.amount
+    ,l.status
+    ,l.employee_id
+    ,l.due_date
+    ,l.loan_closing_date
+    ,l.loan_start_date
+    ,l.month_amount
+    ,l.amount FROM loan l
+        WHERE l.employee_id != ''
+        AND date < l.date;`,
       (err, result) => {
          
         if (result.length == 0) {
