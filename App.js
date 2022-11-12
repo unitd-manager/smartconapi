@@ -46,6 +46,8 @@ const employeesportal = require('./routes/employeesportal.js');
 const claim = require('./routes/claim.js');
 const leave = require('./routes/leave.js');
 const loan = require('./routes/loan.js');
+const staff = require('./routes/staff.js');
+
 
 
 
@@ -71,8 +73,8 @@ app.use('/company', company);
 app.use('/employeesportal', employeesportal);
 app.use('/claim', claim);
 app.use('/leave', leave);
-app.use('/leave', leave);
 app.use('/loan', loan);
+app.use('/staff', staff);
 
 
 
