@@ -46,7 +46,7 @@ const employeesportal = require('./routes/employeesportal.js');
 const claim = require('./routes/claim.js');
 const loan = require('./routes/loan.js');
 const training = require('./routes/training.js');
-
+const usergroup = require('./routes/usergroup.js');
 
 
 
@@ -73,6 +73,7 @@ app.use('/employeesportal', employeesportal);
 app.use('/claim', claim);
 app.use('/loan', loan);
 app.use('/training', training);
+app.use('/usergroup', usergroup);
 
 
 
