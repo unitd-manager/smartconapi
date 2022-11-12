@@ -74,6 +74,63 @@ app.post('/editTabLoan', (req, res, next) => {
                 });
               });
 
+              app.post('/insertLoan', (req, res, next) => {
+
+                let data = {date	:req.body.date	
+                  ,amount: req.body.amount
+                 , employee_id: req.body.employee_id
+                 , type: req.body.type
+                 , status: req.body.status
+                 , due_date: req.body.due_date
+                 , creation_date	: req.body.creation_date	
+                 , modification_date: req.body.modification_date
+                 , created_by: req.body.created_by
+                 , modified_by: req.body.modified_by
+                 , flag: req.body.flag
+                 , no_of_months: req.body.no_of_months
+                 , deduction	: req.body.deduction	
+                 , approved_by: req.body.approved_by
+                 , loan_closing_date: req.body.loan_closing_date
+                 , month_amount: req.body.month_amount
+                 , loan_start_date: req.body.loan_start_date                
+                  , notes: req.body.notes
+
+                 
+                  
+               };
+                let sql = "INSERT INTO loan SET ?";
+                let query = db.query(sql, data,(err, result) => {
+                  if (err) {
+                    console.log("error: ", err);
+                    result(err, null);
+                    return;
+                  } else {
+                        return res.status(200).send({
+                          data: result,
+                          msg:'New Tender has been created successfully'
+                        });
+                  }
+                });
+              });
+
+              app.delete('/deleteTabLoan', (req, res, next) => {
+
+                let data = {employee_id: req.body.employee_id};
+                let sql = "DELETE FROM loan WHERE ?";
+                let query = db.query(sql, data,(err, result) => {
+                  if (err) {
+                    console.log("error: ", err);
+                    result(err, null);
+                    return;
+                  } else {
+                        return res.status(200).send({
+                          data: result,
+                          msg:'Tender has been removed successfully'
+                        });
+                  }
+                });
+              });
+
 app.get('/TabPaymentHistory', (req, res, next) => {
     db.query(`SELECT lrh.loan_repayment_history_id
     ,DATE_FORMAT(lrh.generated_date, '%d-%m-%Y') AS payment_date
