@@ -47,6 +47,11 @@ const claim = require('./routes/claim.js');
 const inventory = require('./routes/inventory.js');
 const cpfcalculator = require('./routes/cpfcalculator.js');
 const payrollmanagement = require('./routes/payrollmanagement.js');
+const loan = require('./routes/loan.js');
+const training = require('./routes/training.js');
+const usergroup = require('./routes/usergroup.js');
+const employeeModule = require('./routes/employeeModule.js');
+
 
 
 app.use('/project', project);
@@ -72,6 +77,11 @@ app.use('/claim', claim);
 app.use('/inventory', inventory);
 app.use('/cpfcalculator', cpfcalculator);
 app.use('/payrollmanagement', payrollmanagement);
+app.use('/loan', loan);
+app.use('/training', training);
+app.use('/usergroup', usergroup);
+app.use('/employeeModule', employeeModule);
+
 
 
 app.use(fileUpload({

@@ -71,7 +71,14 @@ app.get('/getTenders', (req, res, next) => {
 
 app.get('/getTabCostingSummary', (req, res, next) => {
   db.query(`SELECT 
-  c.total_material_price,c.transport_charges,c.total_labour_charges,c.salesman_commission,c.finance_charges,c.office_overheads,c.other_charges,c.total_cost
+  c.total_material_price
+  ,c.transport_charges
+  ,c.total_labour_charges
+  ,c.salesman_commission
+  ,c.finance_charges
+  ,c.office_overheads
+  ,c.other_charges
+  ,c.total_cost
   FROM opportunity_costing_summary c 
   WHERE c.opportunity_id != '' 
   ORDER BY c.opportunity_costing_summary_id DESC`,
@@ -94,7 +101,20 @@ app.get('/getTabCostingSummary', (req, res, next) => {
 
 
 app.get('/getTabCostingSummaryForm', (req, res, next) => {
-  db.query(`SELECT c.no_of_worker_used,c.no_of_days_worked,c.labour_rates_per_day,c.po_price,c.profit_percentage,c.profit,c.total_material_price,c.transport_charges,c.total_labour_charges,c.salesman_commission,c.finance_charges,c.office_overheads,c.other_charges,c.total_cost FROM opportunity_costing_summary c WHERE c.opportunity_costing_summary_id != '' `,
+  db.query(`SELECT c.no_of_worker_used
+  ,c.no_of_days_worked
+  ,c.labour_rates_per_day
+  ,c.po_price
+  ,c.profit_percentage
+  ,c.profit
+  ,c.total_material_price
+  ,c.transport_charges
+  ,c.total_labour_charges
+  ,c.salesman_commission
+  ,c.finance_charges
+  ,c.office_overheads
+  ,c.other_charges
+  ,c.total_cost FROM opportunity_costing_summary c WHERE c.opportunity_costing_summary_id != '' `,
     (err, result) => {
      
       if (result.length == 0) {
@@ -145,7 +165,14 @@ app.post('/edit-TabCostingSummaryForm', (req, res, next) => {
 
 
 app.get('/getTabquote', (req, res, next) => {
-  db.query(` SELECT q.quote_date,q.quote_code,q.quote_status,q.project_location,q.project_reference,q.payment_method,q.revision,q.intro_drawing_quote FROM quote q  WHERE q.opportunity_id != ''  ORDER BY quote_code DESC
+  db.query(` SELECT q.quote_date
+  ,q.quote_code
+  ,q.quote_status
+  ,q.project_location
+  ,q.project_reference
+  ,q.payment_method
+  ,q.revision
+  ,q.intro_drawing_quote FROM quote q  WHERE q.opportunity_id != ''  ORDER BY quote_code DESC
   `,
     (err, result) => {
      

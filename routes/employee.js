@@ -36,6 +36,27 @@ app.get('/hello', (req, res, next) => {
     }
   );
 });
+
+app.get('/TabLeave', (req, res, next) => {
+  db.query(`SELECT * FROM leave`,
+    (err, result) => {
+       
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
 app.get('/getCostingSummary', (req, res, next) => {
   db.query("SELECT c.* FROM `opportunity_costing_summary` c WHERE c.opportunity_id =  ORDER BY c.opportunity_costing_summary_id DESC",
     (err, result) => {
