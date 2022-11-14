@@ -167,6 +167,29 @@ app.post('/insertTrainingStaff', (req, res, next) => {
   });
 });
 
+
+
+
+app.delete('/deleteTraining', (req, res, next) => {
+
+  let data = {training_id :req.body.training_id  };
+  let sql = "DELETE FROM training WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
+
+
 app.post('/edit-TabEmployeeLinked', (req, res, next) => {
   db.query(`UPDATE training_staff 
             SET training_staff_id=${db.escape(req.body.training_staff_id)}
@@ -188,6 +211,29 @@ app.post('/edit-TabEmployeeLinked', (req, res, next) => {
      }
   );
 });
+
+
+
+
+
+app.delete('/deleteTrainingStaff', (req, res, next) => {
+
+  let data = {training_staff_id   :req.body.training_staff_id  };
+  let sql = "DELETE FROM training_staff WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
 
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
