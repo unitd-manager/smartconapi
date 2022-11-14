@@ -44,6 +44,10 @@ const materialpurchased = require('./routes/materialpurchased.js');
 const company = require('./routes/company.js');
 const employeesportal = require('./routes/employeesportal.js');
 const claim = require('./routes/claim.js');
+const inventory = require('./routes/inventory.js');
+const cpfcalculator = require('./routes/cpfcalculator.js');
+const payrollmanagement = require('./routes/payrollmanagement.js');
+
 
 app.use('/project', project);
 app.use('/tender', tender);
@@ -65,7 +69,9 @@ app.use('/materialpurchased', materialpurchased);
 app.use('/company', company);
 app.use('/employeesportal', employeesportal);
 app.use('/claim', claim);
-
+app.use('/inventory', inventory);
+app.use('/cpfcalculator', cpfcalculator);
+app.use('/payrollmanagement', payrollmanagement);
 
 
 app.use(fileUpload({
