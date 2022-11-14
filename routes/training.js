@@ -46,6 +46,38 @@ WHERE t.training_id != ''`,
   );
 });
 
+
+
+
+app.post('/edit-Training', (req, res, next) => {
+  db.query(`UPDATE training  
+            SET title=${db.escape(req.body.title)}
+            ,date=${db.escape(req.body.title)}
+            ,to_date=${db.escape(req.body.to_date)}
+            ,trainer=${db.escape(req.body.trainer)}
+            ,description=${db.escape(req.body.description)}
+            ,training_company_name=${db.escape(req.body.training_company_name)}
+            ,training_company_address=${db.escape(req.body.training_company_address)}
+            ,training_company_email=${db.escape(req.body.training_company_email)}
+            ,training_company_phone =${db.escape(req.body.training_company_phone)}
+            WHERE training_id = ${db.escape(req.body.training_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
+
+
 app.get('/getTabEmployeeLinked', (req, res, next) => {
   db.query(` SELECT ts.training_staff_id 
   ,ts.from_date
@@ -72,6 +104,32 @@ app.get('/getTabEmployeeLinked', (req, res, next) => {
         }
  
     }
+  );
+});
+
+
+
+
+
+app.post('/edit-TabEmployeeLinked', (req, res, next) => {
+  db.query(`UPDATE training_staff 
+            SET training_staff_id=${db.escape(req.body.training_staff_id)}
+            ,from_date=${db.escape(req.body.from_date)}
+            ,to_date=${db.escape(req.body.to_date)}
+            WHERE training_id = ${db.escape(req.body.training_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
   );
 });
 

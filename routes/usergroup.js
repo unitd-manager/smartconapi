@@ -39,34 +39,6 @@ WHERE ug.user_group_id != ''`,
   );
 });
 
-app.get('/getTabEmployeeLinked', (req, res, next) => {
-  db.query(` SELECT ts.training_staff_id 
-  ,ts.from_date
-  ,ts.to_date
-  ,CONCAT_WS(' ', e.first_name, e.last_name) AS employee_name
-  ,ji.designation
-  FROM training_staff ts
-  LEFT JOIN (employee e) ON (ts.staff_id = e.employee_id)
-   LEFT JOIN (job_information ji) ON (e.employee_id = ji.employee_id)
-   WHERE training_id != ''
-  ORDER BY training_staff_id DESC`,
-    (err, result) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            });
-
-        }
- 
-    }
-  );
-});
 
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
