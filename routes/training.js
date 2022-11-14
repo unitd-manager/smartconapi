@@ -109,7 +109,63 @@ app.get('/getTabEmployeeLinked', (req, res, next) => {
 
 
 
+app.post('/insertTraining', (req, res, next) => {
 
+  let data = {date: req.body.date
+    , title: req.body.title
+    , trainer: req.body.trainer
+    , description: req.body.description
+    , creation_date: req.body.creation_date
+    ,  modification_date : req.body. modification_date 
+    , created_by: req.body.created_by
+    , modified_by: req.body.modified_by
+    , flag: req.body.flag
+    , to_date: req.body.to_date
+    , training_company_name: req.body.training_company_name
+    , training_company_address: req.body.training_company_address
+    , training_company_email: req.body.training_company_email
+    , training_company_phone: req.body.training_company_phone};
+  let sql = "INSERT INTO training SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+
+
+app.post('/insertTrainingStaff', (req, res, next) => {
+
+  let data = {training_id: req.body.training_id
+    , staff_id: req.body.staff_id
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date
+    , created_by: req.body.created_by
+    ,  modified_by : req.body. modified_by 
+    , from_date: req.body.from_date
+    , to_date: req.body.to_date};
+  let sql = "INSERT INTO training_staff SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
 
 app.post('/edit-TabEmployeeLinked', (req, res, next) => {
   db.query(`UPDATE training_staff 
