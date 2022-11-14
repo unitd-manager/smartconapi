@@ -41,6 +41,28 @@ WHERE ug.user_group_id != ''`,
 
 
 
+app.post('/edit-usergroup', (req, res, next) => {
+  db.query(`UPDATE user_group  
+            SET title=${db.escape(req.body.title)}
+            ,user_group_type=${db.escape(req.body.user_group_type)}
+            WHERE user_group_id = ${db.escape(req.body.user_group_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
+
+
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');
