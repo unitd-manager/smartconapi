@@ -79,7 +79,6 @@ WHERE a.staff_id != ''`,
               ,address_town=${db.escape(req.body.address_town)}
               ,address_state=${db.escape(req.body.address_state)}
               ,published=${db.escape(req.body.published)}
-              ,published=${db.escape(req.body.published)}
 
               WHERE staff_id = ${db.escape(req.body.staff_id)}`,
               (err, result) => {
@@ -182,6 +181,181 @@ WHERE a.staff_id != ''`,
                 });
               });
 
+              app.get('/getStaffGrp', (req, res, next) => {
+                db.query(`SELECT s.staff_group_id
+                ,s.title
+                ,s.creation_date
+                ,s.modification_date
+                ,s.sort_order FROM staff_group s
+                WHERE s.staff_group_id!='';`,
+                  (err, result) => {
+                    if (err) {
+                      console.log("error: ", err);
+                      result(err, null);
+                      return;
+                    
+                    } else {
+                          return res.status(200).send({
+                            data: result,
+                            msg:'Success'
+                          });
+              
+                      }
+               
+                  }
+                );
+              });
+
+              app.post('/editStaffGrp', (req, res, next) => {
+                db.query(`UPDATE staff_group
+                          SET title=${db.escape(req.body.title)}
+                          ,creation_date=${db.escape(req.body.creation_date)}
+                          ,modification_date=${db.escape(req.body.modification_date)}
+                          ,sort_order=${db.escape(req.body.sort_order)}
+                           WHERE staff_group_id = ${db.escape(req.body.staff_group_id)}`,
+                          (err, result) => {
+                   
+                            if (err) {
+                                console.log("error: ", err);
+                                result(err, null);
+                                return;
+                              } else {
+                                    return res.status(200).send({
+                                      data: result,
+                                      msg:'Tender has been removed successfully'
+                                    });
+                              }
+                            });
+                          });
+
+              app.post('/insertStaffGroup', (req, res, next) => {
+
+                let data = {title	:req.body.title	
+                 , creation_date: req.body.creation_date
+                 , modification_date: req.body.modification_date
+                 , sort_order: req.body.sort_order
+                  
+               };
+                let sql = "INSERT INTO staff_group SET ?";
+                let query = db.query(sql, data,(err, result) => {
+                  if (err) {
+                    console.log("error: ", err);
+                    result(err, null);
+                    return;
+                  } else {
+                        return res.status(200).send({
+                          data: result,
+                          msg:'New Tender has been created successfully'
+                        });
+                  }
+                });
+              });
+
+              app.delete('/deleteStaffGroup', (req, res, next) => {
+
+                let data = {sort_order: req.body.sort_order};
+                let sql = "DELETE FROM staff_group WHERE ?";
+                let query = db.query(sql, data,(err, result) => {
+                  if (err) {
+                    console.log("error: ", err);
+                    result(err, null);
+                    return;
+                  } else {
+                        return res.status(200).send({
+                          data: result,
+                          msg:'Tender has been removed successfully'
+                        });
+                  }
+                });
+              });
+
+              app.get('/getStaffGrpHist', (req, res, next) => {
+                db.query(`SELECT 
+                s.staff_id
+                ,s.staff_group_id
+                ,s.creation_date
+                ,s.modification_date FROM staff_group_history s
+                WHERE s.staff_group_history_id!='';`,
+                  (err, result) => {
+                    if (err) {
+                      console.log("error: ", err);
+                      result(err, null);
+                      return;
+                    
+                    } else {
+                          return res.status(200).send({
+                            data: result,
+                            msg:'Success'
+                          });
+              
+                      }
+               
+                  }
+                );
+              });
+
+              app.post('/editStaffGrpHist', (req, res, next) => {
+                db.query(`UPDATE staff_group_history
+                          SET staff_id=${db.escape(req.body.staff_id)}
+                          ,staff_group_id=${db.escape(req.body.staff_group_id)}
+                          ,creation_date=${db.escape(req.body.creation_date)}
+                          ,modification_date=${db.escape(req.body.modification_date)}
+                           WHERE staff_group_history_id = ${db.escape(req.body.staff_group_id)}`,
+                          (err, result) => {
+                   
+                            if (err) {
+                                console.log("error: ", err);
+                                result(err, null);
+                                return;
+                              } else {
+                                    return res.status(200).send({
+                                      data: result,
+                                      msg:'Tender has been removed successfully'
+                                    });
+                              }
+                            });
+                          });
+
+              app.post('/insertStaffGroupHist', (req, res, next) => {
+
+                let data = {staff_id	:req.body.staff_id	
+                 , staff_group_id: req.body.staff_group_id
+                 , creation_date: req.body.creation_date
+                 , modification_date: req.body.modification_date
+                  
+               };
+                let sql = "INSERT INTO staff_group_history SET ?";
+                let query = db.query(sql, data,(err, result) => {
+                  if (err) {
+                    console.log("error: ", err);
+                    result(err, null);
+                    return;
+                  } else {
+                        return res.status(200).send({
+                          data: result,
+                          msg:'New Tender has been created successfully'
+                        });
+                  }
+                });
+              });
+
+              app.delete('/deleteStaffGroup', (req, res, next) => {
+
+                let data = {staff_id: req.body.staff_id};
+                let sql = "DELETE FROM staff_group_history WHERE ?";
+                let query = db.query(sql, data,(err, result) => {
+                  if (err) {
+                    console.log("error: ", err);
+                    result(err, null);
+                    return;
+                  } else {
+                        return res.status(200).send({
+                          data: result,
+                          msg:'Tender has been removed successfully'
+                        });
+                  }
+                });
+              });
 
   app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
     console.log(req.userData);
