@@ -51,7 +51,7 @@ const loan = require('./routes/loan.js');
 const training = require('./routes/training.js');
 const usergroup = require('./routes/usergroup.js');
 const employeeModule = require('./routes/employeeModule.js');
-
+const accounts = require('./routes/accounts.js');
 
 
 app.use('/project', project);
@@ -81,7 +81,7 @@ app.use('/loan', loan);
 app.use('/training', training);
 app.use('/usergroup', usergroup);
 app.use('/employeeModule', employeeModule);
-
+app.use('/accounts', accounts);
 
 
 app.use(fileUpload({
