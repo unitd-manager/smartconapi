@@ -16,22 +16,19 @@ app.use(cors());
 app.use(fileUpload({
     createParentPath: true
 }));
-app.get('/getAccounts', (req, res, next) => {
-  db.query(`Select e.date 
-  ,e.group
-  ,e.sub_group 
-  ,e.amount 
-  ,e.gst_amount 
-  ,e.service_charge 
-  ,e.total_amount 
-  ,e.description 
-  ,e.invoice_code 
-  ,e.invoice_date 
-  ,e.payment_ref_no 
-  ,e.job_id 
-  ,e.remarks 
-  FROM expense e 
-  WHERE expense_id !=''`,
+app.get('/getClients', (req, res, next) => {
+  db.query(`Select c.company_name
+  ,c.phone
+  ,c.website
+  ,c.email
+  ,c.fax
+  ,c.address_flat
+  ,c.address_street
+  ,c.address_country
+  ,c.address_po_code
+  ,c.retention
+  From company c 
+  Where c.company_id !=''`,
     (err, result) => {
       if (err) {
         console.log("error: ", err);
@@ -50,6 +47,34 @@ app.get('/getAccounts', (req, res, next) => {
   );
 });
 
+
+
+app.get('/getContactLinked', (req, res, next) => {
+  db.query(`SELECT 
+  c.first_name
+  ,c.email
+  ,c.phone
+  ,c.mobile
+  ,c.position
+  ,c.department 
+  FROM contact c WHERE c.contact_id = ''`,
+    (err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
 
 
 

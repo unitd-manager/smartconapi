@@ -52,7 +52,7 @@ const training = require('./routes/training.js');
 const usergroup = require('./routes/usergroup.js');
 const employeeModule = require('./routes/employeeModule.js');
 const accounts = require('./routes/accounts.js');
-
+const clients = require('./routes/clients.js');
 
 app.use('/project', project);
 app.use('/tender', tender);
@@ -82,7 +82,7 @@ app.use('/training', training);
 app.use('/usergroup', usergroup);
 app.use('/employeeModule', employeeModule);
 app.use('/accounts', accounts);
-
+app.use('/clients', clients);
 
 app.use(fileUpload({
     createParentPath: true
