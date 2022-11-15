@@ -43,6 +43,28 @@ app.get('/getSetting', (req, res, next) => {
   );
 });
 
+app.post('/editSetting', (req, res, next) => {
+  db.query(`UPDATE setting 
+            SET key_text=${db.escape(req.body.key_text)}
+            ,description=${db.escape(req.body.description)}
+            ,value=${db.escape(req.body.value)}
+            ,value_type=${db.escape(req.body.value_type)}
+            WHERE setting_id = ${db.escape(req.body.setting_id)}`,
+    (err, result) => {
+     
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
 
 
 

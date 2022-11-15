@@ -50,6 +50,34 @@ app.get('/getAccounts', (req, res, next) => {
   );
 });
 
+app.post('/editAccounts', (req, res, next) => {
+  db.query(`UPDATE expense
+            SET date=${db.escape(req.body.date)}
+            ,amount=${db.escape(req.body.amount)}
+            ,gst_amount=${db.escape(req.body.gst_amount)}
+            ,service_charge=${db.escape(req.body.service_charge)}
+            ,description=${db.escape(req.body.description)}
+            ,invoice_code=${db.escape(req.body.invoice_code)}
+            ,invoice_date=${db.escape(req.body.invoice_date)}
+            ,payment_ref_no=${db.escape(req.body.payment_ref_no)}
+            ,job_id=${db.escape(req.body.job_id)}
+            ,remarks=${db.escape(req.body.remarks)}
+            WHERE expense_id = ${db.escape(req.body.expense_id)}`,
+    (err, result) => {
+     
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
 
 
 

@@ -38,6 +38,25 @@ app.get('/getExpenseHead', (req, res, next) => {
   );
 });
 
+app.post('/editExpenseHead', (req, res, next) => {
+  db.query(`UPDATE expense_sub_group 
+            SET title=${db.escape(req.body.title)}
+            WHERE expense_sub_group_id = ${db.escape(req.body.expense_sub_group_id)}`,
+    (err, result) => {
+     
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
 
 
 app.get('/getExpenseSubHeadLinked', (req, res, next) => {
