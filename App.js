@@ -54,6 +54,7 @@ const employeeModule = require('./routes/employeeModule.js');
 const accounts = require('./routes/accounts.js');
 const clients = require('./routes/clients.js');
 const expensehead = require('./routes/expensehead.js');
+const setting = require('./routes/setting.js');
 
 
 app.use('/project', project);
@@ -86,7 +87,7 @@ app.use('/employeeModule', employeeModule);
 app.use('/accounts', accounts);
 app.use('/clients', clients);
 app.use('/expensehead', expensehead);
-
+app.use('/setting', setting);
 
 app.use(fileUpload({
     createParentPath: true

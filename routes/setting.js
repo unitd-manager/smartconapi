@@ -16,21 +16,15 @@ app.use(cors());
 app.use(fileUpload({
     createParentPath: true
 }));
-app.get('/getClients', (req, res, next) => {
-  db.query(`Select c.company_name
-  ,c.phone
-  ,c.website
-  ,c.email
-  ,c.fax
-  ,c.address_flat
-  ,c.address_street
-  ,c.address_country
-  ,c.address_po_code
-  ,c.retention
-  ,c.creation_date
-  ,c.creation_date
-  From company c 
-  Where c.company_id !=''`,
+app.get('/getSetting', (req, res, next) => {
+  db.query(`Select s.key_text
+  ,s.description
+  ,s.value
+  ,s.value_type
+  ,s.creation_date
+  ,s.modification_date
+  From setting s
+  Where s.setting_id !=''`,
     (err, result) => {
       if (err) {
         console.log("error: ", err);
@@ -49,35 +43,6 @@ app.get('/getClients', (req, res, next) => {
   );
 });
 
-
-
-app.get('/getContactLinked', (req, res, next) => {
-  db.query(`SELECT 
-  c.first_name
-  ,c.email
-  ,c.phone
-  ,c.mobile
-  ,c.position
-  ,c.department 
-
-  FROM contact c WHERE c.contact_id = ''`,
-    (err, result) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            });
-
-        }
- 
-    }
-  );
-});
 
 
 
