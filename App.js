@@ -47,6 +47,10 @@ const claim = require('./routes/claim.js');
 const loan = require('./routes/loan.js');
 const training = require('./routes/training.js');
 const usergroup = require('./routes/usergroup.js');
+const leave = require('./routes/leave.js');
+const staff = require('./routes/staff.js');
+
+
 
 
 
@@ -74,6 +78,10 @@ app.use('/claim', claim);
 app.use('/loan', loan);
 app.use('/training', training);
 app.use('/usergroup', usergroup);
+app.use('/leave', leave);
+app.use('/staff', staff);
+
+
 
 
 
