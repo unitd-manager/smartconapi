@@ -53,6 +53,8 @@ const usergroup = require('./routes/usergroup.js');
 const employeeModule = require('./routes/employeeModule.js');
 const accounts = require('./routes/accounts.js');
 const clients = require('./routes/clients.js');
+const expensehead = require('./routes/expensehead.js');
+
 
 app.use('/project', project);
 app.use('/tender', tender);
@@ -83,6 +85,8 @@ app.use('/usergroup', usergroup);
 app.use('/employeeModule', employeeModule);
 app.use('/accounts', accounts);
 app.use('/clients', clients);
+app.use('/expensehead', expensehead);
+
 
 app.use(fileUpload({
     createParentPath: true
