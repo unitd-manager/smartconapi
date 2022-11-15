@@ -44,15 +44,17 @@ const materialpurchased = require('./routes/materialpurchased.js');
 const company = require('./routes/company.js');
 const employeesportal = require('./routes/employeesportal.js');
 const claim = require('./routes/claim.js');
+const inventory = require('./routes/inventory.js');
+const cpfcalculator = require('./routes/cpfcalculator.js');
+const payrollmanagement = require('./routes/payrollmanagement.js');
 const loan = require('./routes/loan.js');
 const training = require('./routes/training.js');
 const usergroup = require('./routes/usergroup.js');
-const leave = require('./routes/leave.js');
-const staff = require('./routes/staff.js');
-
-
-
-
+const employeeModule = require('./routes/employeeModule.js');
+const accounts = require('./routes/accounts.js');
+const clients = require('./routes/clients.js');
+const expensehead = require('./routes/expensehead.js');
+const setting = require('./routes/setting.js');
 
 
 app.use('/project', project);
@@ -75,16 +77,17 @@ app.use('/materialpurchased', materialpurchased);
 app.use('/company', company);
 app.use('/employeesportal', employeesportal);
 app.use('/claim', claim);
+app.use('/inventory', inventory);
+app.use('/cpfcalculator', cpfcalculator);
+app.use('/payrollmanagement', payrollmanagement);
 app.use('/loan', loan);
 app.use('/training', training);
 app.use('/usergroup', usergroup);
-app.use('/leave', leave);
-app.use('/staff', staff);
-
-
-
-
-
+app.use('/employeeModule', employeeModule);
+app.use('/accounts', accounts);
+app.use('/clients', clients);
+app.use('/expensehead', expensehead);
+app.use('/setting', setting);
 
 app.use(fileUpload({
     createParentPath: true

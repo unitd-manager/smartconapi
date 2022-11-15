@@ -39,35 +39,69 @@ WHERE ug.user_group_id != ''`,
   );
 });
 
-app.get('/getTabEmployeeLinked', (req, res, next) => {
-  db.query(` SELECT ts.training_staff_id 
-  ,ts.from_date
-  ,ts.to_date
-  ,CONCAT_WS(' ', e.first_name, e.last_name) AS employee_name
-  ,ji.designation
-  FROM training_staff ts
-  LEFT JOIN (employee e) ON (ts.staff_id = e.employee_id)
-   LEFT JOIN (job_information ji) ON (e.employee_id = ji.employee_id)
-   WHERE training_id != ''
-  ORDER BY training_staff_id DESC`,
+
+
+app.post('/insertUserGroup', (req, res, next) => {
+
+  let data = {title: req.body.title
+    , user_group_type: req.body.user_group_type
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date};
+  let sql = "INSERT INTO user_group SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+app.post('/edit-usergroup', (req, res, next) => {
+  db.query(`UPDATE user_group  
+            SET title=${db.escape(req.body.title)}
+            ,user_group_type=${db.escape(req.body.user_group_type)}
+            WHERE user_group_id = ${db.escape(req.body.user_group_id)}`,
     (err, result) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
       } else {
             return res.status(200).send({
               data: result,
               msg:'Success'
             });
-
-        }
- 
-    }
+      }
+     }
   );
 });
 
+
+
+app.delete('/deleteUserGroup', (req, res, next) => {
+
+  let data = {user_group_id:req.body.user_group_id };
+  let sql = "DELETE FROM user_group WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
