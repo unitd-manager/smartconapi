@@ -55,7 +55,7 @@ const accounts = require('./routes/accounts.js');
 const clients = require('./routes/clients.js');
 const expensehead = require('./routes/expensehead.js');
 const setting = require('./routes/setting.js');
-
+const valuelist = require('./routes/valuelist.js');
 
 app.use('/project', project);
 app.use('/tender', tender);
@@ -88,6 +88,7 @@ app.use('/accounts', accounts);
 app.use('/clients', clients);
 app.use('/expensehead', expensehead);
 app.use('/setting', setting);
+app.use('/valuelist', valuelist);
 
 app.use(fileUpload({
     createParentPath: true
