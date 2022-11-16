@@ -40,7 +40,6 @@ const finance = require('./routes/finance.js');
 const tabsubconworkorder = require('./routes/tabsubconworkorder.js');
 const tabfinanaceportal = require('./routes/tabfinanaceportal.js');
 const purchaseorder = require('./routes/purchaseorder.js');
-const materialpurchased = require('./routes/materialpurchased.js');
 const company = require('./routes/company.js');
 const employeesportal = require('./routes/employeesportal.js');
 const claim = require('./routes/claim.js');
@@ -60,6 +59,9 @@ const valuelist = require('./routes/valuelist.js');
 const staff = require('./routes/staff.js');
 const projecttabmaterialusedportal = require('./routes/projecttabmaterialusedportal.js');
 const projecttabmaterialtransferred = require('./routes/projecttabmaterialtransferred.js');
+const projecttabdeliveryorder = require('./routes/const projecttabdeliveryorder.js');
+
+
 
 
 app.use('/project', project);
@@ -78,7 +80,6 @@ app.use('/finance', finance);
 app.use('/tabsubconworkorder', tabsubconworkorder);
 app.use('/tabfinanaceportal', tabfinanaceportal);
 app.use('/purchaseorder', purchaseorder);
-app.use('/materialpurchased', materialpurchased);
 app.use('/company', company);
 app.use('/employeesportal', employeesportal);
 app.use('/claim', claim);
@@ -98,6 +99,9 @@ app.use('/valuelist', valuelist);
 app.use('/staff', staff);
 app.use('/projecttabmaterialusedportal',projecttabmaterialusedportal);
 app.use('/projecttabmaterialtransferred',projecttabmaterialtransferred);
+app.use('/projecttabdeliveryorder', projecttabdeliveryorder);
+
+
 
 app.use(fileUpload({
     createParentPath: true
