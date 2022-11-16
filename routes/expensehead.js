@@ -38,51 +38,25 @@ app.get('/getExpenseHead', (req, res, next) => {
   );
 });
 
-app.post('/insertExpGroup', (req, res, next) => {
-
-  let data = {expense_group_id	:req.body.expense_group_id	
-   , title	: req.body.title	
-   , created_by: req.body.created_by
-   , creation_date: req.body.creation_date
-   , modified_by: req.body.modified_by
-   , modification_date	: req.body.modification_date
-   , site_id	: req.body.site_id
-   
-    
- };
-  let sql = "INSERT INTO expense_sub_group SET ?";
-  let query = db.query(sql, data,(err, result) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    } else {
-          return res.status(200).send({
-            data: result,
-            msg:'New Tender has been created successfully'
-          });
-    }
-  });
+app.post('/editExpenseHead', (req, res, next) => {
+  db.query(`UPDATE expense_sub_group 
+            SET title=${db.escape(req.body.title)}
+            WHERE expense_sub_group_id = ${db.escape(req.body.expense_sub_group_id)}`,
+    (err, result) => {
+     
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
 });
-
-app.delete('/deleteExpGroup', (req, res, next) => {
-
-  let data = {expense_group_id: req.body.expense_group_id};
-  let sql = "DELETE FROM expense_sub_group WHERE ?";
-  let query = db.query(sql, data,(err, result) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    } else {
-          return res.status(200).send({
-            data: result,
-            msg:'Tender has been removed successfully'
-          });
-    }
-  });
-});
-
 
 
 app.get('/getExpenseSubHeadLinked', (req, res, next) => {

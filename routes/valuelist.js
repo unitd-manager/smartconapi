@@ -44,51 +44,29 @@ app.get('/getValueList', (req, res, next) => {
   );
 });
 
-app.post('/insertValueList', (req, res, next) => {
-
-  let data = {key_text	:req.body.key_text	
-   , value	: req.body.value	
-   , chi_value: req.body.chi_value
-   , creation_date: req.body.creation_date
-   , modification_date	: req.body.modification_date
-   , sort_order: req.body.sort_order
-   , flag	: req.body.flag
-   , code	: req.body.code
-   
-    
- };
-  let sql = "INSERT INTO value_list SET ?";
-  let query = db.query(sql, data,(err, result) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    } else {
-          return res.status(200).send({
-            data: result,
-            msg:'New Tender has been created successfully'
-          });
-    }
-  });
+app.post('/editValueList', (req, res, next) => {
+  db.query(`UPDATE valuelist 
+            SET key_text=${db.escape(req.body.key_text)}
+            ,value=${db.escape(req.body.value)}
+            ,code=${db.escape(req.body.code)}
+            WHERE valuelist_id = ${db.escape(req.body.valuelist_id)}`,
+    (err, result) => {
+     
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
 });
 
-app.delete('/deleteValueList', (req, res, next) => {
 
-  let data = {key_text: req.body.key_text};
-  let sql = "DELETE FROM value_list WHERE ?";
-  let query = db.query(sql, data,(err, result) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    } else {
-          return res.status(200).send({
-            data: result,
-            msg:'Tender has been removed successfully'
-          });
-    }
-  });
-});
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);

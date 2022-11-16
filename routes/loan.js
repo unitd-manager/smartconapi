@@ -94,8 +94,6 @@ app.post('/editTabLoan', (req, res, next) => {
                  , month_amount: req.body.month_amount
                  , loan_start_date: req.body.loan_start_date                
                   , notes: req.body.notes
-
-                 
                   
                };
                 let sql = "INSERT INTO loan SET ?";
