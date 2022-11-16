@@ -60,7 +60,7 @@ const staff = require('./routes/staff.js');
 const projecttabmaterialusedportal = require('./routes/projecttabmaterialusedportal.js');
 const projecttabmaterialstransferredportal = require('./routes/projecttabmaterialstransferredportal.js');
 const projecttabdeliveryorder = require('./routes/projecttabdeliveryorder.js');
-
+const media = require('./routes/media.js');
 
 
 
@@ -100,6 +100,7 @@ app.use('/staff', staff);
 app.use('/projecttabmaterialusedportal',projecttabmaterialusedportal);
 app.use('/projecttabmaterialstransferredportal',projecttabmaterialstransferredportal);
 app.use('/projecttabdeliveryorder', projecttabdeliveryorder);
+app.use('/media', media);
 
 
 
