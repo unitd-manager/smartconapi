@@ -22,6 +22,8 @@ app.get('/getBooking', (req, res, next) => {
   ,b.assign_time
   ,b.status
   ,b.gps_parameter
+  ,b.created_by
+  ,b.modified_by
   ,c.company_name AS c_company_name
   ,c.email AS c_email,
    c.address_flat AS c_address_flat,
@@ -88,6 +90,7 @@ app.post('/insertBooking', (req, res, next) => {
     , assign_time: req.body.assign_time
     , creation_date: req.body.creation_date
     , modification_date: req.body.modification_date
+    , created_by: req.body.created_by
     , modified_by: req.body.modified_by
     , gps_parameter: req.body.gps_parameter
     , status: req.body.status
