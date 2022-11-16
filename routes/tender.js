@@ -340,7 +340,33 @@ app.post('/insertCompany', (req, res, next) => {
     , supplier_type: req.body.supplier_type
     , industry: req.body.industry
     , company_size: req.body.company_size
-    , source: req.body.source};
+    , source: req.body.source
+    , email: req.body.email
+    , address_town: req.body.address_town
+    , address_state: req.body.address_state
+    , notes: req.body.notes
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date
+    , mobile: req.body.mobile
+    , flag: req.body.flag
+    ,  status: req.body.status
+    , category: req.body.category
+    , comment_by: req.body.comment_by
+    , group_name: req.body.group_name
+    , created_by: req.body.created_by
+    , modified_by: req.body.modified_by
+    , chi_company_name: req.body.chi_company_name
+    , chi_company_address: req.body.chi_company_address
+   ,  company_address_id: req.body.company_address_id
+   , contact_person: req.body.contact_person
+   , billing_address_flat: req.body.billing_address_flat
+   , billing_address_street: req.body.billing_address_street
+   , billing_address_country: req.body.billing_address_country
+   , billing_address_po_code: req.body.billing_address_po_code
+   , client_code: req.body.client_code
+   , latitude: req.body.latitude
+   , longitude: req.body.longitude
+   , retention: req.body.retention};
   let sql = "INSERT INTO company SET ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
@@ -377,14 +403,61 @@ app.delete('/deleteCompany', (req, res, next) => {
 
 app.post('/insertContact', (req, res, next) => {
 
-  let data = {salutation: req.body.salutation
-    , first_name: req.body.first_name
-    , email: req.body.email
-    , position: req.body.position
-    , department: req.body.department
-    , phone_direct: req.body.phone_direct
-    , fax: req.body.fax
-    , mobile: req.body.mobile};
+  let data = {company_name	:req.body.company_name	
+   , position	: req.body.position	
+   , email: req.body.email
+   , address_street: req.body.address_street
+   , address_area: req.body.address_area
+   , address_town: req.body.address_town
+   , address_state: req.body.address_state
+   , address_country	: req.body.address_country
+   , address_po_code	: req.body.address_po_code
+   , phone: req.body.phone
+   , fax: req.body.fax
+   , sort_order: req.body.sort_order
+   , published: req.body.published
+   , creation_date		: req.body.creation_date		
+   , modification_date	: req.body.modification_date	
+   , protected	: req.body.protected	
+   , pass_word: req.body.pass_word
+   , subscribe: req.body.subscribe
+   , first_name: req.body.first_name
+   , last_name: req.body.last_name
+   , mobile: req.body.mobile
+   , religion	: req.body.religion
+   , relationship	: req.body.relationship
+   , known_as_name: req.body.known_as_name
+   , address_street1: req.body.address_street1
+   , address_town1: req.body.address_town1
+   , address_country1: req.body.address_country1
+   , flag		: req.body.flag		
+   , sex	: req.body.sex	
+   , date_of_birth: req.body.date_of_birth
+   , random_no: req.body.random_no
+   , member_status: req.body.member_status
+   , direct_tel: req.body.direct_tel
+   , member_type	: req.body.member_type
+   , address_flat	: req.body.address_flat
+   , phone_direct: req.body.phone_direct
+   , salutation: req.body.salutation
+   , department: req.body.department
+   , created_by: req.body.created_by
+   , modified_by	: req.body.modified_by	
+   , published_test	: req.body.published_test	
+   , company_address_street	: req.body.company_address_street
+   , company_address_flat	: req.body.company_address_flat
+   , company_address_town: req.body.company_address_town
+   , company_address_state: req.body.company_address_state
+   , company_address_country: req.body.company_address_country
+   , company_address_id: req.body.company_address_id
+   , category	: req.body.category	
+   , status	: req.body.status	
+   , user_group_id	: req.body.user_group_id	
+   , name	: req.body.name	
+   , notes	: req.body.notes	
+   , user_name	: req.body.user_name	
+   , address	: req.body.address	
+   , login_count	: req.body.login_count};
   let sql = "INSERT INTO contact SET ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
@@ -400,11 +473,9 @@ app.post('/insertContact', (req, res, next) => {
   });
 });
 
-
-
 app.delete('/deleteContact', (req, res, next) => {
 
-  let data = {contact_id  : req.body.contact_id  };
+  let data = {company_name: req.body.company_name};
   let sql = "DELETE FROM contact WHERE ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
@@ -419,7 +490,6 @@ app.delete('/deleteContact', (req, res, next) => {
     }
   });
 });
-
 app.post('/insertValueList', (req, res, next) => {
 
   let data = {key_text: req.body.key_text
