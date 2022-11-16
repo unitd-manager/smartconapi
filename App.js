@@ -57,6 +57,9 @@ const expensehead = require('./routes/expensehead.js');
 const setting = require('./routes/setting.js');
 const valuelist = require('./routes/valuelist.js');
 const staff = require('./routes/staff.js');
+const projecttabdeliveryorder = require('./routes/const projecttabdeliveryorder.js');
+
+
 
 
 app.use('/project', project);
@@ -92,6 +95,8 @@ app.use('/expensehead', expensehead);
 app.use('/setting', setting);
 app.use('/valuelist', valuelist);
 app.use('/staff', staff);
+app.use('/projecttabdeliveryorder', projecttabdeliveryorder);
+
 
 
 app.use(fileUpload({
