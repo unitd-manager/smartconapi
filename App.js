@@ -58,8 +58,8 @@ const setting = require('./routes/setting.js');
 const valuelist = require('./routes/valuelist.js');
 const staff = require('./routes/staff.js');
 const projecttabmaterialusedportal = require('./routes/projecttabmaterialusedportal.js');
-const projecttabmaterialtransferred = require('./routes/projecttabmaterialtransferred.js');
-const projecttabdeliveryorder = require('./routes/const projecttabdeliveryorder.js');
+const projecttabmaterialstransferredportal = require('./routes/projecttabmaterialstransferredportal.js');
+const projecttabdeliveryorder = require('./routes/projecttabdeliveryorder.js');
 
 
 
@@ -98,7 +98,7 @@ app.use('/setting', setting);
 app.use('/valuelist', valuelist);
 app.use('/staff', staff);
 app.use('/projecttabmaterialusedportal',projecttabmaterialusedportal);
-app.use('/projecttabmaterialtransferred',projecttabmaterialtransferred);
+app.use('/projecttabmaterialstransferredportal',projecttabmaterialstransferredportal);
 app.use('/projecttabdeliveryorder', projecttabdeliveryorder);
 
 

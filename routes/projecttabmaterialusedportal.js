@@ -103,7 +103,7 @@ app.post('/insertProjectMaterials', (req, res, next) => {
 
 app.delete('/deleteProjectMaterials', (req, res, next) => {
 
-  let data = {project_id: req.body.project_id};
+  let data = {project_materials_id : req.body.project_materials_id };
   let sql = "DELETE FROM project_materials WHERE ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
