@@ -69,6 +69,88 @@ app.get('/getTenders', (req, res, next) => {
   );
 });
 
+app.post('/edit-Tenders', (req, res, next) => {
+  db.query(`UPDATE opportunity 
+            SET office_ref_no=${db.escape(req.body.office_ref_no)}
+            ,company_id=${db.escape(req.body.company_id)}
+            ,contact_id=${db.escape(req.body.contact_id)}
+            ,mode_of_submission=${db.escape(req.body.mode_of_submission)}
+            ,services=${db.escape(req.body.services)}
+            ,site_show_date=${db.escape(req.body.site_show_date)}
+            ,site_show_attendee=${db.escape(req.body.site_show_attendee)}
+            ,actual_submission_date=${db.escape(req.body.actual_submission_date)}
+            ,email=${db.escape(req.body.email)}
+            ,price=${db.escape(req.body.price)}
+            WHERE opportunity_id =  ${db.escape(req.body.opportunity_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
+
+
+app.post('/insertTender', (req, res, next) => {
+
+  let data = {title: req.body.title
+    , company_id: req.body.company_id
+    , contact_id: req.body.contact_id
+    , category_id: req.body.category_id
+    , office_ref_no: req.body.office_ref_no
+    , mode_of_submission: req.body.mode_of_submission
+    , services: req.body.services
+    , site_show_date: req.body.site_show_date
+    , site_show_attendee: req.body.site_show_attendee
+    , actual_submission_date: req.body.actual_submission_date
+    , status: req.body.status
+    , email: req.body.email
+    , price: req.body.price};
+  let sql = "INSERT INTO opportunity SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+
+
+
+app.delete('/deleteTender', (req, res, next) => {
+
+  let data = {opportunity_id: req.body.opportunity_id};
+  let sql = "DELETE FROM opportunity WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
+
 app.get('/getTabCostingSummary', (req, res, next) => {
   db.query(`SELECT 
   c.total_material_price
@@ -172,8 +254,8 @@ app.get('/getTabquote', (req, res, next) => {
   ,q.project_reference
   ,q.payment_method
   ,q.revision
-  ,q.intro_drawing_quote FROM quote q  WHERE q.opportunity_id != ''  ORDER BY quote_code DESC
-  `,
+  ,q.intro_drawing_quote FROM quote q  
+  WHERE q.opportunity_id != ''  ORDER BY quote_code DESC`,
     (err, result) => {
      
       if (result.length == 0) {
@@ -242,121 +324,24 @@ app.post('/edit-TabQuoteLine', (req, res, next) => {
   );
 });
 
-app.post('/edit-Tenders', (req, res, next) => {
-  db.query(`UPDATE opportunity 
-            SET office_ref_no=${db.escape(req.body.office_ref_no)}
-            ,company_id=${db.escape(req.body.company_id)}
-            ,contact_id=${db.escape(req.body.contact_id)}
-            ,mode_of_submission=${db.escape(req.body.mode_of_submission)}
-            ,services=${db.escape(req.body.services)}
-            ,site_show_date=${db.escape(req.body.site_show_date)}
-            ,site_show_attendee=${db.escape(req.body.site_show_attendee)}
-            ,actual_submission_date=${db.escape(req.body.actual_submission_date)}
-            ,email=${db.escape(req.body.email)}
-            ,price=${db.escape(req.body.price)}
-            WHERE opportunity_id =  ${db.escape(req.body.opportunity_id)}`,
-    (err, result) => {
-     
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            });
-      }
-     }
-  );
-});
 
-app.post('/getCostingSummaryById', (req, res, next) => {
-  db.query(`SELECT 
-            c.* 
-            FROM opportunity_costing_summary c  
-            WHERE c.opportunity_id =  ${db.escape(req.body.opportunity_id)}
-            ORDER BY c.opportunity_costing_summary_id DESC`,
-    (err, result) => {
-       
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            });
 
-        }
- 
-    }
-  );
-});
 
-app.post('/getQuoteLineItemsById', (req, res, next) => {
-  db.query(`SELECT
-            qt.* 
-            FROM quote_items qt 
-            WHERE qt.quote_id =  ${db.escape(req.body.quote_id)}`,
-          (err, result) => {
-       
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            });
-      }
- 
-    }
-  );
-});
+app.post('/insertCompany', (req, res, next) => {
 
-app.post('/getQuoteById', (req, res, next) => {
-  db.query(`SELECT
-            q.* 
-            FROM quote q 
-            WHERE q.opportunity_id = ${db.escape(req.body.opportunity_id)}
-            ORDER BY quote_code DESC`,
-    (err, result) => {
-       
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            });
-
-      }
- 
-    }
-  );
-});
-
-app.post('/insertTender', (req, res, next) => {
-
-  let data = {title: req.body.title
-    , company_id: req.body.company_id
-    , contact_id: req.body.contact_id
-    , category_id: req.body.category_id
-    , office_ref_no: req.body.office_ref_no
-    , mode_of_submission: req.body.mode_of_submission
-    , services: req.body.services
-    , site_show_date: req.body.site_show_date
-    , site_show_attendee: req.body.site_show_attendee
-    , actual_submission_date: req.body.actual_submission_date
-    , status: req.body.status
-    , email: req.body.email
-    , price: req.body.price};
-  let sql = "INSERT INTO opportunity SET ?";
+  let data = {company_name: req.body.company_name
+    , website: req.body.website
+    , phone: req.body.phone
+    , fax: req.body.fax
+    , address_flat: req.body.address_flat
+    , address_street: req.body.address_street
+    , address_po_code: req.body.address_po_code
+    , address_country: req.body.address_country
+    , supplier_type: req.body.supplier_type
+    , industry: req.body.industry
+    , company_size: req.body.company_size
+    , source: req.body.source};
+  let sql = "INSERT INTO company SET ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
@@ -370,8 +355,6 @@ app.post('/insertTender', (req, res, next) => {
     }
   });
 });
-
-
 
 
 app.delete('/deleteCompany', (req, res, next) => {
@@ -391,27 +374,6 @@ app.delete('/deleteCompany', (req, res, next) => {
     }
   });
 });
-
-
-app.post('/insertCompany', (req, res, next) => {
-
-  let data = {company_name: req.body.company_name, website: req.body.website, phone: req.body.phone, fax: req.body.fax, address_flat: req.body.address_flat, address_street: req.body.address_street, address_po_code: req.body.address_po_code, address_country: req.body.address_country, supplier_type: req.body.supplier_type, industry: req.body.industry, company_size: req.body.company_size, source: req.body.source};
-  let sql = "INSERT INTO company SET ?";
-  let query = db.query(sql, data,(err, result) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    } else {
-          return res.status(200).send({
-            data: result,
-            msg:'New Tender has been created successfully'
-          });
-    }
-  });
-});
-
-
 
 app.post('/insertContact', (req, res, next) => {
 
@@ -549,25 +511,6 @@ app.delete('/deleteservice', (req, res, next) => {
 
 
 
-app.delete('/deletestaff', (req, res, next) => {
-
-  let data = {staff_id : req.body.staff_id  };
-  let sql = "DELETE FROM staff WHERE ?";
-  let query = db.query(sql, data,(err, result) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    } else {
-          return res.status(200).send({
-            data: result,
-            msg:'Tender has been removed successfully'
-          });
-    }
-  });
-});
-
-
 app.post('/insertStaff', (req, res, next) => {
 
   let data = {staff_id: req.body.staff_id
@@ -635,137 +578,11 @@ app.post('/insertStaff', (req, res, next) => {
 
 
 
-app.post('/insertEmployee', (req, res, next) => {
 
-  let data = {company_name: req.body.company_name
-    , position: req.body.position
-    , email: req.body.email
-    , address_street: req.body.address_street
-    , address_area: req.body.address_area
-    , address_town: req.body.address_town
-    , address_state: req.body.address_state
-    , address_country: req.body.address_country
-    , address_po_code: req.body.address_po_code
-    , phone: req.body.phone
-    , fax: req.body.fax
-    , sort_order: req.body.sort_order
-    , published: req.body.published
-    , creation_date: req.body.creation_date
-    , modification_date: req.body.modification_date
-    , protected: req.body.protected
-    , pass_word: req.body.pass_word
-    , subscribe : req.body. subscribe 
-    , mobile: req.body.mobile
-    , religion: req.body.religion
-    , relationship: req.body.relationship
-    , known_as_name: req.body.known_as_name
-    , address_street1: req.body.address_street1
-    , address_town1 : req.body. address_town1 
-    , address_country1: req.body.address_country1
-    , flag: req.body.flag
-    , sex: req.body.sex
-    , date_of_birth: req.body.date_of_birth
-    , random_no: req.body.random_no
-    , member_status: req.body.member_status
-    , direct_tel: req.body.direct_tel
-    , member_type: req.body.member_type
-    , address_flat: req.body.address_flat
-    , phone_direct: req.body.phone_direct
-    , salutation: req.body.salutation
-    , department: req.body.department
-    , created_by: req.body.created_by
-    , modified_by: req.body.modified_by
-    , published_test: req.body.published_test
-    , company_address_street: req.body.company_address_street
-    , company_address_flat: req.body.company_address_flat
-    , company_address_town: req.body.company_address_town
-    , company_address_state : req.body. company_address_state 
-    , company_address_country: req.body.company_address_country
-    , company_address_id: req.body.company_address_id
-    , category : req.body. category 
-    , status: req.body.status
-    , user_group_id: req.body.user_group_id
-    , employee_name: req.body.employee_name
-    , notes: req.body.notes
-    , user_name: req.body.user_name
-    , address: req.body.address
-    , login_count: req.body.login_count
-    , passport: req.body.passport
-    , nric_no: req.body.nric_no
-    , employee_work_type : req.body. employee_work_type 
-    , add_hourly_rate: req.body.add_hourly_rate
-    , salary: req.body.salary
-    , spass_no: req.body.spass_no
-    , date_of_expiry: req.body.date_of_expiry
-    , day_rate: req.body.day_rate
-    , overtime_rate: req.body.overtime_rate
-    , emp_code: req.body.emp_code
-    , gender: req.body.gender
-    , relegion : req.body. relegion 
-    , nationality: req.body.nationality
-    , foreign_addrs_street: req.body.foreign_addrs_street
-    , foreign_addrs_area: req.body.foreign_addrs_area
-    ,  foreign_addrs_city : req.body. foreign_addrs_city 
-    , foreign_addrs_postal_code: req.body.foreign_addrs_postal_code
-    , foreign_addrs_country : req.body. foreign_addrs_country 
-    , emergency_contact_name: req.body.emergency_contact_name
-    , emergency_contact_phone: req.body.emergency_contact_phone
-    , emergency_contact_phone2: req.body.emergency_contact_phone2
-    , emergency_contact_address: req.body.emergency_contact_address
-    , degree1: req.body.degree1
-    , educational_qualitifcation1: req.body.educational_qualitifcation1
-    , year_of_completion1: req.body.year_of_completion1
-    , degree2: req.body.degree2
-    , educational_qualitifcation2: req.body.educational_qualitifcation2
-    , year_of_completion2: req.body.year_of_completion2
-    , degree3: req.body.degree3
-    , department: req.body.department
-    , educational_qualitifcation3: req.body.educational_qualitifcation3
-    , year_of_completion3: req.body.year_of_completion3
-    , fin_no: req.body.fin_no
-    , marital_status: req.body.marital_status
-    , is_citizen: req.body.is_citizen
-    , race: req.body.race
-    , employee_group : req.body. employee_group 
-    , first_name: req.body.first_name
-    , last_name: req.body.last_name
-    , foreign_mobile : req.body. foreign_mobile 
-    , foreign_email: req.body.foreign_email
-    , spr_year: req.body.spr_year
-    , citizen: req.body.citizen
-    , date_of_issue: req.body.date_of_issue
-    , work_permit: req.body.work_permit
-    , fin_no_expiry_date: req.body.fin_no_expiry_date
-    , work_permit_expiry_date : req.body. work_permit_expiry_date 
-    , ir21_filed: req.body.ir21_filed
-    , site_id: req.body.site_id
-    , room_no : req.body. room_no 
-    , dormitory_id: req.body.dormitory_id
-    , employee_type: req.body.employee_type
-    , project_designation: req.body.project_designation
-    , team : req.body. team 
-    , project_manager: req.body.project_manager
-    , admin_staff: req.body.admin_staff};
-  let sql = "INSERT INTO employee SET ?";
-  let query = db.query(sql, data,(err, result) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    } else {
-          return res.status(200).send({
-            data: result,
-            msg:'New Tender has been created successfully'
-          });
-    }
-  });
-});
+app.delete('/deletestaff', (req, res, next) => {
 
-
-app.delete('/deleteemployee', (req, res, next) => {
-
-  let data = {employee_id:req.body.employee_id };
-  let sql = "DELETE FROM employee WHERE ?";
+  let data = {staff_id : req.body.staff_id  };
+  let sql = "DELETE FROM staff WHERE ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
@@ -778,85 +595,6 @@ app.delete('/deleteemployee', (req, res, next) => {
           });
     }
   });
-});
-
-
-app.delete('/deleteTender', (req, res, next) => {
-
-  let data = {opportunity_id: req.body.opportunity_id};
-  let sql = "DELETE FROM opportunity WHERE ?";
-  let query = db.query(sql, data,(err, result) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    } else {
-          return res.status(200).send({
-            data: result,
-            msg:'Tender has been removed successfully'
-          });
-    }
-  });
-});
-
-app.post('/getQuotePDF', (req, res, next) => {
-    db.query(`SELECT q.*
-    ,qi.title AS quote_item_title
-    ,qi.quantity
-    ,qi.unit
-    ,qi.description
-    ,qi.amount
-    ,qi.unit_price
-    ,qi.remarks
-    ,o.opportunity_id
-    ,o.opportunity_code
-    ,o.company_id
-    ,c.company_name
-    ,c.address_flat AS billing_address_flat
-    ,c.address_street AS billing_address_street
-    ,c.address_town AS billing_address_town
-    ,c.address_state AS billing_address_state
-    ,gc.name AS billing_address_country
-    ,c.address_po_code AS billing_address_po_code
-    ,c.company_id
-    ,co.email
-    ,c.phone
-    ,c.fax
-    ,c.mobile
-    ,co.salutation
-    ,co.first_name
-    ,s.email AS employee_email
-    ,e.mobile AS employee_mobile
-  FROM quote q
-  LEFT JOIN (quote_items qi) ON (qi.quote_id = q.quote_id)
-  LEFT JOIN (opportunity o) ON (o.opportunity_id = q.opportunity_id)
-  LEFT JOIN (company c) ON (c.company_id = o.company_id)
-  LEFT JOIN (contact co) ON (co.contact_id = o.contact_id)
-  LEFT JOIN (geo_country gc) ON (gc.country_code = c.address_country)
-  LEFT JOIN (employee e) ON (e.employee_id = q.employee_id)
-  LEFT JOIN (staff s) ON (s.employee_id = q.employee_id)
-  WHERE q.quote_id = ${db.escape(req.body.quote_id)}
-  ORDER BY qi.quote_items_id ASC`,
-    (err, result) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      } 
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            });
-
-        }
- 
-    }
-  );
 });
 
 app.post('/insertCostingSummary', (req, res, next) => {
@@ -907,6 +645,8 @@ app.post('/insertCostingSummary', (req, res, next) => {
   });
 });
 
+
+
 app.delete('/deleteCostingSummary', (req, res, next) => {
 
   let data = {po_code: req.body.po_code};
@@ -924,6 +664,7 @@ app.delete('/deleteCostingSummary', (req, res, next) => {
     }
   });
 });
+
 
 app.post('/insertOpportunityCostingSummary', (req, res, next) => {
 
@@ -1042,22 +783,66 @@ app.delete('/deleteQuoteItems', (req, res, next) => {
   });
 });
 
-app.delete('/deleteTender', (req, res, next) => {
 
-  let data = {opportunity_id: req.body.opportunity_id};
-  let sql = "DELETE FROM opportunity WHERE ?";
-  let query = db.query(sql, data,(err, result) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    } else {
-          return res.status(200).send({
-            data: result,
-            msg:'Tender has been removed successfully'
-          });
+
+app.post('/getQuotePDF', (req, res, next) => {
+    db.query(`SELECT q.*
+    ,qi.title AS quote_item_title
+    ,qi.quantity
+    ,qi.unit
+    ,qi.description
+    ,qi.amount
+    ,qi.unit_price
+    ,qi.remarks
+    ,o.opportunity_id
+    ,o.opportunity_code
+    ,o.company_id
+    ,c.company_name
+    ,c.address_flat AS billing_address_flat
+    ,c.address_street AS billing_address_street
+    ,c.address_town AS billing_address_town
+    ,c.address_state AS billing_address_state
+    ,gc.name AS billing_address_country
+    ,c.address_po_code AS billing_address_po_code
+    ,c.company_id
+    ,co.email
+    ,c.phone
+    ,c.fax
+    ,c.mobile
+    ,co.salutation
+    ,co.first_name
+    ,s.email AS employee_email
+    ,e.mobile AS employee_mobile
+  FROM quote q
+  LEFT JOIN (quote_items qi) ON (qi.quote_id = q.quote_id)
+  LEFT JOIN (opportunity o) ON (o.opportunity_id = q.opportunity_id)
+  LEFT JOIN (company c) ON (c.company_id = o.company_id)
+  LEFT JOIN (contact co) ON (co.contact_id = o.contact_id)
+  LEFT JOIN (geo_country gc) ON (gc.country_code = c.address_country)
+  LEFT JOIN (employee e) ON (e.employee_id = q.employee_id)
+  LEFT JOIN (staff s) ON (s.employee_id = q.employee_id)
+  WHERE q.quote_id = ${db.escape(req.body.quote_id)}
+  ORDER BY qi.quote_items_id ASC`,
+    (err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      } 
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
     }
-  });
+  );
 });
 
 
