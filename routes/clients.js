@@ -49,6 +49,38 @@ app.get('/getClients', (req, res, next) => {
   );
 });
 
+
+
+app.post('/editClients', (req, res, next) => {
+  db.query(`UPDATE company
+            SET company_name=${db.escape(req.body.company_name)}
+            ,phone=${db.escape(req.body.phone)}
+            ,website=${db.escape(req.body.website)}
+            ,email=${db.escape(req.body.email)}
+            ,fax=${db.escape(req.body.fax)}
+            ,address_flat=${db.escape(req.body.address_flat)}
+            ,address_street=${db.escape(req.body.address_street)}
+            ,address_country=${db.escape(req.body.address_country)}
+            ,address_po_code=${db.escape(req.body.address_po_code)}
+            ,retention=${db.escape(req.body.retention)}
+            WHERE company_id = ${db.escape(req.body.company_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
+
+
 app.post('/insertClient', (req, res, next) => {
 
   let data = {company_name	:req.body.company_name	
@@ -88,10 +120,7 @@ app.post('/insertClient', (req, res, next) => {
    , client_code: req.body.client_code
    , latitude: req.body.latitude
    , longitude	: req.body.longitude	
-   , retention	: req.body.retention	
-  
-    
- };
+   , retention	: req.body.retention };
   let sql = "INSERT INTO company SET ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
@@ -125,35 +154,6 @@ app.delete('/deleteClients', (req, res, next) => {
   });
 });
 
-app.post('/editClients', (req, res, next) => {
-  db.query(`UPDATE company
-            SET company_name=${db.escape(req.body.company_name)}
-            ,phone=${db.escape(req.body.phone)}
-            ,website=${db.escape(req.body.website)}
-            ,email=${db.escape(req.body.email)}
-            ,fax=${db.escape(req.body.fax)}
-            ,address_flat=${db.escape(req.body.address_flat)}
-            ,address_street=${db.escape(req.body.address_street)}
-            ,address_country=${db.escape(req.body.address_country)}
-            ,address_po_code=${db.escape(req.body.address_po_code)}
-            ,retention=${db.escape(req.body.retention)}
-            WHERE company_id = ${db.escape(req.body.company_id)}`,
-    (err, result) => {
-     
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            });
-      }
-     }
-  );
-});
-
 
 app.get('/getContactLinked', (req, res, next) => {
   db.query(`SELECT 
@@ -182,7 +182,6 @@ app.get('/getContactLinked', (req, res, next) => {
     }
   );
 });
-
 app.post('/insertContact', (req, res, next) => {
 
   let data = {company_name	:req.body.company_name	

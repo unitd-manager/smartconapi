@@ -81,26 +81,6 @@ app.post('/edit-Booking', (req, res, next) => {
 
 
 
-app.get('/getTabServiceLink', (req, res, next) => {
-  db.query(`SELECT * FROM booking_service WHERE booking_id = '' ORDER BY booking_service_id`,
-    (err, result) => {
-     
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            });
-        }
- 
-    }
-  );
-}); 
-
-
 app.post('/insertBooking', (req, res, next) => {
 
   let data = {customer_id: req.body.customer_id
@@ -130,6 +110,7 @@ app.post('/insertBooking', (req, res, next) => {
 });
 
 
+
 app.delete('/deleteBooking', (req, res, next) => {
 
   let data = {booking_id  : req.body.booking_id  };
@@ -147,6 +128,27 @@ app.delete('/deleteBooking', (req, res, next) => {
     }
   });
 });
+
+app.get('/getTabServiceLink', (req, res, next) => {
+  db.query(`SELECT * FROM booking_service WHERE booking_id = '' ORDER BY booking_service_id`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+        }
+ 
+    }
+  );
+}); 
+
+
 
 app.post('/insertbooking_service', (req, res, next) => {
 
