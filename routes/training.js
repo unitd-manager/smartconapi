@@ -27,7 +27,7 @@ app.get('/getTraining', (req, res, next) => {
   ,t.training_company_email
   ,t.training_company_phone
   FROM training t
-WHERE t.training_id != ''`,
+  WHERE t.training_id != ''`,
     (err, result) => {
       if (err) {
         console.log("error: ", err);
@@ -45,8 +45,6 @@ WHERE t.training_id != ''`,
     }
   );
 });
-
-
 
 
 app.post('/edit-Training', (req, res, next) => {
@@ -77,35 +75,6 @@ app.post('/edit-Training', (req, res, next) => {
   );
 });
 
-
-app.get('/getTabEmployeeLinked', (req, res, next) => {
-  db.query(` SELECT ts.training_staff_id 
-  ,ts.from_date
-  ,ts.to_date
-  ,CONCAT_WS(' ', e.first_name, e.last_name) AS employee_name
-  ,ji.designation
-  FROM training_staff ts
-  LEFT JOIN (employee e) ON (ts.staff_id = e.employee_id)
-   LEFT JOIN (job_information ji) ON (e.employee_id = ji.employee_id)
-   WHERE training_id != ''
-  ORDER BY training_staff_id DESC`,
-    (err, result) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            });
-
-        }
- 
-    }
-  );
-});
 
 
 
@@ -140,36 +109,6 @@ app.post('/insertTraining', (req, res, next) => {
   });
 });
 
-
-
-app.post('/insertTrainingStaff', (req, res, next) => {
-
-  let data = {training_id: req.body.training_id
-    , staff_id: req.body.staff_id
-    , creation_date: req.body.creation_date
-    , modification_date: req.body.modification_date
-    , created_by: req.body.created_by
-    ,  modified_by : req.body. modified_by 
-    , from_date: req.body.from_date
-    , to_date: req.body.to_date};
-  let sql = "INSERT INTO training_staff SET ?";
-  let query = db.query(sql, data,(err, result) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    } else {
-          return res.status(200).send({
-            data: result,
-            msg:'New Tender has been created successfully'
-          });
-    }
-  });
-});
-
-
-
-
 app.delete('/deleteTraining', (req, res, next) => {
 
   let data = {training_id :req.body.training_id  };
@@ -186,6 +125,36 @@ app.delete('/deleteTraining', (req, res, next) => {
           });
     }
   });
+});
+
+
+app.get('/getTabEmployeeLinked', (req, res, next) => {
+  db.query(` SELECT ts.training_staff_id 
+  ,ts.from_date
+  ,ts.to_date
+  ,CONCAT_WS(' ', e.first_name, e.last_name) AS employee_name
+  ,ji.designation
+  FROM training_staff ts
+  LEFT JOIN (employee e) ON (ts.staff_id = e.employee_id)
+   LEFT JOIN (job_information ji) ON (e.employee_id = ji.employee_id)
+   WHERE training_id != ''
+  ORDER BY training_staff_id DESC`,
+    (err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
 });
 
 
@@ -213,6 +182,30 @@ app.post('/edit-TabEmployeeLinked', (req, res, next) => {
 });
 
 
+app.post('/insertTrainingStaff', (req, res, next) => {
+
+  let data = {training_id: req.body.training_id
+    , staff_id: req.body.staff_id
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date
+    , created_by: req.body.created_by
+    ,  modified_by : req.body. modified_by 
+    , from_date: req.body.from_date
+    , to_date: req.body.to_date};
+  let sql = "INSERT INTO training_staff SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
 
 
 

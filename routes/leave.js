@@ -77,27 +77,21 @@ app.get('/getLeave', (req, res, next) => {
                   }
                 });
               });
+ app.post('/insertLeave', (req, res, next) => {
 
-              app.post('/insertLeave', (req, res, next) => {
-
-                let data = {date	:req.body.date	
-                 , employee_id: req.body.employee_id
-                 , leave_type: req.body.leave_type
-                 , from_date: req.body.from_date
-                 , to_date: req.body.to_date
-                 , reason	: req.body.reason
-                 , creation_date	: req.body.creation_date
-                 , modification_date: req.body.modification_date
-                 , created_by: req.body.created_by
-                 , modified_by: req.body.modified_by
-                 , no_of_days: req.body.no_of_days
-                 , status	: req.body.status	
-                 , no_of_days_next_month	: req.body.no_of_days_next_month	
-                 , went_overseas: req.body.went_overseas
-
-                 
-                  
-               };
+ let data = {date	:req.body.date	, employee_id: req.body.employee_id
+  , leave_type: req.body.leave_type
+  , from_date: req.body.from_date
+  , to_date: req.body.to_date
+  , reason	: req.body.reason
+  , creation_date	: req.body.creation_date
+  , modification_date: req.body.modification_date
+  , created_by: req.body.created_by
+  , modified_by: req.body.modified_by
+  , no_of_days: req.body.no_of_days
+  , status	: req.body.status	
+  , no_of_days_next_month	: req.body.no_of_days_next_month	
+  , went_overseas: req.body.went_overseas};
                 let sql = "INSERT INTO empleave SET ?";
                 let query = db.query(sql, data,(err, result) => {
                   if (err) {
@@ -112,8 +106,8 @@ app.get('/getLeave', (req, res, next) => {
                   }
                 });
               });
-
-              app.delete('/deleteLeave', (req, res, next) => {
+              
+     app.delete('/deleteLeave', (req, res, next) => {
 
                 let data = {employee_id: req.body.employee_id};
                 let sql = "DELETE FROM empleave WHERE ?";
@@ -130,6 +124,7 @@ app.get('/getLeave', (req, res, next) => {
                   }
                 });
               });
+             
 
 
   app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
