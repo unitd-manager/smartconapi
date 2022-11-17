@@ -139,10 +139,7 @@ WHERE a.staff_id != ''`,
                  , current_status	: req.body.current_status
                  , developer: req.body.developer
                  , joined_date: req.body.joined_date
-                 , employee_id: req.body.employee_id
-                 
-                  
-               };
+                 , employee_id: req.body.employee_id};
                 let sql = "INSERT INTO staff SET ?";
                 let query = db.query(sql, data,(err, result) => {
                   if (err) {
@@ -198,26 +195,25 @@ WHERE s.staff_group_id!='';`,
   );
  });
 
-              app.post('/editStaffGrp', (req, res, next) => {
-                db.query(`UPDATE staff_group
-                          SET title=${db.escape(req.body.title)}
-                          ,creation_date=${db.escape(req.body.creation_date)}
-                          ,modification_date=${db.escape(req.body.modification_date)}
-                          ,sort_order=${db.escape(req.body.sort_order)}
-                           WHERE staff_group_id = ${db.escape(req.body.staff_group_id)}`,
-                          (err, result) => {
-                   
-                            if (err) {
-                                console.log("error: ", err);
-                                return;
-                              } else {
-                                    return res.status(200).send({
-                                      data: result,
-                                      msg:'Tender has been removed successfully'
-                                    });
-                              }
-                            });
-                          });
+  app.post('/editStaffGrp', (req, res, next) => {
+   db.query(`UPDATE staff_group
+   SET title=${db.escape(req.body.title)}
+   ,creation_date=${db.escape(req.body.creation_date)}
+   ,modification_date=${db.escape(req.body.modification_date)}
+   ,sort_order=${db.escape(req.body.sort_order)}
+    WHERE staff_group_id = ${db.escape(req.body.staff_group_id)}`,
+     (err, result) => {
+      if (err) {
+      console.log("error: ", err);
+       return;
+       } else {
+        return res.status(200).send({
+          data: result,
+          msg:'Tender has been removed successfully'
+            });
+       }
+      });
+    });
 
               app.post('/insertStaffGroup', (req, res, next) => {
 

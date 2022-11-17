@@ -46,6 +46,31 @@ app.get('/getTabQuote', (req, res, next) => {
     );
   });
 
+  
+  app.post('/TabQuote', (req, res, next) => {
+    db.query(`UPDATE quote
+              SET  quote_date=${db.escape(req.body.quote_date)}
+              ,discount=${db.escape(req.body.discount)}
+              ,project_location=${db.escape(req.body.project_location)}
+              ,project_reference=${db.escape(req.body.project_reference)}
+              ,ref_no_quote=${db.escape(req.body.ref_no_quote)}
+              ,revision=${db.escape(req.body.revision)}
+              WHERE  project_id = ${db.escape(req.body.project_id)}`,
+      (err, result) => {
+       
+        if (err) {
+          console.log("error: ", err);
+          return;
+        } else {
+              return res.status(200).send({
+                data: result,
+                msg:'Success'
+              });
+        }
+       }
+    );
+  });
+
   app.post('/insertQuote', (req, res, next) => {
 
     let data = {
@@ -128,31 +153,6 @@ app.get('/getTabQuote', (req, res, next) => {
             });
       }
     });
-  });
-  
-  
-  app.post('/TabQuote', (req, res, next) => {
-    db.query(`UPDATE quote
-              SET  quote_date=${db.escape(req.body.quote_date)}
-              ,discount=${db.escape(req.body.discount)}
-              ,project_location=${db.escape(req.body.project_location)}
-              ,project_reference=${db.escape(req.body.project_reference)}
-              ,ref_no_quote=${db.escape(req.body.ref_no_quote)}
-              ,revision=${db.escape(req.body.revision)}
-              WHERE  project_id = ${db.escape(req.body.project_id)}`,
-      (err, result) => {
-       
-        if (err) {
-          console.log("error: ", err);
-          return;
-        } else {
-              return res.status(200).send({
-                data: result,
-                msg:'Success'
-              });
-        }
-       }
-    );
   });
   
   

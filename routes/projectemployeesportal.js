@@ -45,35 +45,6 @@ app.get('/getTabEmployeePortal', (req, res, next) => {
   );
 }); 
 
-app.get('/getTabEmployeeTimeSheet', (req, res, next) => {
-  db.query(`SELECT DATE_FORMAT(et.date, '%Y-%m') AS dateMonth
-            ,DATE_FORMAT(et.date, '%M') AS Month
-            ,DATE_FORMAT(et.date, '%m') AS month_req
-            ,DATE_FORMAT(et.date, '%Y') AS year_req
-            ,DATE_FORMAT(et.date, '%Y-%m') AS year_Months
-            ,SUM(et.employee_hours) AS totalHours
-            ,SUM(et.employee_ot_hours) AS totalOTHours
-            ,SUM(et.employee_ph_hours) AS totalPHHours
-            ,et.project_id FROM employee_timesheet et 
-            WHERE et.project_id != '' 
-            GROUP BY DATE_FORMAT(et.date, '%Y-%m') 
-            ORDER BY et.date DESC`,
-    (err, result) => {
-     
-      if (err) {
-        console.log("error: ", err);
-        return;
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            });
-        }
- 
-    }
-  );
-}); 
-
 app.post('/insertemployee_timesheet', (req, res, next) => {
 
   let data = {creation_date: req.body.creation_date,
@@ -124,6 +95,38 @@ app.delete('/deleteEmployee_timesheet', (req, res, next) => {
     }
   });
 });
+
+
+
+app.get('/getTabEmployeeTimeSheet', (req, res, next) => {
+  db.query(`SELECT DATE_FORMAT(et.date, '%Y-%m') AS dateMonth
+            ,DATE_FORMAT(et.date, '%M') AS Month
+            ,DATE_FORMAT(et.date, '%m') AS month_req
+            ,DATE_FORMAT(et.date, '%Y') AS year_req
+            ,DATE_FORMAT(et.date, '%Y-%m') AS year_Months
+            ,SUM(et.employee_hours) AS totalHours
+            ,SUM(et.employee_ot_hours) AS totalOTHours
+            ,SUM(et.employee_ph_hours) AS totalPHHours
+            ,et.project_id FROM employee_timesheet et 
+            WHERE et.project_id != '' 
+            GROUP BY DATE_FORMAT(et.date, '%Y-%m') 
+            ORDER BY et.date DESC`,
+    (err, result) => {
+     
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+        }
+ 
+    }
+  );
+}); 
+
 
 
 app.post('/insertproject_employee', (req, res, next) => {

@@ -69,73 +69,7 @@ app.get('/TabMaterialRequest', (req, res, next) => {
        }
     );
   });
-  
-  app.get('/TabMaterialRequestlineitems', (req, res, next) => {
-    db.query(`SELECT 
-    mrli.quantity
-    ,mrli.unit
-    ,mrli.amount
-    ,mrli.item_title
-    ,mrli.supplier_id
-    ,mrli.description FROM materials_request_line_items mrli 
-    LEFT JOIN supplier s ON (s.supplier_id = mrli.supplier_id) WHERE mrli.materials_request_id != '' ORDER BY mrli.item_title ASC;`,
-      (err, result) => {
-         
-        if (err) {
-          console.log("error: ", err);
-          return;
-        } else {
-              return res.status(200).send({
-                data: result,
-                msg:'Tender has been removed successfully'
-              });
-        
-        }
-   
-      }
-    );
-  });
-  
-  app.post('/editTabMaterialRequestlineitems', (req, res, next) => {
-    db.query(`UPDATE materials_request_line_items
-              SET quantity=${db.escape(req.body.quantity)}
-              ,unit=${db.escape(req.body.unit)}
-              ,amount=${db.escape(req.body.amount)}
-              ,item_title=${db.escape(req.body.item_title)}
-              ,supplier_id=${db.escape(req.body.supplier_id)}
-              ,description=${db.escape(req.body.description)}
-              WHERE materials_request_id = ${db.escape(req.body.materials_request_id)}`,
-      (err, result) => {
-       
-        if (err) {
-          console.log("error: ", err);
-          return;
-        } else {
-              return res.status(200).send({
-                data: result,
-                msg:'Tender has been removed successfully'
-              });
-        }
-       }
-    );
-  });
-  
-  app.delete('/deleteMaterialsRequest', (req, res, next) => {
-  
-    let data = {mr_code: req.body.mr_code};
-    let sql = "DELETE FROM materials_request WHERE ?";
-    let query = db.query(sql, data,(err, result) => {
-      if (err) {
-        console.log("error: ", err);
-        return;
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Tender has been removed successfully'
-            });
-      }
-    });
-  });
+
   
   app.post('/insertMaterialRequest', (req, res, next) => {
   
@@ -191,6 +125,73 @@ app.get('/TabMaterialRequest', (req, res, next) => {
             });
       }
     });
+  });
+  
+  app.delete('/deleteMaterialsRequest', (req, res, next) => {
+  
+    let data = {mr_code: req.body.mr_code};
+    let sql = "DELETE FROM materials_request WHERE ?";
+    let query = db.query(sql, data,(err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Tender has been removed successfully'
+            });
+      }
+    });
+  });
+  
+  app.get('/TabMaterialRequestlineitems', (req, res, next) => {
+    db.query(`SELECT 
+    mrli.quantity
+    ,mrli.unit
+    ,mrli.amount
+    ,mrli.item_title
+    ,mrli.supplier_id
+    ,mrli.description FROM materials_request_line_items mrli 
+    LEFT JOIN supplier s ON (s.supplier_id = mrli.supplier_id) WHERE mrli.materials_request_id != '' ORDER BY mrli.item_title ASC;`,
+      (err, result) => {
+         
+        if (err) {
+          console.log("error: ", err);
+          return;
+        } else {
+              return res.status(200).send({
+                data: result,
+                msg:'Tender has been removed successfully'
+              });
+        
+        }
+   
+      }
+    );
+  });
+  
+  app.post('/editTabMaterialRequestlineitems', (req, res, next) => {
+    db.query(`UPDATE materials_request_line_items
+              SET quantity=${db.escape(req.body.quantity)}
+              ,unit=${db.escape(req.body.unit)}
+              ,amount=${db.escape(req.body.amount)}
+              ,item_title=${db.escape(req.body.item_title)}
+              ,supplier_id=${db.escape(req.body.supplier_id)}
+              ,description=${db.escape(req.body.description)}
+              WHERE materials_request_id = ${db.escape(req.body.materials_request_id)}`,
+      (err, result) => {
+       
+        if (err) {
+          console.log("error: ", err);
+          return;
+        } else {
+              return res.status(200).send({
+                data: result,
+                msg:'Tender has been removed successfully'
+              });
+        }
+       }
+    );
   });
   
   app.post('/insertMaterialRequestLineItems', (req, res, next) => {
