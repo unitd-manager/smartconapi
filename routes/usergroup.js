@@ -20,7 +20,7 @@ app.get('/getusergroup', (req, res, next) => {
   db.query(`SELECT ug.title
   ,ug.user_group_type
   FROM user_group ug
-WHERE ug.user_group_id != ''`,
+  WHERE ug.user_group_id != ''`,
     (err, result) => {
       if (err) {
         console.log("error: ", err);
@@ -41,27 +41,6 @@ WHERE ug.user_group_id != ''`,
 
 
 
-app.post('/insertUserGroup', (req, res, next) => {
-
-  let data = {title: req.body.title
-    , user_group_type: req.body.user_group_type
-    , creation_date: req.body.creation_date
-    , modification_date: req.body.modification_date};
-  let sql = "INSERT INTO user_group SET ?";
-  let query = db.query(sql, data,(err, result) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    } else {
-          return res.status(200).send({
-            data: result,
-            msg:'New Tender has been created successfully'
-          });
-    }
-  });
-});
-
 app.post('/edit-usergroup', (req, res, next) => {
   db.query(`UPDATE user_group  
             SET title=${db.escape(req.body.title)}
@@ -81,6 +60,27 @@ app.post('/edit-usergroup', (req, res, next) => {
       }
      }
   );
+});
+
+app.post('/insertUserGroup', (req, res, next) => {
+
+  let data = {title: req.body.title
+    , user_group_type: req.body.user_group_type
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date};
+  let sql = "INSERT INTO user_group SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
 });
 
 

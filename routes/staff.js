@@ -41,8 +41,6 @@ app.get('/getStaff', (req, res, next) => {
       ,gc.name AS country_title
       ,b.title AS user_group_title
       ,CONCAT_WS(' ', a.first_name, a.last_name ) AS staff_name
-      
-  
 FROM staff a
 LEFT JOIN user_group b ON (a.user_group_id = b.user_group_id)
 LEFT JOIN geo_country gc ON (a.address_country = gc.country_code)
@@ -177,29 +175,29 @@ WHERE a.staff_id != ''`,
                 });
               });
 
-              app.get('/getStaffGrp', (req, res, next) => {
-                db.query(`SELECT s.staff_group_id
-                ,s.title
-                ,s.creation_date
-                ,s.modification_date
-                ,s.sort_order FROM staff_group s
-                WHERE s.staff_group_id!='';`,
-                  (err, result) => {
-                    if (err) {
-                      console.log("error: ", err);
-                      return;
+app.get('/getStaffGrp', (req, res, next) => {
+db.query(`SELECT s.staff_group_id
+,s.title
+,s.creation_date
+,s.modification_date
+,s.sort_order FROM staff_group s
+WHERE s.staff_group_id!='';`,
+  (err, result) => {
+   if (err) {
+    console.log("error: ", err);
+    return;
                     
-                    } else {
-                          return res.status(200).send({
-                            data: result,
-                            msg:'Success'
-                          });
+    } else {
+   return res.status(200).send({
+    data: result,
+    msg:'Success'
+   });
               
-                      }
+  }
                
-                  }
-                );
-              });
+  }
+  );
+ });
 
               app.post('/editStaffGrp', (req, res, next) => {
                 db.query(`UPDATE staff_group
@@ -328,7 +326,7 @@ WHERE a.staff_id != ''`,
                 });
               });
 
-              app.delete('/deleteStaffGroup', (req, res, next) => {
+              app.delete('/deleteStaffGroupHist', (req, res, next) => {
 
                 let data = {staff_id: req.body.staff_id};
                 let sql = "DELETE FROM staff_group_history WHERE ?";

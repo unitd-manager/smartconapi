@@ -44,6 +44,29 @@ app.get('/getValueList', (req, res, next) => {
   );
 });
 
+
+app.post('/editValueList', (req, res, next) => {
+  db.query(`UPDATE valuelist 
+            SET key_text=${db.escape(req.body.key_text)}
+            ,value=${db.escape(req.body.value)}
+            ,code=${db.escape(req.body.code)}
+            WHERE valuelist_id = ${db.escape(req.body.valuelist_id)}`,
+    (err, result) => {
+     
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
+
 app.post('/insertValueList', (req, res, next) => {
 
   let data = {key_text	:req.body.key_text	
@@ -89,29 +112,6 @@ app.delete('/deleteValueList', (req, res, next) => {
     }
   });
 });
-app.post('/editValueList', (req, res, next) => {
-  db.query(`UPDATE valuelist 
-            SET key_text=${db.escape(req.body.key_text)}
-            ,value=${db.escape(req.body.value)}
-            ,code=${db.escape(req.body.code)}
-            WHERE valuelist_id = ${db.escape(req.body.valuelist_id)}`,
-    (err, result) => {
-     
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            });
-      }
-     }
-  );
-});
-
-
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
