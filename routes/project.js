@@ -637,6 +637,35 @@ app.delete('/deleteThirdPartyCost', (req, res, next) => {
 
 
 
+app.post('/insertActualCostingSummary', (req, res, next) => {
+
+  let data = {title:req.body.title
+    ,date: req.body.date
+    , amount: req.body.amount
+    , description: req.body.description
+    , project_id: req.body.project_id
+    , costing_summary_id: req.body.costing_summary_id
+    , created_by: req.body.created_by
+    , creation_date: req.body.creation_date
+    , modified_by: req.body.modified_by
+    , modification_date: req.body.modification_date };
+  let sql = "INSERT INTO actual_costing_summary SET ?";
+  let query = db.query(sql, data,(err, result) =>{
+    if (err) {
+      console.log("error: ", err);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+
+
+
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');
