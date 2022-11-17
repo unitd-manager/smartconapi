@@ -663,7 +663,22 @@ app.post('/insertActualCostingSummary', (req, res, next) => {
   });
 });
 
+app.delete('/deleteActualCostingSummary', (req, res, next) => {
 
+  let data = {title: req.body.title};
+  let sql = "DELETE FROM actual_costing_summary WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
 
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
