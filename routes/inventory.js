@@ -75,6 +75,61 @@ app.post('/editinventoryMain', (req, res, next) => {
   );
 });
 
+
+app.post('/insertinventory', (req, res, next) => {
+
+  let data = {creation_date: req.body.creation_date,
+              modification_date: req.body.modification_date,
+              flag: req.body.flag,
+              minimum_order_level: req.body.minimum_order_level,
+              site_id: req.body.site_id,
+              actual_stock: req.body.actual_stock,
+              inventory_code: req.body.inventory_code,
+              color: req.body.color,
+              size: req.body.size,
+              code: req.body.code,
+              model: req.body.model,
+              changed_stock: req.body.changed_stock,
+              notes: req.body.notes,
+              created_by: req.body.created_by,
+              modified_by: req.body.modified_by,
+          };
+
+  let sql = "INSERT INTO  inventory SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+
+
+app.delete('/deleteInventory', (req, res, next) => {
+
+  let data = {inventory_id  : req.body.inventory_id  };
+  let sql = "DELETE FROM inventory WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
 app.post('/insertsite', (req, res, next) => {
 
   let data = {site_id: req.body.site_id,
@@ -114,26 +169,11 @@ app.post('/insertsite', (req, res, next) => {
   });
 });
 
-app.post('/insertinventory', (req, res, next) => {
 
-  let data = {creation_date: req.body.creation_date,
-              modification_date: req.body.modification_date,
-              flag: req.body.flag,
-              minimum_order_level: req.body.minimum_order_level,
-              site_id: req.body.site_id,
-              actual_stock: req.body.actual_stock,
-              inventory_code: req.body.inventory_code,
-              color: req.body.color,
-              size: req.body.size,
-              code: req.body.code,
-              model: req.body.model,
-              changed_stock: req.body.changed_stock,
-              notes: req.body.notes,
-              created_by: req.body.created_by,
-              modified_by: req.body.modified_by,
-          };
+app.delete('/deleteSite', (req, res, next) => {
 
-  let sql = "INSERT INTO  inventory SET ?";
+  let data = {site_id  : req.body.site_id };
+  let sql = "DELETE FROM site WHERE ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
@@ -142,12 +182,11 @@ app.post('/insertinventory', (req, res, next) => {
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Tender has been removed successfully'
           });
     }
   });
 });
-
 
 
 app.get('/gettabPurchaseOrderLinked', (req, res, next) => {
@@ -216,45 +255,6 @@ app.get('/getTabProjectLinked', (req, res, next) => {
     }
   );
 });
-
-app.delete('/deleteInventory', (req, res, next) => {
-
-  let data = {inventory_id  : req.body.inventory_id  };
-  let sql = "DELETE FROM inventory WHERE ?";
-  let query = db.query(sql, data,(err, result) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    } else {
-          return res.status(200).send({
-            data: result,
-            msg:'Tender has been removed successfully'
-          });
-    }
-  });
-});
-
-
-app.delete('/deleteSite', (req, res, next) => {
-
-  let data = {site_id  : req.body.site_id };
-  let sql = "DELETE FROM site WHERE ?";
-  let query = db.query(sql, data,(err, result) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    } else {
-          return res.status(200).send({
-            data: result,
-            msg:'Tender has been removed successfully'
-          });
-    }
-  });
-});
-
-
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');

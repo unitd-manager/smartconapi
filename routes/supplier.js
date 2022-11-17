@@ -32,7 +32,8 @@ app.get('/getSupplier', (req, res, next) => {
   ,s.address_po_code
   ,s.payment_details
   ,s.terms
-  ,gc.name AS country_name FROM supplier s LEFT JOIN (geo_country gc) ON (s.address_country = gc.country_code) WHERE s.supplier_id != ''`,
+  ,gc.name AS country_name 
+  FROM supplier s LEFT JOIN (geo_country gc) ON (s.address_country = gc.country_code) WHERE s.supplier_id != ''`,
     (err, result) => {
        
       if (result.length == 0) {

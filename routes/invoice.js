@@ -67,11 +67,6 @@ app.get('/getMainInvoice', (req, res, next) => {
 });
 
 
-app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
-  console.log(req.userData);
-  res.send('This is the secret content. Only logged in users can see that!');
-});
-
 app.post('/insertInvoice', (req, res, next) => {
 
   let data = {
@@ -149,7 +144,6 @@ app.delete('/deleteInvoice', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
@@ -199,6 +193,12 @@ app.delete('/deleteBranch', (req, res, next) => {
           });
     }
   });
+});
+
+
+app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
+  console.log(req.userData);
+  res.send('This is the secret content. Only logged in users can see that!');
 });
 
 module.exports = app;

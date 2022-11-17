@@ -842,8 +842,7 @@ app.delete('/deleteQuoteItems', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
-      return;
+         return;
     } else {
           return res.status(200).send({
             data: result,
