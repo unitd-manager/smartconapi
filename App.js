@@ -61,6 +61,8 @@ const projecttabmaterialusedportal = require('./routes/projecttabmaterialusedpor
 const projecttabmaterialstransferredportal = require('./routes/projecttabmaterialstransferredportal.js');
 const projecttabdeliveryorder = require('./routes/projecttabdeliveryorder.js');
 const media = require('./routes/media.js');
+const projecttabmaterialrequest = require('./routes/projecttabmaterialrequest.js');
+
 
 
 
@@ -101,6 +103,8 @@ app.use('/projecttabmaterialusedportal',projecttabmaterialusedportal);
 app.use('/projecttabmaterialstransferredportal',projecttabmaterialstransferredportal);
 app.use('/projecttabdeliveryorder', projecttabdeliveryorder);
 app.use('/media', media);
+app.use('/projecttabmaterialrequest', projecttabmaterialrequest);
+
 
 
 
