@@ -46,10 +46,9 @@ WHERE a.employee_id != ''
 ORDER BY a.first_name ASC`,
     (err, result) => {
        
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -81,10 +80,9 @@ app.post('/edit-Employee', (req, res, next) => {
             WHERE employee_id = ${db.escape(req.body.employee_id)}`,
     (err, result) => {
      
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -212,12 +210,11 @@ app.post('/insertEmployee', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Success'
           });
     }
   });
@@ -234,10 +231,9 @@ WHERE ts.staff_id != ''
 ORDER BY ts.to_date DESC`,
     (err, result) => {
        
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -259,10 +255,9 @@ WHERE j.employee_id != ''
 ORDER BY j.job_information_id DESC`,
     (err, result) => {
        
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,

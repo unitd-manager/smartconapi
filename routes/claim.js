@@ -29,10 +29,9 @@ app.get('/getTabClaimPaymentPortal', (req, res, next) => {
             FROM claim_payment cp WHERE cp.project_id != ' ' AND cp.project_claim_id != '' 
             GROUP BY cp.claim_seq;`,
     (err, result) => {
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -67,12 +66,11 @@ app.get('/getTabClaimPaymentPortal', (req, res, next) => {
     let query = db.query(sql, data,(err, result) => {
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
       } else {
             return res.status(200).send({
               data: result,
-              msg:'New Tender has been created successfully'
+              msg:'Success'
             });
       }
     });
@@ -102,12 +100,11 @@ app.get('/getTabClaimPaymentPortal', (req, res, next) => {
     let query = db.query(sql, data,(err, result) => {
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
       } else {
             return res.status(200).send({
               data: result,
-              msg:'New Tender has been created successfully'
+              msg:'Success'
             });
       }
     });
@@ -139,12 +136,11 @@ app.get('/getTabClaimPaymentPortal', (req, res, next) => {
     let query = db.query(sql, data,(err, result) => {
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
       } else {
             return res.status(200).send({
               data: result,
-              msg:'New Tender has been created successfully'
+              msg:'Success'
             });
       }
     });
@@ -157,12 +153,11 @@ app.get('/getTabClaimPaymentPortal', (req, res, next) => {
     let query = db.query(sql, data,(err, result) => {
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
       } else {
             return res.status(200).send({
               data: result,
-              msg:'Tender has been removed successfully'
+              msg:'Success'
             });
       }
     });
@@ -175,12 +170,11 @@ app.get('/getTabClaimPaymentPortal', (req, res, next) => {
     let query = db.query(sql, data,(err, result) => {
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
       } else {
             return res.status(200).send({
               data: result,
-              msg:'Tender has been removed successfully'
+              msg:'Success'
             });
       }
     });
@@ -193,12 +187,11 @@ app.get('/getTabClaimPaymentPortal', (req, res, next) => {
     let query = db.query(sql, data,(err, result) => {
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
       } else {
             return res.status(200).send({
               data: result,
-              msg:'Tender has been removed successfully'
+              msg:'Success'
             });
       }
     });
@@ -225,10 +218,9 @@ app.get('/getTabClaimPaymentPortal', (req, res, next) => {
     LEFT JOIN (project p) ON (p.project_id = pc.project_id) LEFT JOIN (company c) ON (c.company_id = pc.client_id) WHERE pc.project_id != '';`,
       (err, result) => {
          
-        if (result.length == 0) {
-          return res.status(400).send({
-            msg: 'No result found'
-          });
+        if (err) {
+          console.log("error: ", err);
+          return;
         } else {
               return res.status(200).send({
                 data: result,
@@ -256,10 +248,9 @@ app.get('/getTabClaimPaymentPortal', (req, res, next) => {
                           WHERE project_id = ${db.escape(req.body.project_id)}`,
       (err, result) => {
        
-        if (result.length == 0) {
-          return res.status(400).send({
-            msg: 'No result found'
-          });
+        if (err) {
+          console.log("error: ", err);
+          return;
         } else {
               return res.status(200).send({
                 data: result,
@@ -278,10 +269,9 @@ app.get('/getTabClaimPaymentPortal', (req, res, next) => {
     ,ct.status FROM claim_line_items ct LEFT JOIN project_claim pc ON (pc.project_claim_id = ct.project_claim_id) WHERE pc.project_id != '' AND ct.project_claim_id != '' ORDER BY ct.claim_line_items_id ASC`,
       (err, result) => {
          
-        if (result.length == 0) {
-          return res.status(400).send({
-            msg: 'No result found'
-          });
+        if (err) {
+          console.log("error: ", err);
+          return;
         } else {
               return res.status(200).send({
                 data: result,
@@ -302,10 +292,9 @@ app.get('/getTabClaimPaymentPortal', (req, res, next) => {
                           WHERE project_id = ${db.escape(req.body.project_id)} AND project_claim_id = ${db.escape(req.body.project_claim_id)}`,
       (err, result) => {
        
-        if (result.length == 0) {
-          return res.status(400).send({
-            msg: 'No result found'
-          });
+        if (err) {
+          console.log("error: ", err);
+          return;
         } else {
               return res.status(200).send({
                 data: result,

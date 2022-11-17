@@ -90,17 +90,15 @@ app.get('/getjobinformation', (req, res, next) => {
             ORDER BY e.first_name ASC`,
     (err, result) => {
        
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
-              msg:'Success'
+              msg:'Tender has been removed successfully'
             });
-
-        }
+      }
  
     }
   );
@@ -161,12 +159,12 @@ app.post('/editjobinformation', (req, res, next) => {
                 if (err) {
                   console.log("error: ", err);
                   return;
-                  } else {
-                        return res.status(200).send({
-                          data: result,
-                          msg:'Tender has been removed successfully'
-                        });
-                  }
+                } else {
+                      return res.status(200).send({
+                        data: result,
+                        msg:'Tender has been removed successfully'
+                      });
+                }
                 });
               });
     
@@ -247,7 +245,7 @@ app.post('/editjobinformation', (req, res, next) => {
                   } else {
                         return res.status(200).send({
                           data: result,
-                          msg:'New Tender has been created successfully'
+                          msg:'Tender has been removed successfully'
                         });
                   }
                 });
