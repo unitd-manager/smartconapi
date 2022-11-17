@@ -23,9 +23,7 @@ app.get('/getExpenseHead', (req, res, next) => {
     (err, result) => {
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
-      
       } else {
             return res.status(200).send({
               data: result,
@@ -47,7 +45,6 @@ app.post('/editExpenseHead', (req, res, next) => {
      
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
       } else {
             return res.status(200).send({
@@ -74,12 +71,11 @@ app.post('/insertExpGroup', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Success'
           });
     }
   });
@@ -92,12 +88,11 @@ app.delete('/deleteExpGroup', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'Tender has been removed successfully'
+            msg:'Success'
           });
     }
   });
@@ -112,9 +107,7 @@ app.get('/getExpenseSubHeadLinked', (req, res, next) => {
     (err, result) => {
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
-      
       } else {
             return res.status(200).send({
               data: result,
@@ -143,12 +136,11 @@ app.post('/insertExp', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Success'
           });
     }
   });
@@ -161,12 +153,11 @@ app.delete('/deleteExp', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'Tender has been removed successfully'
+            msg:'Success'
           });
     }
   });

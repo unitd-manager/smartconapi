@@ -56,12 +56,12 @@ app.get('/getFinances', (req, res, next) => {
     (err, result) => {
       if (err) {
         console.log("error: ", err);
-           return;
+        return;
       } else {
-        return res.status(200).send({
-          data: result,
-          msg: 'Success'
-        });
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
 
       }
 
@@ -86,7 +86,7 @@ app.post('/editFinances', (req, res, next) => {
     (err, result) => {
       if (err) {
         console.log("error: ", err);
-           return;
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -101,10 +101,9 @@ app.get('/getTabOrderItemPanel', (req, res, next) => {
   db.query(`SELECT order_item_id, unit_price,qty,discount_percentage,description,remarks FROM order_item WHERE order_id != '' ORDER BY order_item_id ASC;`,
     (err, result) => {
      
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -133,10 +132,9 @@ app.get('/getTabInvoicePortalDisplay', (req, res, next) => {
                    WHERE r.receipt_id = invrecpt.receipt_id AND i.invoice_id = invrecpt.invoice_id) AS receipt_codes_history FROM invoice i WHERE i.order_id != '' ORDER BY i.invoice_id DESC`,
     (err, result) => {
      
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -165,10 +163,9 @@ app.post('/editTabInvoicePortalDisplay', (req, res, next) => {
            
              WHERE order_id =  ${db.escape(req.body.order_id)}`,
     (err, result) => {
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -198,10 +195,9 @@ app.get('/getTabReceiptPortalDisplay', (req, res, next) => {
             WHERE r.order_id != '' ORDER BY r.receipt_id DESC`,
     (err, result) => {
      
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -229,10 +225,9 @@ app.post('/editTabReceiptPortalDisplay', (req, res, next) => {
             WHERE order_id  =  ${db.escape(req.body.order_id)}`,
     (err, result) => {
      
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -253,10 +248,9 @@ app.get('/getTabCreditNotePortalDisplay', (req, res, next) => {
                    WHERE cn.order_id != '' ORDER BY cn.credit_note_id DESC`,
     (err, result) => {
      
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -338,12 +332,11 @@ app.post('/insertOrder', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Success'
           });
     }
   });
@@ -357,12 +350,11 @@ app.delete('/deleteorders', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Success'
           });
     }
   });
@@ -412,12 +404,11 @@ app.post('/insertorder_item', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Success'
           });
     }
   });
@@ -431,12 +422,11 @@ app.delete('/deleteorder_item', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'Tender has been removed successfully'
+            msg:'Success'
           });
     }
   });
@@ -468,12 +458,11 @@ app.post('/insertreceipt', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Success'
           });
     }
   });
@@ -487,12 +476,11 @@ app.delete('/deleteReceipt', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'Tender has been removed successfully'
+            msg:'Success'
           });
     }
   });
@@ -517,12 +505,11 @@ app.post('/insertInvoiceReceiptHistory', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Success'
           });
     }
   });
@@ -536,12 +523,11 @@ app.delete('/deleteInvoice_receipt_history', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'Tender has been removed successfully'
+            msg:'Success'
           });
     }
   });
@@ -571,12 +557,11 @@ app.post('/insertcredit_note', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Success'
           });
     }
   });
@@ -591,12 +576,11 @@ app.delete('/deletecredit_note', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'Tender has been removed successfully'
+            msg:'Success'
           });
     }
   });
