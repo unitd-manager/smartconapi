@@ -91,9 +91,9 @@ app.get('/getjobinformation', (req, res, next) => {
     (err, result) => {
        
       if (err) {
-        console.log("error: ", err);
-        return;
-      } else {
+          console.log("error: ", err);
+          return;
+        } else {
             return res.status(200).send({
               data: result,
               msg:'Tender has been removed successfully'
@@ -157,13 +157,15 @@ app.post('/editjobinformation', (req, res, next) => {
               (err, result) => {
        
                 if (err) {
-                  console.log("error: ", err);
-                  return;
-                } else {
-                      return res.status(200).send({
-                        data: result,
-                        msg:'Tender has been removed successfully'
-                      });
+
+                    console.log("error: ", err);
+                    return;
+                  } else {
+                        return res.status(200).send({
+                          data: result,
+                          msg:'Tender has been removed successfully'
+                        });
+                  
                 }
                 });
               });

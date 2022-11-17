@@ -59,9 +59,12 @@ app.post('/editinventoryMain', (req, res, next) => {
             
              WHERE inventory_id =  ${db.escape(req.body.inventory_id)}`,
     (err, result) => {
+       
       if (err) {
         console.log("error: ", err);
         return;
+      
+      
       } else {
             return res.status(200).send({
               data: result,
