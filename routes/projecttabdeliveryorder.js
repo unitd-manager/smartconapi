@@ -21,17 +21,17 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
     db.query(`SELECT do.date FROM delivery_order do WHERE project_id != ''`,
         (err, result) => {
            
-          if (result.length == 0) {
-            return res.status(400).send({
-              msg: 'No result found'
-            });
+          if (err) {
+            console.log("error: ", err);
+            return;
           } else {
                 return res.status(200).send({
                   data: result,
-                  msg:'Success'
+                  msg:'Tender has been removed successfully'
                 });
+          }
     
-            }
+            
      
         }
       );
@@ -43,15 +43,15 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
                 WHERE project_id=${db.escape(req.body.project_id)}`,
         (err, result) => {
          
-          if (result.length == 0) {
-            return res.status(400).send({
-              msg: 'No result found'
-            });
+          if (err) {
+            console.log("error: ", err);
+            return;
           } else {
                 return res.status(200).send({
                   data: result,
-                  msg:'Success'
+                  msg:'Tender has been removed successfully'
                 });
+          
           }
          }
       );
@@ -91,13 +91,13 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
       let query = db.query(sql, data,(err, result) => {
         if (err) {
           console.log("error: ", err);
-          result(err, null);
           return;
         } else {
               return res.status(200).send({
                 data: result,
                 msg:'Tender has been removed successfully'
               });
+        
         }
       });
     });

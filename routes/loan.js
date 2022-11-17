@@ -35,10 +35,9 @@ app.get('/TabLoan', (req, res, next) => {
   WHERE l.loan_id !=''`,
     (err, result) => {
        
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -63,7 +62,6 @@ app.post('/editTabLoan', (req, res, next) => {
        
                 if (err) {
                     console.log("error: ", err);
-                    result(err, null);
                     return;
                   } else {
                         return res.status(200).send({
@@ -100,7 +98,6 @@ app.post('/editTabLoan', (req, res, next) => {
                 let query = db.query(sql, data,(err, result) => {
                   if (err) {
                     console.log("error: ", err);
-                    result(err, null);
                     return;
                   } else {
                         return res.status(200).send({
@@ -118,7 +115,6 @@ app.post('/editTabLoan', (req, res, next) => {
                 let query = db.query(sql, data,(err, result) => {
                   if (err) {
                     console.log("error: ", err);
-                    result(err, null);
                     return;
                   } else {
                         return res.status(200).send({
@@ -142,10 +138,9 @@ WHERE lrh.loan_id != ''
 ORDER BY lrh.generated_date DESC`,
       (err, result) => {
          
-        if (result.length == 0) {
-          return res.status(400).send({
-            msg: 'No result found'
-          });
+        if (err) {
+          console.log("error: ", err);
+          return;
         } else {
               return res.status(200).send({
                 data: result,
@@ -172,10 +167,9 @@ ORDER BY lrh.generated_date DESC`,
         AND date < l.date;`,
       (err, result) => {
          
-        if (result.length == 0) {
-          return res.status(400).send({
-            msg: 'No result found'
-          });
+        if (err) {
+          console.log("error: ", err);
+          return;
         } else {
               return res.status(200).send({
                 data: result,

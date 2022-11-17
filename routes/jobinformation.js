@@ -159,9 +159,8 @@ app.post('/editjobinformation', (req, res, next) => {
               (err, result) => {
        
                 if (err) {
-                    console.log("error: ", err);
-                    result(err, null);
-                    return;
+                  console.log("error: ", err);
+                  return;
                   } else {
                         return res.status(200).send({
                           data: result,
@@ -248,7 +247,6 @@ app.post('/editjobinformation', (req, res, next) => {
                 let query = db.query(sql, data,(err, result) => {
                   if (err) {
                     console.log("error: ", err);
-                    result(err, null);
                     return;
                   } else {
                         return res.status(200).send({
@@ -266,7 +264,6 @@ app.post('/editjobinformation', (req, res, next) => {
                 let query = db.query(sql, data,(err, result) => {
                   if (err) {
                     console.log("error: ", err);
-                    result(err, null);
                     return;
                   } else {
                         return res.status(200).send({
