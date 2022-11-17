@@ -49,10 +49,9 @@ LEFT JOIN geo_country gc ON (a.address_country = gc.country_code)
 WHERE a.staff_id != ''`,
       (err, result) => {
          
-        if (result.length == 0) {
-          return res.status(400).send({
-            msg: 'No result found'
-          });
+        if (err) {
+          console.log("error: ", err);
+          return;
         } else {
               return res.status(200).send({
                 data: result,
@@ -85,7 +84,6 @@ WHERE a.staff_id != ''`,
        
                 if (err) {
                     console.log("error: ", err);
-                    result(err, null);
                     return;
                   } else {
                         return res.status(200).send({
@@ -152,7 +150,6 @@ WHERE a.staff_id != ''`,
                 let query = db.query(sql, data,(err, result) => {
                   if (err) {
                     console.log("error: ", err);
-                    result(err, null);
                     return;
                   } else {
                         return res.status(200).send({
@@ -170,7 +167,6 @@ WHERE a.staff_id != ''`,
                 let query = db.query(sql, data,(err, result) => {
                   if (err) {
                     console.log("error: ", err);
-                    result(err, null);
                     return;
                   } else {
                         return res.status(200).send({
@@ -191,7 +187,6 @@ WHERE a.staff_id != ''`,
                   (err, result) => {
                     if (err) {
                       console.log("error: ", err);
-                      result(err, null);
                       return;
                     
                     } else {
@@ -217,7 +212,6 @@ WHERE a.staff_id != ''`,
                    
                             if (err) {
                                 console.log("error: ", err);
-                                result(err, null);
                                 return;
                               } else {
                                     return res.status(200).send({
@@ -240,7 +234,6 @@ WHERE a.staff_id != ''`,
                 let query = db.query(sql, data,(err, result) => {
                   if (err) {
                     console.log("error: ", err);
-                    result(err, null);
                     return;
                   } else {
                         return res.status(200).send({
@@ -258,7 +251,6 @@ WHERE a.staff_id != ''`,
                 let query = db.query(sql, data,(err, result) => {
                   if (err) {
                     console.log("error: ", err);
-                    result(err, null);
                     return;
                   } else {
                         return res.status(200).send({
@@ -279,7 +271,6 @@ WHERE a.staff_id != ''`,
                   (err, result) => {
                     if (err) {
                       console.log("error: ", err);
-                      result(err, null);
                       return;
                     
                     } else {
@@ -305,7 +296,6 @@ WHERE a.staff_id != ''`,
                    
                             if (err) {
                                 console.log("error: ", err);
-                                result(err, null);
                                 return;
                               } else {
                                     return res.status(200).send({
@@ -328,7 +318,6 @@ WHERE a.staff_id != ''`,
                 let query = db.query(sql, data,(err, result) => {
                   if (err) {
                     console.log("error: ", err);
-                    result(err, null);
                     return;
                   } else {
                         return res.status(200).send({
@@ -346,7 +335,6 @@ WHERE a.staff_id != ''`,
                 let query = db.query(sql, data,(err, result) => {
                   if (err) {
                     console.log("error: ", err);
-                    result(err, null);
                     return;
                   } else {
                         return res.status(200).send({
