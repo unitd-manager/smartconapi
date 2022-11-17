@@ -30,17 +30,15 @@ app.get('/TabMaterialRequest', (req, res, next) => {
     ,mr.delivery_terms FROM materials_request mr WHERE mr.project_id != '' ORDER BY mr.materials_request_id DESC;`,
       (err, result) => {
          
-        if (result.length == 0) {
-          return res.status(400).send({
-            msg: 'No result found'
-          });
+        if (err) {
+          console.log("error: ", err);
+          return;
         } else {
               return res.status(200).send({
                 data: result,
-                msg:'Success'
+                msg:'Tender has been removed successfully'
               });
-  
-          }
+        }
    
       }
     );
@@ -59,14 +57,13 @@ app.get('/TabMaterialRequest', (req, res, next) => {
               WHERE project_id = ${db.escape(req.body.project_id)}`,
       (err, result) => {
        
-        if (result.length == 0) {
-          return res.status(400).send({
-            msg: 'No result found'
-          });
+        if (err) {
+          console.log("error: ", err);
+          return;
         } else {
               return res.status(200).send({
                 data: result,
-                msg:'Success'
+                msg:'Tender has been removed successfully'
               });
         }
        }
@@ -84,17 +81,16 @@ app.get('/TabMaterialRequest', (req, res, next) => {
     LEFT JOIN supplier s ON (s.supplier_id = mrli.supplier_id) WHERE mrli.materials_request_id != '' ORDER BY mrli.item_title ASC;`,
       (err, result) => {
          
-        if (result.length == 0) {
-          return res.status(400).send({
-            msg: 'No result found'
-          });
+        if (err) {
+          console.log("error: ", err);
+          return;
         } else {
               return res.status(200).send({
                 data: result,
-                msg:'Success'
+                msg:'Tender has been removed successfully'
               });
-  
-          }
+        
+        }
    
       }
     );
@@ -111,14 +107,13 @@ app.get('/TabMaterialRequest', (req, res, next) => {
               WHERE materials_request_id = ${db.escape(req.body.materials_request_id)}`,
       (err, result) => {
        
-        if (result.length == 0) {
-          return res.status(400).send({
-            msg: 'No result found'
-          });
+        if (err) {
+          console.log("error: ", err);
+          return;
         } else {
               return res.status(200).send({
                 data: result,
-                msg:'Success'
+                msg:'Tender has been removed successfully'
               });
         }
        }
@@ -132,7 +127,6 @@ app.get('/TabMaterialRequest', (req, res, next) => {
     let query = db.query(sql, data,(err, result) => {
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
       } else {
             return res.status(200).send({
@@ -189,12 +183,11 @@ app.get('/TabMaterialRequest', (req, res, next) => {
     let query = db.query(sql, data,(err, result) => {
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
       } else {
             return res.status(200).send({
               data: result,
-              msg:'New Tender has been created successfully'
+              msg:'Tender has been removed successfully'
             });
       }
     });
@@ -229,12 +222,11 @@ app.get('/TabMaterialRequest', (req, res, next) => {
     let query = db.query(sql, data,(err, result) => {
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
       } else {
             return res.status(200).send({
               data: result,
-              msg:'New Tender has been created successfully'
+              msg:'Tender has been removed successfully'
             });
       }
     });
@@ -247,7 +239,6 @@ app.get('/TabMaterialRequest', (req, res, next) => {
     let query = db.query(sql, data,(err, result) => {
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
       } else {
             return res.status(200).send({

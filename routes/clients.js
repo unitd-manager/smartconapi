@@ -34,9 +34,7 @@ app.get('/getClients', (req, res, next) => {
     (err, result) => {
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
-      
       } else {
             return res.status(200).send({
               data: result,
@@ -66,10 +64,9 @@ app.post('/editClients', (req, res, next) => {
             WHERE company_id = ${db.escape(req.body.company_id)}`,
     (err, result) => {
      
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -125,12 +122,11 @@ app.post('/insertCompany', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Success'
           });
     }
   });
@@ -143,12 +139,11 @@ app.delete('/deleteCompany', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'Tender has been removed successfully'
+            msg:'Success'
           });
     }
   });
@@ -168,9 +163,7 @@ app.get('/getContactLinked', (req, res, next) => {
     (err, result) => {
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
-      
       } else {
             return res.status(200).send({
               data: result,
@@ -246,12 +239,11 @@ app.post('/insertContact', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Success'
           });
     }
   });
@@ -264,12 +256,11 @@ app.delete('/deleteContact', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'Tender has been removed successfully'
+            msg:'Success'
           });
     }
   });

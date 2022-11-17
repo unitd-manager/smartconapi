@@ -35,14 +35,13 @@ app.get('/getAccounts', (req, res, next) => {
     (err, result) => {
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
-      
       } else {
             return res.status(200).send({
               data: result,
               msg:'Success'
             });
+      
 
         }
  
@@ -67,13 +66,13 @@ app.post('/editAccounts', (req, res, next) => {
      
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
       } else {
             return res.status(200).send({
               data: result,
               msg:'Success'
             });
+      
       }
      }
   );
@@ -127,12 +126,11 @@ app.post('/insertexpense', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Success'
           });
     }
   });
@@ -145,12 +143,11 @@ app.delete('/deleteExpense', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'Tender has been removed successfully'
+            msg:'Success'
           });
     }
   });
