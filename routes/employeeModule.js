@@ -242,6 +242,11 @@ app.delete('/deleteEmployee', (req, res, next) => {
 app.get('/TabPassType', (req, res, next) => {
   db.query(`Select citizen
   ,nric_no  
+  ,spr_year
+  ,fin_no
+  ,fin_no_expiry_date
+  ,work_permit
+  ,work_permit_expiry_date
   from employee where employee_id !=''`,
     (err, result) => {
        
@@ -261,6 +266,30 @@ app.get('/TabPassType', (req, res, next) => {
 });
 
 
+app.post('/edit-TabPassType', (req, res, next) => {
+  db.query(`UPDATE employee  
+            SET citizen=${db.escape(req.body.citizen)}
+            ,nric_no=${db.escape(req.body.nric_no)}
+            ,spr_year=${db.escape(req.body.spr_year)}
+            ,fin_no=${db.escape(req.body.fin_no)}
+            ,fin_no_expiry_date=${db.escape(req.body.fin_no_expiry_date)}
+            ,work_permit=${db.escape(req.body.work_permit)}
+            ,work_permit_expiry_date=${db.escape(req.body.work_permit_expiry_date)}
+            WHERE employee_id = ${db.escape(req.body.employee_id)}`,
+    (err, result) => {
+     
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
 
 app.get('/TabEducationalQualification', (req, res, next) => {
   db.query(`Select e.educational_qualitifcation1
@@ -351,6 +380,36 @@ app.get('/TabContactInformation', (req, res, next) => {
 });
 
 
+app.post('/edit-ContactInformation', (req, res, next) => {
+  db.query(`UPDATE employee  
+            SET address_area=${db.escape(req.body.address_area)}
+            ,address_street=${db.escape(req.body.address_street)}
+            ,address_po_code=${db.escape(req.body.address_po_code)}
+            ,mobile=${db.escape(req.body.mobile)}
+            ,phone=${db.escape(req.body.phone)}
+            ,email=${db.escape(req.body.email)}
+            ,foreign_addrs_area=${db.escape(req.body.foreign_addrs_area)}
+            ,foreign_addrs_street=${db.escape(req.body.foreign_addrs_street)}
+            ,foreign_addrs_postal_code=${db.escape(req.body.foreign_addrs_postal_code)}
+            ,foreign_mobile=${db.escape(req.body.foreign_mobile)}
+            ,foreign_email=${db.escape(req.body.foreign_email)}
+            ,phone_direct=${db.escape(req.body.phone_direct)}
+            WHERE employee_id = ${db.escape(req.body.employee_id)}`,
+    (err, result) => {
+     
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
+
 app.get('/TabEmergencyContact', (req, res, next) => {
   db.query(`Select e.emergency_contact_name,
   e.emergency_contact_phone,
@@ -372,6 +431,28 @@ app.get('/TabEmergencyContact', (req, res, next) => {
         }
  
     }
+  );
+});
+
+app.post('/edit-EmergencyContact', (req, res, next) => {
+  db.query(`UPDATE employee  
+            SET emergency_contact_name=${db.escape(req.body.emergency_contact_name)}
+            ,emergency_contact_phone=${db.escape(req.body.emergency_contact_phone)}
+            ,emergency_contact_phone2=${db.escape(req.body.emergency_contact_phone2)}
+            ,emergency_contact_address=${db.escape(req.body.emergency_contact_address)}
+            WHERE employee_id = ${db.escape(req.body.employee_id)}`,
+    (err, result) => {
+     
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
   );
 });
 
