@@ -42,12 +42,10 @@ app.get('/getProjects', (req, res, next) => {
   FROM invoice i LEFT JOIN (orders o) ON (i.order_id = o.order_id) 
   WHERE o.project_id = p.project_id AND LOWER(i.status) != 'cancelled' ) ))) AS still_to_bill FROM project p LEFT JOIN (contact cont) ON (p.contact_id = cont.contact_id)LEFT JOIN (company c)ON (p.company_id = c.company_id) 
   LEFT JOIN (service ser) ON (p.service_id = ser.service_id) LEFT JOIN (staff s) ON (p.project_manager_id = s.staff_id) LEFT JOIN (opportunity o) ON (p.opportunity_id = o.opportunity_id) WHERE ( LOWER(p.status) = 'wip' OR LOWER(p.status) = 'billable' OR LOWER(p.status) = 'billed' ) AND ( LOWER(p.status) = 'wip' OR LOWER(p.status) ='billable' OR LOWER(p.status) = 'billed') ORDER BY p.project_code DESC`,
-    (err, result) => {
-       
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+    (err, result) =>{
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -72,12 +70,10 @@ app.post('/edit-Project', (req, res, next) => {
             ,description=${db.escape(req.body.description)}
             ,project_manager_id=${db.escape(req.body.project_manager_id)}
             WHERE project_id =  ${db.escape(req.body.project_id)}`,
-    (err, result) => {
-     
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+    (err, result) =>{
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -87,8 +83,6 @@ app.post('/edit-Project', (req, res, next) => {
      }
   );
 });
-
-
 
 app.post('/insertOrder', (req, res, next) => {
 
@@ -159,6 +153,24 @@ app.post('/insertOrder', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+
+
+app.delete('/deleteorders', (req, res, next) => {
+
+  let data = {order_id  : req.body.order_id,};
+  let sql = "DELETE FROM orders WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
       result(err, null);
       return;
     } else {
@@ -169,14 +181,13 @@ app.post('/insertOrder', (req, res, next) => {
     }
   });
 });
+
 app.get('/getCostingSummary', (req, res, next) => {
   db.query(`SELECT c.no_of_worker_used FROM opportunity_costing_summary c WHERE c.opportunity_id =  ORDER BY c.opportunity_costing_summary_id DESC`,
     (err, result) => {
-       
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -197,12 +208,10 @@ app.get('/SalemanCommission', (req, res, next) => {
   ,a.amount
   ,a.title
   ,a.description FROM actual_costing_summary a WHERE title = "salesman commission" AND project_id = ${db.escape(req.body.project_id)};`,
-    (err, result) => {
-       
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+    (err, result) =>{
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -222,13 +231,11 @@ app.post('/editSalesmanCommission', (req, res, next) => {
             ,description=${db.escape(req.body.contact_id)}
             ,title=${db.escape(req.body.mode_of_submission)}
             WHERE title =  ${db.escape(req.body.title)} AND project_id = ${db.escape(req.body.project_id)}`,
-    (err, result) => {
-     
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
-      } else {
+    (err, result) =>{
+      if (err) {
+        console.log("error: ", err);
+        return;
+      }else {
             return res.status(200).send({
               data: result,
               msg:'Success'
@@ -245,11 +252,9 @@ app.get('/TotalLabourCharges', (req, res, next) => {
   ,a.title
   ,a.description FROM actual_costing_summary a WHERE title = "total labour charges" AND project_id = ${db.escape(req.body.project_id)};`,
     (err, result) => {
-       
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -270,12 +275,10 @@ app.post('/editTotalLabourCharges', (req, res, next) => {
             ,title=${db.escape(req.body.mode_of_submission)}
             WHERE title =  ${db.escape(req.body.title)} AND project_id = ${db.escape(req.body.project_id)}`,
     (err, result) => {
-     
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
-      } else {
+      if (err) {
+        console.log("error: ", err);
+        return;
+      }else {
             return res.status(200).send({
               data: result,
               msg:'Success'
@@ -291,12 +294,10 @@ app.get('/FinanceCharges', (req, res, next) => {
   ,a.amount
   ,a.title
   ,a.description FROM actual_costing_summary a WHERE title = "finance charges" AND project_id = ${db.escape(req.body.project_id)};`,
-    (err, result) => {
-       
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+    (err, result) =>{
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -317,11 +318,9 @@ app.post('/editFinanceCharges', (req, res, next) => {
             ,title=${db.escape(req.body.mode_of_submission)}
             WHERE title =  ${db.escape(req.body.title)} AND project_id = ${db.escape(req.body.project_id)}`,
     (err, result) => {
-     
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -338,12 +337,10 @@ app.get('/OtherCharges', (req, res, next) => {
   ,a.amount
   ,a.title
   ,a.description FROM actual_costing_summary a WHERE title = "other charges" AND project_id = ${db.escape(req.body.project_id)};`,
-    (err, result) => {
-       
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+    (err, result) =>{
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -364,11 +361,9 @@ app.post('/editOtherCharges', (req, res, next) => {
             ,title=${db.escape(req.body.mode_of_submission)}
             WHERE title =  ${db.escape(req.body.title)} AND project_id = ${db.escape(req.body.project_id)}`,
     (err, result) => {
-     
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -385,12 +380,10 @@ app.get('/TransportCharges', (req, res, next) => {
   ,a.amount
   ,a.title
   ,a.description FROM actual_costing_summary a WHERE title = "transport charges" AND project_id = ${db.escape(req.body.project_id)};`,
-    (err, result) => {
-       
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+    (err, result) =>{
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -410,12 +403,10 @@ app.post('/editTransportCharges', (req, res, next) => {
             ,description=${db.escape(req.body.contact_id)}
             ,title=${db.escape(req.body.mode_of_submission)}
             WHERE title =  ${db.escape(req.body.title)} AND project_id = ${db.escape(req.body.project_id)}`,
-    (err, result) => {
-     
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+    (err, result) =>{
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -432,12 +423,10 @@ app.get('/OfficeOverHeads', (req, res, next) => {
   ,a.amount
   ,a.title
   ,a.description FROM actual_costing_summary a WHERE title = "office overheads" AND project_id = ${db.escape(req.body.project_id)};`,
-    (err, result) => {
-       
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+    (err, result) =>{
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -457,12 +446,10 @@ app.post('/editOfficeOverHeads', (req, res, next) => {
             ,description=${db.escape(req.body.contact_id)}
             ,title=${db.escape(req.body.mode_of_submission)}
             WHERE title =  ${db.escape(req.body.title)} AND project_id = ${db.escape(req.body.project_id)}`,
-    (err, result) => {
-     
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+    (err, result) =>{
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -493,13 +480,11 @@ app.get('/getTabCostingSummary', (req, res, next) => {
   ,c.office_overheads
   ,c.other_charges
   ,c.total_cost of FROM costing_summary c WHERE c.project_id != '' ORDER BY c.costing_summary_id DESC`,
-    (err, result) => {
-       
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
-      } else {
+    (err, result) =>{
+      if (err) {
+        console.log("error: ", err);
+        return;
+      }else {
             return res.status(200).send({
               data: result,
               msg:'Success'
@@ -566,10 +551,9 @@ app.post('/insertProject', (req, res, next) => {
     , site: req.body.site
   };
   let sql = "INSERT INTO project SET ?";
-  let query = db.query(sql, data,(err, result) => {
+  let query = db.query(sql, data,(err, result) =>{
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
@@ -585,12 +569,11 @@ app.delete('/deleteProject', (req, res, next) => {
 
   let data = {project_id : req.body.project_id };
   let sql = "DELETE FROM project WHERE ?";
-  let query = db.query(sql, data,(err, result) => {
+  let query = db.query(sql, data,(err, result) =>{
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
-    } else {
+    }else {
           return res.status(200).send({
             data: result,
             msg:'Tender has been removed successfully'
@@ -611,7 +594,6 @@ app.post('/insertProjectStaff', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
@@ -629,7 +611,6 @@ app.delete('/deleteProjectStaff', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
@@ -655,10 +636,9 @@ app.post('/insertThirdParty', (req, res, next) => {
 
   };
   let sql = "INSERT INTO third_party_cost SET ?";
-  let query = db.query(sql, data,(err, result) => {
+  let query = db.query(sql, data,(err, result) =>{
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
@@ -676,7 +656,6 @@ app.delete('/deleteThirdPartyCost', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
