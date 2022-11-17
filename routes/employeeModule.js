@@ -220,6 +220,161 @@ app.post('/insertEmployee', (req, res, next) => {
   });
 });
 
+
+app.delete('/deleteEmployee', (req, res, next) => {
+
+  let data = {employee_id  : req.body.employee_id  };
+  let sql = "DELETE FROM employee WHERE ?";
+  let query = db.query(sql, data,(err, result) =>{
+    if (err) {
+      console.log("error: ", err);
+      return;
+    }else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
+
+app.get('/TabPassType', (req, res, next) => {
+  db.query(`Select citizen
+  ,nric_no  
+  from employee where employee_id !=''`,
+    (err, result) => {
+       
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
+
+
+app.get('/TabEducationalQualification', (req, res, next) => {
+  db.query(`Select e.educational_qualitifcation1
+  ,e.year_of_completion1
+  ,e.degree2
+  ,e.educational_qualitifcation2
+  ,e.year_of_completion2
+  ,e.degree3
+  ,e.educational_qualitifcation3
+  ,e.year_of_completion3
+  From employee e
+  Where e.employee_id != ''`,
+    (err, result) => {
+       
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
+app.post('/edit-EducationalQualification', (req, res, next) => {
+  db.query(`UPDATE employee  
+            SET educational_qualitifcation1=${db.escape(req.body.educational_qualitifcation1)}
+            ,year_of_completion1=${db.escape(req.body.year_of_completion1)}
+            ,degree2=${db.escape(req.body.degree2)}
+            ,educational_qualitifcation2=${db.escape(req.body.educational_qualitifcation2)}
+            ,year_of_completion2=${db.escape(req.body.year_of_completion2)}
+            ,degree3=${db.escape(req.body.degree3)}
+            ,educational_qualitifcation3=${db.escape(req.body.educational_qualitifcation3)}
+            ,year_of_completion3=${db.escape(req.body.year_of_completion3)}
+            WHERE employee_id = ${db.escape(req.body.employee_id)}`,
+    (err, result) => {
+     
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
+
+app.get('/TabContactInformation', (req, res, next) => {
+  db.query(`Select e.address_area,
+  e.address_street,
+  e.address_po_code,
+  e.address_country1,
+  e.mobile,
+  e.phone,
+  e.email,
+  e.foreign_addrs_area,
+  e.foreign_addrs_street,
+  e.foreign_addrs_country,
+  e.foreign_addrs_postal_code,
+  e.foreign_mobile,
+  e.foreign_email,
+  e.phone_direct
+  From employee e
+  Where e.employee_id !=''`,
+    (err, result) => {
+       
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
+
+app.get('/TabEmergencyContact', (req, res, next) => {
+  db.query(`Select e.emergency_contact_name,
+  e.emergency_contact_phone,
+  e.emergency_contact_phone2,
+  e.emergency_contact_address
+  From employee e
+  Where e.employee_id!=''`,
+    (err, result) => {
+       
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
 app.get('/TabJobInformationHistory', (req, res, next) => {
   db.query(`SELECT ts.training_staff_id
   ,t.title
