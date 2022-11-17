@@ -51,13 +51,7 @@ app.get('/getTenders', (req, res, next) => {
     (err, result) => {
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
-      }
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
       } else {
             return res.status(200).send({
               data: result,
@@ -83,11 +77,9 @@ app.post('/edit-Tenders', (req, res, next) => {
             ,price=${db.escape(req.body.price)}
             WHERE opportunity_id =  ${db.escape(req.body.opportunity_id)}`,
     (err, result) => {
-     
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -118,7 +110,6 @@ app.post('/insertTender', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
@@ -139,7 +130,6 @@ app.delete('/deleteTender', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
@@ -164,12 +154,10 @@ app.get('/getTabCostingSummary', (req, res, next) => {
   FROM opportunity_costing_summary c 
   WHERE c.opportunity_id != '' 
   ORDER BY c.opportunity_costing_summary_id DESC`,
-    (err, result) => {
-     
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+    (err, result) =>{
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -198,11 +186,9 @@ app.get('/getTabCostingSummaryForm', (req, res, next) => {
   ,c.other_charges
   ,c.total_cost FROM opportunity_costing_summary c WHERE c.opportunity_costing_summary_id != '' `,
     (err, result) => {
-     
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -228,12 +214,10 @@ app.post('/edit-TabCostingSummaryForm', (req, res, next) => {
             ,other_charges=${db.escape(req.body.other_charges)}
             ,total_cost =${db.escape(req.body.total_cost)}
             WHERE opportunity_costing_summary_id = ${db.escape(req.body.opportunity_costing_summary_id)}`,
-    (err, result) => {
-     
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+    (err, result) =>{
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -257,11 +241,9 @@ app.get('/getTabquote', (req, res, next) => {
   ,q.intro_drawing_quote FROM quote q  
   WHERE q.opportunity_id != ''  ORDER BY quote_code DESC`,
     (err, result) => {
-     
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -282,12 +264,10 @@ app.get('/getTabQuoteLine', (req, res, next) => {
   ,qt.unit_price
   ,qt.amount FROM quote_items qt 
   WHERE qt.opportunity_id != '' AND qt.quote_id != ''`,
-    (err, result) => {
-     
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+    (err, result) =>{
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -308,12 +288,10 @@ app.post('/edit-TabQuoteLine', (req, res, next) => {
             ,unit_price=${db.escape(req.body.unit_price)}
             ,amount=${db.escape(req.body.amount)}
             WHERE opportunity_id =  ${db.escape(req.body.opportunity_id)}`,
-    (err, result) => {
-     
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+    (err, result) =>{
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -371,7 +349,6 @@ app.post('/insertCompany', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
@@ -390,7 +367,6 @@ app.delete('/deleteCompany', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
@@ -462,7 +438,6 @@ app.post('/insertContact', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
@@ -480,7 +455,6 @@ app.delete('/deleteContact', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
@@ -504,7 +478,6 @@ app.post('/insertValueList', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
@@ -523,7 +496,6 @@ app.delete('/deletevaluelist', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
@@ -549,7 +521,6 @@ app.post('/insertService', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
@@ -568,7 +539,6 @@ app.delete('/deleteservice', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
@@ -635,7 +605,6 @@ app.post('/insertStaff', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
@@ -656,7 +625,6 @@ app.delete('/deletestaff', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
@@ -704,7 +672,6 @@ app.post('/insertCostingSummary', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
@@ -723,7 +690,6 @@ app.delete('/deleteCostingSummary', (req, res, next) => {
   let sql = "DELETE FROM costing_summary WHERE ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
-      console.log("error: ", err);
       result(err, null);
       return;
     } else {
@@ -757,7 +723,6 @@ app.post('/insertOpportunityCostingSummary', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
@@ -775,7 +740,6 @@ app.delete('/deleteOpportunityCostingSummary', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
@@ -824,7 +788,6 @@ app.post('/insertQuoteItems', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({

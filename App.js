@@ -42,7 +42,7 @@ const projecttabfinanaceportal = require('./routes/projecttabfinanaceportal.js')
 const purchaseorder = require('./routes/purchaseorder.js');
 const company = require('./routes/company.js');
 const projectemployeesportal = require('./routes/projectemployeesportal.js');
-const claim = require('./routes/claim.js');
+const projecttabclaimportal = require('./routes/projecttabclaimportal.js');
 const inventory = require('./routes/inventory.js');
 const cpfcalculator = require('./routes/cpfcalculator.js');
 const payrollmanagement = require('./routes/payrollmanagement.js');
@@ -84,7 +84,7 @@ app.use('/projecttabfinanaceportal', projecttabfinanaceportal);
 app.use('/purchaseorder', purchaseorder);
 app.use('/company', company);
 app.use('/projectemployeesportal', projectemployeesportal);
-app.use('/claim', claim);
+app.use('/projecttabclaimportal', projecttabclaimportal);
 app.use('/inventory', inventory);
 app.use('/cpfcalculator', cpfcalculator);
 app.use('/payrollmanagement', payrollmanagement);
