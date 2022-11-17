@@ -81,7 +81,7 @@ app.post('/editClients', (req, res, next) => {
 });
 
 
-app.post('/insertClient', (req, res, next) => {
+app.post('/insertCompany', (req, res, next) => {
 
   let data = {company_name	:req.body.company_name	
    , email	: req.body.email	
@@ -136,7 +136,7 @@ app.post('/insertClient', (req, res, next) => {
   });
 });
 
-app.delete('/deleteClients', (req, res, next) => {
+app.delete('/deleteCompany', (req, res, next) => {
 
   let data = {company_name: req.body.company_name};
   let sql = "DELETE FROM company WHERE ?";

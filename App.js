@@ -33,15 +33,15 @@ const timesheet = require('./routes/timesheet.js');
 const product = require('./routes/product.js');
 const supplier = require('./routes/supplier.js');
 const subcon = require('./routes/subcon.js');
-const tabcostingsummary = require('./routes/tabcostingsummary.js');
+const projecttabcostingsummary = require('./routes/projecttabcostingsummary.js');
 const quotation = require('./routes/quotation.js');
 const invoice = require('./routes/invoice.js');
 const finance = require('./routes/finance.js');
-const tabsubconworkorder = require('./routes/tabsubconworkorder.js');
-const tabfinanaceportal = require('./routes/tabfinanaceportal.js');
+const projecttabsubconworkorder = require('./routes/projecttabsubconworkorder.js');
+const projecttabfinanaceportal = require('./routes/projecttabfinanaceportal.js');
 const purchaseorder = require('./routes/purchaseorder.js');
 const company = require('./routes/company.js');
-const employeesportal = require('./routes/employeesportal.js');
+const projectemployeesportal = require('./routes/projectemployeesportal.js');
 const claim = require('./routes/claim.js');
 const inventory = require('./routes/inventory.js');
 const cpfcalculator = require('./routes/cpfcalculator.js');
@@ -57,8 +57,10 @@ const expensehead = require('./routes/expensehead.js');
 const setting = require('./routes/setting.js');
 const valuelist = require('./routes/valuelist.js');
 const staff = require('./routes/staff.js');
+const projecttabmaterialusedportal = require('./routes/projecttabmaterialusedportal.js');
+const projecttabmaterialstransferredportal = require('./routes/projecttabmaterialstransferredportal.js');
 const projecttabdeliveryorder = require('./routes/projecttabdeliveryorder.js');
-
+const media = require('./routes/media.js');
 
 
 
@@ -71,15 +73,15 @@ app.use('/timesheet', timesheet);
 app.use('/product', product);
 app.use('/supplier', supplier);
 app.use('/subcon', subcon);
-app.use('/tabcostingsummary', tabcostingsummary);
+app.use('/projecttabcostingsummary', projecttabcostingsummary);
 app.use('/quotation', quotation);
 app.use('/invoice', invoice);
 app.use('/finance', finance);
-app.use('/tabsubconworkorder', tabsubconworkorder);
-app.use('/tabfinanaceportal', tabfinanaceportal);
+app.use('/projecttabsubconworkorder', projecttabsubconworkorder);
+app.use('/projecttabfinanaceportal', projecttabfinanaceportal);
 app.use('/purchaseorder', purchaseorder);
 app.use('/company', company);
-app.use('/employeesportal', employeesportal);
+app.use('/projectemployeesportal', projectemployeesportal);
 app.use('/claim', claim);
 app.use('/inventory', inventory);
 app.use('/cpfcalculator', cpfcalculator);
@@ -95,7 +97,10 @@ app.use('/expensehead', expensehead);
 app.use('/setting', setting);
 app.use('/valuelist', valuelist);
 app.use('/staff', staff);
+app.use('/projecttabmaterialusedportal',projecttabmaterialusedportal);
+app.use('/projecttabmaterialstransferredportal',projecttabmaterialstransferredportal);
 app.use('/projecttabdeliveryorder', projecttabdeliveryorder);
+app.use('/media', media);
 
 
 
