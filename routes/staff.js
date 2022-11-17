@@ -53,10 +53,9 @@ WHERE a.staff_id != ''`,
         } else {
               return res.status(200).send({
                 data: result,
-                msg:'Success'
+                msg:'Tender has been removed successfully'
               });
-  
-          }
+        }
    
       }
     );

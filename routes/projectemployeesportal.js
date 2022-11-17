@@ -30,15 +30,15 @@ app.get('/getTabEmployeePortal', (req, res, next) => {
             ORDER BY title`,
     (err, result) => {
      
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
-              msg:'Success'
+              msg:'Tender has been removed successfully'
             });
+      
         }
  
     }
@@ -60,10 +60,9 @@ app.get('/getTabEmployeeTimeSheet', (req, res, next) => {
             ORDER BY et.date DESC`,
     (err, result) => {
      
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -99,7 +98,6 @@ app.post('/insertemployee_timesheet', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
@@ -117,7 +115,6 @@ app.delete('/deleteEmployee_timesheet', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
@@ -142,7 +139,6 @@ app.post('/insertproject_employee', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
@@ -160,7 +156,6 @@ app.delete('/deleteProject_employee', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
