@@ -54,11 +54,9 @@ app.get('/getFinances', (req, res, next) => {
   LEFT JOIN quote q ON o.quote_id = q.quote_id 
   LEFT JOIN project p ON o.project_id = p.project_id WHERE o.order_id !='' `,
     (err, result) => {
-
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+           return;
       } else {
         return res.status(200).send({
           data: result,
@@ -68,6 +66,34 @@ app.get('/getFinances', (req, res, next) => {
       }
 
     }
+  );
+});
+
+
+
+app.post('/editFinances', (req, res, next) => {
+  db.query(`UPDATE orders
+            SET invoice_terms=${db.escape(req.body.invoice_terms)}
+            ,notes=${db.escape(req.body.notes)}
+            ,shipping_first_name=${db.escape(req.body.shipping_first_name)}
+            ,shipping_address1=${db.escape(req.body.shipping_address1)}
+            ,shipping_address2=${db.escape(req.body.shipping_address2)}
+            ,shipping_address_country=${db.escape(req.body.shipping_address_country)}
+            ,shipping_address_po_code=${db.escape(req.body.shipping_address_po_code)}
+            ,delivery_date=${db.escape(req.body.delivery_date)}
+            ,delivery_terms=${db.escape(req.body.delivery_terms)}
+            WHERE order_id =  ${db.escape(req.body.order_id)}`,
+    (err, result) => {
+      if (err) {
+        console.log("error: ", err);
+           return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
   );
 });
 
@@ -121,34 +147,6 @@ app.get('/getTabInvoicePortalDisplay', (req, res, next) => {
     }
   );
 }); 
-
-app.post('/editFinances', (req, res, next) => {
-  db.query(`UPDATE orders
-            SET invoice_terms=${db.escape(req.body.invoice_terms)}
-            ,notes=${db.escape(req.body.notes)}
-            ,shipping_first_name=${db.escape(req.body.shipping_first_name)}
-            ,shipping_address1=${db.escape(req.body.shipping_address1)}
-            ,shipping_address2=${db.escape(req.body.shipping_address2)}
-            ,shipping_address_country=${db.escape(req.body.shipping_address_country)}
-            ,shipping_address_po_code=${db.escape(req.body.shipping_address_po_code)}
-            ,delivery_date=${db.escape(req.body.delivery_date)}
-            ,delivery_terms=${db.escape(req.body.delivery_terms)}
-            WHERE order_id =  ${db.escape(req.body.order_id)}`,
-    (err, result) => {
-     
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            });
-      }
-     }
-  );
-});
 
 app.post('/editTabInvoicePortalDisplay', (req, res, next) => {
   db.query(`UPDATE invoice 
