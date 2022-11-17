@@ -837,7 +837,7 @@ app.post('/insertQuoteItems', (req, res, next) => {
 
 app.delete('/deleteQuoteItems', (req, res, next) => {
 
-  let data = {quote_category_id: req.body.quote_category_id};
+  let data = {quote_items_id : req.body.quote_items_id };
   let sql = "DELETE FROM quote_items WHERE ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {

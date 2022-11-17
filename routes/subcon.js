@@ -76,6 +76,81 @@ app.post('/edit-Subcon', (req, res, next) => {
   );
 });
 
+
+
+app.post('/insertsub_con', (req, res, next) => {
+
+  let data = {company_name: req.body.company_name,
+              email: req.body.email,
+              address_street: req.body.address_street,
+              address_town: req.body.address_town,
+              address_state: req.body.address_state,
+              address_country: req.body.address_country,
+              address_po_code: req.body.address_po_code,
+              phone: req.body.phone,
+              fax: req.body.fax,
+              notes: req.body.notes,
+              creation_date: req.body.creation_date,
+              modification_date: req.body.modification_date,
+              mobile: req.body.mobile,
+              flag: req.body.flag,
+              address_flat: req.body.address_flat,
+              status: req.body.status,
+              website: req.body.website,
+              category : req.body. category ,
+              comment_by: req.body.comment_by,
+              company_size: req.body.company_size,
+              industry: req.body.industry,
+              source: req.body.source,
+              group_name : req.body. group_name ,
+              supplier_type: req.body.supplier_type,
+              created_by: req.body.created_by,
+              modified_by: req.body.modified_by,
+              chi_company_name: req.body.chi_company_name,
+              chi_company_address: req.body.chi_company_address,
+              company_address_id: req.body.company_address_id,
+              contact_person: req.body.contact_person,
+              billing_address_flat: req.body.billing_address_flat,
+              billing_address_street: req.body.billing_address_street,
+              billing_address_country: req.body.billing_address_country,
+              billing_address_po_code: req.body.billing_address_po_code,
+              gst_no: req.body.gst_no,};
+  let sql = "INSERT INTO sub_con  SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'New Tender has been created successfully'
+          });
+    }
+  });
+});
+
+
+
+app.delete('/deleteSub_Con', (req, res, next) => {
+
+  let data = {sub_con_id   : req.body.sub_con_id    };
+  let sql = "DELETE FROM sub_con WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Tender has been removed successfully'
+          });
+    }
+  });
+});
+
+
 app.get('/getTabWorkOrder', (req, res, next) => {
   db.query(`SELECT p.sub_con_work_order_id FROM sub_con_work_order p 
             WHERE p.sub_con_id != '' AND (p.status != 'Cancelled' OR p.status IS NULL)`,
@@ -229,79 +304,6 @@ app.delete('/deletesub_con_payments', (req, res, next) => {
 
   let data = {sub_con_payments_id : req.body.sub_con_payments_id };
   let sql = "DELETE FROM sub_con_payments WHERE ?";
-  let query = db.query(sql, data,(err, result) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    } else {
-          return res.status(200).send({
-            data: result,
-            msg:'Tender has been removed successfully'
-          });
-    }
-  });
-});
-
-
-app.post('/insertsub_con', (req, res, next) => {
-
-  let data = {company_name: req.body.company_name,
-              email: req.body.email,
-              address_street: req.body.address_street,
-              address_town: req.body.address_town,
-              address_state: req.body.address_state,
-              address_country: req.body.address_country,
-              address_po_code: req.body.address_po_code,
-              phone: req.body.phone,
-              fax: req.body.fax,
-              notes: req.body.notes,
-              creation_date: req.body.creation_date,
-              modification_date: req.body.modification_date,
-              mobile: req.body.mobile,
-              flag: req.body.flag,
-              address_flat: req.body.address_flat,
-              status: req.body.status,
-              website: req.body.website,
-              category : req.body. category ,
-              comment_by: req.body.comment_by,
-              company_size: req.body.company_size,
-              industry: req.body.industry,
-              source: req.body.source,
-              group_name : req.body. group_name ,
-              supplier_type: req.body.supplier_type,
-              created_by: req.body.created_by,
-              modified_by: req.body.modified_by,
-              chi_company_name: req.body.chi_company_name,
-              chi_company_address: req.body.chi_company_address,
-              company_address_id: req.body.company_address_id,
-              contact_person: req.body.contact_person,
-              billing_address_flat: req.body.billing_address_flat,
-              billing_address_street: req.body.billing_address_street,
-              billing_address_country: req.body.billing_address_country,
-              billing_address_po_code: req.body.billing_address_po_code,
-              gst_no: req.body.gst_no,};
-  let sql = "INSERT INTO sub_con  SET ?";
-  let query = db.query(sql, data,(err, result) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    } else {
-          return res.status(200).send({
-            data: result,
-            msg:'New Tender has been created successfully'
-          });
-    }
-  });
-});
-
-
-
-app.delete('/deleteSub_Con', (req, res, next) => {
-
-  let data = {sub_con_id   : req.body.sub_con_id    };
-  let sql = "DELETE FROM sub_con WHERE ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);

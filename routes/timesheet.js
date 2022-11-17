@@ -27,6 +27,8 @@ app.get('/getTimeSheet', (req, res, next) => {
   ,a.time_in
   ,a.leave_time
   ,a.description
+  ,a.created_by
+  ,a.modified_by
   ,CONCAT_WS(' ', s.first_name, s.last_name) AS staff_name 
   ,s.team AS staff_team 
   FROM attendance a LEFT JOIN (staff s) ON (a.staff_id = s.staff_id) 
@@ -50,6 +52,27 @@ app.get('/getTimeSheet', (req, res, next) => {
 });
 
 
+app.post('/edit-timesheet', (req, res, next) => {
+  db.query(`UPDATE attendance 
+            SET staff_id=${db.escape(req.body.staff_id)}
+            ,record_date=${db.escape(req.body.record_date)}
+            ,type_of_leave=${db.escape(req.body.type_of_leave)}
+            ,description=${db.escape(req.body.description)}}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
 app.post('/insertAttendance', (req, res, next) => {
 
   let data = {staff_id: req.body.staff_id

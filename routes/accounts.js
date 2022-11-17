@@ -78,7 +78,7 @@ app.post('/editAccounts', (req, res, next) => {
      }
   );
 });
-app.post('/insertStaff', (req, res, next) => {
+app.post('/insertexpense', (req, res, next) => {
 
   let data = {group	:req.body.group	
    , sub_group	: req.body.sub_group	
@@ -138,7 +138,7 @@ app.post('/insertStaff', (req, res, next) => {
   });
 });
 
-app.delete('/deleteAccounts', (req, res, next) => {
+app.delete('/deleteExpense', (req, res, next) => {
 
   let data = {group: req.body.group};
   let sql = "DELETE FROM expense WHERE ?";
