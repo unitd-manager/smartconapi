@@ -239,11 +239,7 @@ app.post('/editjobinformation', (req, res, next) => {
                   allowance5: req.body.allowance5,
                   allowance6: req.body.allowance6,
                   site_id: req.body.site_id,
-                  over_time_rate: req.body.over_time_rate,
-                  
-                };
-                  
-              
+                  over_time_rate: req.body.over_time_rate};
                 let sql = "INSERT INTO job_information SET ?";
                 let query = db.query(sql, data,(err, result) => {
                   if (err) {

@@ -33,8 +33,7 @@ app.get('/getcpfcalculatorMain', (req, res, next) => {
             FROM cpf_calculator cpf
             WHERE cpf.cpf_calculator_id != ''`,
     (err, result) => {
-       
-      if (err) {
+       if (err) {
         console.log("error: ", err);
         result(err, null);
         return;
