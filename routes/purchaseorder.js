@@ -137,147 +137,6 @@ app.post('/editTabPurchaseOrderLineItem', (req, res, next) => {
   );
 });
 
-app.get('/TabMaterialUsedPortal', (req, res, next) => {
-  db.query(`SELECT pm.title
-  ,pm.description
-  ,pm.unit
-  ,pm.quantity
-  ,project_materials_id
-  ,project_id
-  ,p.product_type FROM project_materials pm 
-  LEFT JOIN (product p) ON (p.product_id = pm.product_id) WHERE pm.project_id != '' ORDER BY pm.project_materials_id ASC`,
-    (err, result) => {
-       
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            });
-
-        }
- 
-    }
-  );
-});
-
-app.post('/editTabMaterialUsedPortal', (req, res, next) => {
-  db.query(`UPDATE project_materials
-            SET title=${db.escape(req.body.title)}
-            ,description=${db.escape(req.body.description)}
-            ,unit=${db.escape(req.body.unit)}
-            ,quantity=${db.escape(req.body.quantity)}
-            WHERE project_id=${db.escape(req.body.project_id)}`,
-    (err, result) => {
-     
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            });
-      }
-     }
-  );
-});
-
-app.get('/TabMaterialTransferred', (req, res, next) => {
-  db.query(`SELECT 
-  st.quantity
-  ,st.to_project_id
-  ,p.title
-  ,p.price FROM stock_transfer st 
-  LEFT JOIN (product p) ON (p.product_id = st.product_id) WHERE st.to_project_id != '' ORDER BY st.creation_date ASC`,
-    (err, result) => {
-       
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            });
-
-        }
- 
-    }
-  );
-});
-
-app.post('/editTabMaterialTransferred', (req, res, next) => {
-  db.query(`UPDATE project_materials
-            SET quantity=${db.escape(req.body.quantity)}
-            ,title=${db.escape(req.body.title)}
-            ,price=${db.escape(req.body.price)}
-            WHERE project_id=${db.escape(req.body.project_id)}`,
-    (err, result) => {
-     
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            });
-      }
-     }
-  );
-});
-
-app.post('/insertstock_transfer', (req, res, next) => {
-
-  let data = {from_project_id: req.body.from_project_id,
-              to_project_id: req.body.to_project_id,
-              product_id: req.body.product_id,
-              quantity: req.body.quantity,
-              creation_date: req.body.creation_date,
-              modification_date: req.body.modification_date,
-               };
-
-  let sql = "INSERT INTO stock_transfer  SET ?";
-  let query = db.query(sql, data,(err, result) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    } else {
-          return res.status(200).send({
-            data: result,
-            msg:'New Tender has been created successfully'
-          });
-    }
-  });
-});
-
-app.delete('/deletestock_transfer', (req, res, next) => {
-
-  let data = {stock_transfer_id : req.body.stock_transfer_id };
-  let sql = "DELETE FROM stock_transfer WHERE ?";
-  let query = db.query(sql, data,(err, result) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    } else {
-          return res.status(200).send({
-            data: result,
-            msg:'Tender has been removed successfully'
-          });
-    }
-  });
-});
-
-
 
   app.post('/insertPoProduct', (req, res, next) => {
 
@@ -342,40 +201,7 @@ app.delete('/deletestock_transfer', (req, res, next) => {
 
 
 
-  app.post('/insertProjectMaterials', (req, res, next) => {
-
-    let data = {
-      project_id:req.body.project_id
-       ,title: req.body.title
-      , quantity: req.body.quantity
-      , amount: req.body.amount
-      , description: req.body.description
-      , creation_date: req.body.creation_date
-      , modification_date: req.body.modification_date
-      , created_by: req.body.created_by
-      , modified_by: req.body.modified_by
-      , status: req.body.status
-      , unit: req.body.unit
-      , material_used_date: req.body.material_used_date
-      , part_no: req.body.part_no
-      , product_id: req.body.product_id
-      , viresco_factory: req.body.viresco_factory
-   };
-    let sql = "INSERT INTO project_materials SET ?";
-    let query = db.query(sql, data,(err, result) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'New Tender has been created successfully'
-            });
-      }
-    });
-  });
-
+  
   app.post('/insertPurchaseOrder', (req, res, next) => {
 
     let data = {po_code:req.body.po_code
@@ -450,24 +276,7 @@ app.delete('/deletestock_transfer', (req, res, next) => {
     });
   });
 
-  app.delete('/deleteProjectMaterials', (req, res, next) => {
-
-    let data = {project_id: req.body.project_id};
-    let sql = "DELETE FROM project_materials WHERE ?";
-    let query = db.query(sql, data,(err, result) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Tender has been removed successfully'
-            });
-      }
-    });
-  });
-
+  
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
