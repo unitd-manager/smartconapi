@@ -29,9 +29,7 @@ app.get('/getValueList', (req, res, next) => {
     (err, result) => {
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
-      
       } else {
             return res.status(200).send({
               data: result,
@@ -55,7 +53,6 @@ app.post('/editValueList', (req, res, next) => {
      
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
       } else {
             return res.status(200).send({
@@ -84,12 +81,11 @@ app.post('/insertValueList', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Success'
           });
     }
   });
@@ -102,12 +98,11 @@ app.delete('/deleteValueList', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'Tender has been removed successfully'
+            msg:'Success'
           });
     }
   });

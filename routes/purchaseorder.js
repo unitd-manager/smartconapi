@@ -38,10 +38,9 @@ app.get('/TabPurchaseOrder', (req, res, next) => {
   LEFT JOIN (supplier s) ON (po.company_id_supplier = s.supplier_id) WHERE po.project_id != '' ORDER BY po.purchase_order_id ASC;`,
     (err, result) => {
        
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -67,10 +66,9 @@ app.post('/editTabPurchaseOrder', (req, res, next) => {
             WHERE project_id = ${db.escape(req.body.project_id)}`,
     (err, result) => {
      
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -129,12 +127,11 @@ app.post('/insertPurchaseOrder', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Success'
           });
     }
   });
@@ -149,12 +146,11 @@ app.delete('/deletePurchaseOrder', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'Tender has been removed successfully'
+            msg:'Success'
           });
     }
   });
@@ -173,14 +169,14 @@ app.get('/TabPurchaseOrderLineItem', (req, res, next) => {
   ,po.modified_by FROM po_product po WHERE po.purchase_order_id != '' ORDER BY po.item_title ASC`,
     (err, result) => {
        
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
               msg:'Success'
+            
             });
 
         }
@@ -202,10 +198,9 @@ app.post('/editTabPurchaseOrderLineItem', (req, res, next) => {
             WHERE purchase_order_id = ${db.escape(req.body.purchase_order_id)}`,
     (err, result) => {
      
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -248,12 +243,11 @@ app.post('/editTabPurchaseOrderLineItem', (req, res, next) => {
     let query = db.query(sql, data,(err, result) => {
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
       } else {
             return res.status(200).send({
               data: result,
-              msg:'New Tender has been created successfully'
+              msg:'Success'
             });
       }
     });
@@ -266,12 +260,11 @@ app.post('/editTabPurchaseOrderLineItem', (req, res, next) => {
     let query = db.query(sql, data,(err, result) => {
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
       } else {
             return res.status(200).send({
               data: result,
-              msg:'Tender has been removed successfully'
+              msg:'Success'
             });
       }
     });

@@ -35,10 +35,9 @@ app.get('/WorkOrderPortal', (req, res, next) => {
     (err, result) => {
        
 
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -61,10 +60,9 @@ app.get('/WorkOrderPortal', (req, res, next) => {
               WHERE project_id = ${db.escape(req.body.project_id)}`,
       (err, result) => {
        
-        if (result.length == 0) {
-          return res.status(400).send({
-            msg: 'No result found'
-          });
+        if (err) {
+          console.log("error: ", err);
+          return;
         } else {
               return res.status(200).send({
                 data: result,
@@ -87,10 +85,9 @@ app.get('/PaymentHistoryPortal', (req, res, next) => {
   ORDER BY srh.sub_con_payments_history_id`,
     (err, result) => {
        
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
