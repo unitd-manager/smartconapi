@@ -97,12 +97,11 @@ app.delete('/deletestock_transfer', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'Tender has been removed successfully'
+            msg:'Success'
           });
     }
   });

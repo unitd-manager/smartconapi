@@ -463,38 +463,7 @@ app.post('/editOfficeOverHeads', (req, res, next) => {
 
 
 
-app.get('/getTabCostingSummary', (req, res, next) => {
-  db.query(`SELECT 
-  c.no_of_worker_used
-  ,c.no_of_days_worked
-  ,c.labour_rates_per_day
-  ,c.po_price
-  ,c.po_price_with_gst
-  ,c.profit_percentage
-  ,c.profit
-  ,c.total_material_price
-  ,c.transport_charges
-  ,c.total_labour_charges
-  ,c.salesman_commission
-  ,c.finance_charges
-  ,c.office_overheads
-  ,c.other_charges
-  ,c.total_cost of FROM costing_summary c WHERE c.project_id != '' ORDER BY c.costing_summary_id DESC`,
-    (err, result) =>{
-      if (err) {
-        console.log("error: ", err);
-        return;
-      }else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            });
 
-        }
- 
-    }
-  );
-});
 
 
 

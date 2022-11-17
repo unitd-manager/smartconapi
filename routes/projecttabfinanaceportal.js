@@ -37,10 +37,9 @@ app.get('/getInvoiceTab', (req, res, next) => {
            FROM invoice i WHERE i.order_id != '' ORDER BY i.invoice_id DESC`,
     (err, result) => {
      
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -69,10 +68,9 @@ app.post('/editInvoiceTab', (req, res, next) => {
            
              WHERE order_id =  ${db.escape(req.body.order_id)}`,
     (err, result) => {
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -102,10 +100,9 @@ app.get('/getReceiptTab', (req, res, next) => {
             WHERE r.order_id != '' ORDER BY r.receipt_id DESC;`,
     (err, result) => {
      
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -133,10 +130,9 @@ app.post('/editReceiptTab', (req, res, next) => {
             WHERE order_id  =  ${db.escape(req.body.order_id)}`,
     (err, result) => {
      
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,

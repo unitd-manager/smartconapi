@@ -50,15 +50,14 @@ app.get('/getMainInvoice', (req, res, next) => {
   ,(IF(ISNULL(( SELECT FORMAT(SUM(invoice_amount), 0) FROM invoice WHERE project_id = i.project_id AND invoice_code < i.invoice_code AND status != LOWER('Cancelled') )), 0, ( SELECT FORMAT(SUM(invoice_amount), 0) FROM invoice WHERE project_id = i.project_id AND invoice_code < i.invoice_code AND status != LOWER('Cancelled') ))) AS prior_invoice_billed ,b.title AS branch_name FROM invoice i LEFT JOIN (project p) ON (i.project_id = p.project_id) LEFT JOIN (contact cont) ON (p.contact_id = cont.contact_id) LEFT JOIN (company c) ON (p.company_id = c.company_id) LEFT JOIN (company_address ca)ON (cont.company_address_id = ca.company_address_id) LEFT JOIN branch b ON(p.branch_id = b.branch_id) WHERE i.invoice_id != '' ORDER BY i.invoice_code DESC`,
     (err, result) => {
 
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
-        return res.status(200).send({
-          data: result,
-          msg: 'Success'
-        });
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
 
       }
 
@@ -126,12 +125,11 @@ app.post('/insertInvoice', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Success'
           });
     }
   });
@@ -148,7 +146,7 @@ app.delete('/deleteInvoice', (req, res, next) => {
     } else {
           return res.status(200).send({
             data: result,
-            msg:'Tender has been removed successfully'
+            msg:'Success'
           });
     }
   });
@@ -166,12 +164,11 @@ app.post('/insertBranch', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Success'
           });
     }
   });
@@ -184,12 +181,11 @@ app.delete('/deleteBranch', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'Tender has been removed successfully'
+            msg:'Success'
           });
     }
   });

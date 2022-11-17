@@ -39,9 +39,7 @@ ORDER BY stock DESC`,
        
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
-      
       } else {
             return res.status(200).send({
               data: result,
@@ -61,14 +59,14 @@ app.post('/editinventoryMain', (req, res, next) => {
             
              WHERE inventory_id =  ${db.escape(req.body.inventory_id)}`,
     (err, result) => {
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
               msg:'Success'
+            
             });
       }
      }
@@ -99,12 +97,11 @@ app.post('/insertinventory', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Success'
           });
     }
   });
@@ -119,12 +116,11 @@ app.delete('/deleteInventory', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'Tender has been removed successfully'
+            msg:'Success'
           });
     }
   });
@@ -158,12 +154,11 @@ app.post('/insertsite', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Success'
           });
     }
   });
@@ -177,12 +172,11 @@ app.delete('/deleteSite', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'Tender has been removed successfully'
+            msg:'Success'
           });
     }
   });
@@ -211,9 +205,7 @@ WHERE pop.product_id != ''`,
        
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
-      
       } else {
             return res.status(200).send({
               data: result,
@@ -241,9 +233,7 @@ app.get('/getTabProjectLinked', (req, res, next) => {
        
       if (err) {
         console.log("error: ", err);
-        result(err, null);
         return;
-      
       } else {
             return res.status(200).send({
               data: result,

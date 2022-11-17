@@ -63,10 +63,9 @@ app.get('/getProducts', (req, res, next) => {
   LEFT JOIN (supplier co) ON (co.supplier_id = pc.company_id)`,
     (err, result) => {
        
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -92,10 +91,9 @@ app.post('/edit-Product', (req, res, next) => {
             WHERE product_id =  ${db.escape(req.body.product_id)}`,
     (err, result) => {
      
-      if (result.length == 0) {
-        return res.status(400).send({
-          msg: 'No result found'
-        });
+      if (err) {
+        console.log("error: ", err);
+        return;
       } else {
             return res.status(200).send({
               data: result,
@@ -178,12 +176,11 @@ app.post('/insertProduct', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Success'
           });
     }
   });
@@ -198,12 +195,11 @@ app.delete('/deleteProduct', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'Tender has been removed successfully'
+            msg:'Success'
           });
     }
   });
@@ -221,12 +217,11 @@ app.post('/insertProduct_Company', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Success'
           });
     }
   });
@@ -239,12 +234,11 @@ app.delete('/deleteProduct_Company', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'Tender has been removed successfully'
+            msg:'Success'
           });
     }
   });
@@ -276,12 +270,11 @@ app.post('/insertCategory', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Success'
           });
     }
   });
@@ -295,12 +288,11 @@ app.delete('/deleteCategory', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'Tender has been removed successfully'
+            msg:'Success'
           });
     }
   });
@@ -335,12 +327,11 @@ app.post('/insertSection', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Success'
           });
     }
   });
@@ -354,12 +345,11 @@ app.delete('/deleteSection', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'Tender has been removed successfully'
+            msg:'Success'
           });
     }
   });
@@ -387,12 +377,11 @@ app.post('/insertSubCategory', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'New Tender has been created successfully'
+            msg:'Success'
           });
     }
   });
@@ -405,12 +394,11 @@ app.delete('/deleteSub_Category', (req, res, next) => {
   let query = db.query(sql, data,(err, result) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
       return;
     } else {
           return res.status(200).send({
             data: result,
-            msg:'Tender has been removed successfully'
+            msg:'Success'
           });
     }
   });
