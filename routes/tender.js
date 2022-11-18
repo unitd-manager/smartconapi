@@ -258,7 +258,7 @@ app.get('/getTabquote', (req, res, next) => {
 
 
 
-app.post('/edit-TabQuote', (req, res, next) => {
+app.post('/editTabQuote', (req, res, next) => {
   db.query(`UPDATE quote
             SET quote_date=${db.escape(req.body.quote_date)}
             ,quote_code=${db.escape(req.body.quote_code)}
@@ -268,6 +268,7 @@ app.post('/edit-TabQuote', (req, res, next) => {
             ,payment_method=${db.escape(req.body.payment_method)}
             ,revision=${db.escape(req.body.revision)}
             ,intro_drawing_quote=${db.escape(req.body.intro_drawing_quote)}
+           
             WHERE opportunity_id =  ${db.escape(req.body.opportunity_id)}`,
     (err, result) =>{
       if (err) {
