@@ -7738,3 +7738,24 @@ ALTER TABLE `work_order_line_items`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+/* =================== SULFIA - 17/11/2022 ===================== */
+
+ALTER TABLE `opportunity` ADD `project_end_date` DATE NULL DEFAULT NULL AFTER `employee_id`
+
+ALTER TABLE `supplier` ADD `payment_details` INT NULL DEFAULT NULL AFTER `gst_no`
+
+ALTER TABLE `supplier` ADD `terms` VARCHAR(255) NULL DEFAULT NULL AFTER `payment_details`
+
+/* =================== RAFI - 17/11/2022 ===================== */
+
+ALTER TABLE `purchase_order` ADD `site_id` INT(11) NULL DEFAULT NULL AFTER `project`
+
+/* =================== MEERA - 17/11/2022 ===================== */
+
+RENAME TABLE `smartcongen`.`leave`
+ TO `smartcongen`.`empleave`;
+
+/* =================== SULFIA - 18/11/2022 ===================== */
+
+ALTER TABLE `quote` CHANGE `condition` `conditions` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL; 
