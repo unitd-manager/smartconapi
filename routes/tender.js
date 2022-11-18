@@ -256,6 +256,37 @@ app.get('/getTabquote', (req, res, next) => {
 });
 
 
+
+
+app.post('/edit-TabQuote', (req, res, next) => {
+  db.query(`UPDATE quote
+            SET quote_date=${db.escape(req.body.quote_date)}
+            ,quote_code=${db.escape(req.body.quote_code)}
+            ,quote_status=${db.escape(req.body.quote_status)}
+            ,project_location=${db.escape(req.body.project_location)}
+            ,project_reference=${db.escape(req.body.project_reference)}
+            ,payment_method=${db.escape(req.body.payment_method)}
+            ,revision=${db.escape(req.body.revision)}
+            ,intro_drawing_quote=${db.escape(req.body.intro_drawing_quote)}
+            ,conditions=${db.escape(req.body.conditions)}
+            ,show_project_manager=${db.escape(req.body.show_project_manager)}
+            WHERE opportunity_id =  ${db.escape(req.body.opportunity_id)}`,
+    (err, result) =>{
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
+
+
+
 app.get('/getTabQuoteLine', (req, res, next) => {
   db.query(`SELECT qt.title
   ,qt.description
