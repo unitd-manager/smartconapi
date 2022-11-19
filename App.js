@@ -4,6 +4,8 @@ var fs = require('fs');
 var http = require('http');
 var https = require('https');
 const fileUpload = require('express-fileupload');
+var flash = require('connect-flash')
+const session = require('express-session');
 
 var privateKey  = fs.readFileSync('sslcrt/server.key', 'utf8');
 var certificate = fs.readFileSync('sslcrt/server.crt', 'utf8');
@@ -11,8 +13,14 @@ var credentials = {key: privateKey, cert: certificate};
 
 var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials, app);
-httpServer.listen(3001);
-httpsServer.listen(3002);
+let port = 3001;
+let secureport = 3002;
+httpServer.listen(port, () => {
+    console.log(`Server Running in port:${port}`);
+  });
+httpsServer.listen(secureport, () => {
+    console.log(`Server Running in secure port:${secureport}`);
+  });
     
 var bodyParser = require('body-parser');
 var cors = require('cors');
@@ -24,6 +32,15 @@ app.use(cors());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+
+app.use(session({
+	secret: 'my_secret',
+	resave: true,
+	saveUninitialized: true,
+	cookie: { maxAge: 60000 }
+}))
+app.use(flash());
+
 const project = require('./routes/project.js');
 const tender = require('./routes/tender.js');
 const Arouter = require('./routes/attachment.js');
@@ -61,8 +78,6 @@ const projecttabmaterialstransferredportal = require('./routes/projecttabmateria
 const projecttabdeliveryorder = require('./routes/projecttabdeliveryorder.js');
 const media = require('./routes/media.js');
 const projecttabmaterialrequest = require('./routes/projecttabmaterialrequest.js');
-
-
 
 
 app.use('/project', project);
@@ -104,7 +119,8 @@ app.use('/media', media);
 app.use('/projecttabmaterialrequest', projecttabmaterialrequest);
 
 
-
+const indexRouter = require('./routes/fileUpload'); 
+app.use('/file', indexRouter);
 
 app.use(fileUpload({
     createParentPath: true
