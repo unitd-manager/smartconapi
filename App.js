@@ -7,6 +7,8 @@ const fileUpload = require('express-fileupload');
 var flash = require('connect-flash')
 const session = require('express-session');
 
+global.__basedir = __dirname;
+
 var privateKey  = fs.readFileSync('sslcrt/server.key', 'utf8');
 var certificate = fs.readFileSync('sslcrt/server.crt', 'utf8');
 var credentials = {key: privateKey, cert: certificate};
