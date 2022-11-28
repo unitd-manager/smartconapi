@@ -661,7 +661,7 @@ app.post('/insertActualCostingSummary', (req, res, next) => {
 
 app.delete('/deleteActualCostingSummary', (req, res, next) => {
 
-  let data = {title: req.body.title};
+  let data = {actual_costing_summary_id: req.body.actual_costing_summary_id};
   let sql = "DELETE FROM actual_costing_summary WHERE ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
