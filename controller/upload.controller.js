@@ -3,6 +3,7 @@ const util = require("util");
 const db = require('../config/Database.js');
 const uniqid = require('uniqid');
 const fs = require("fs");
+const path = require('path');
 const baseUrl = "http://localhost:3001/file/getFile/";
 const directoryPath = __basedir + "/storage/uploads/"
 
@@ -87,6 +88,29 @@ exports.getFile = (req, res) => {
         });
       }
     });
+}
+
+exports.downloadFile = (req, res) => {
+  let data = {record_id: req.body.record_id};
+  let sql = "SELECT file_name FROM media WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    const fileName = result[0].file_name;
+    const filePath = path.resolve(directoryPath + result[0].file_name);
+    console.log("fileName : ",fileName);
+    console.log("filePath : ",filePath);
+    res.download(filePath, fileName, (err) => {
+      if (err) {
+        res.status(500).send({
+          message: "Could not download the file. " + err,
+        });
+      } else {
+        return res.status(200).send({
+          data: result[0].file_name,
+          msg: result[0].file_name + ' has been downloaded successfully'
+        });        
+      }
+    });
+  });
 }
 
 exports.removeFile = (req, res) => {
