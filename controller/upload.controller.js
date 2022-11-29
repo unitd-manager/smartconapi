@@ -31,7 +31,7 @@ exports.uploadFile = (req, res) => {
             , media_type: "attachment"
             , actual_file_name: req.file.originalname
             , display_title: req.file.originalname
-            , file_name: uniqid() + "_" +req.file.originalname
+            , file_name: req.file.filename
             , content_type: "attachment"
             , media_size: req.file.size
             , room_name: req.body.room_name
@@ -103,29 +103,36 @@ exports.downloadFile = (req, res) => {
         res.status(500).send({
           message: "Could not download the file. " + err,
         });
-      } else {
-        return res.status(200).send({
-          data: result[0].file_name,
-          msg: result[0].file_name + ' has been downloaded successfully'
-        });        
       }
     });
   });
 }
 
 exports.removeFile = (req, res) => {
-    const fileName = req.params.name;
-    fs.unlink(directoryPath + fileName, (err) => {
+    let data = {record_id: req.body.record_id};
+    let select_sql = "SELECT file_name FROM media WHERE ?";
+    let query = db.query(select_sql, data,(err, result) => {
+      const filePath = path.resolve(directoryPath + result[0].file_name);
+      fs.unlink(filePath, (err) => {
         if (err) {
           res.status(500).send({
             message: "Could not delete the file. " + err,
           });
-        }
-    
-        res.status(200).send({
-          message: "File is deleted.",
-        });
+        } else {
+          let delete_sql = "DELETE FROM media WHERE ?";
+          let query = db.query(delete_sql, data,(err, result) => {
+            if (err) {
+              console.log("error: ", err);
+              return;
+            }
+          });
+          res.status(200).send({
+            message: "File is deleted.",
+          });            
+        }      
       });
+    });
+
 }
 
 exports.uploadMultiple = (req, res) => {
