@@ -19,20 +19,19 @@ app.use(fileUpload({
 
 
 
-app.get('/TabPurchaseOrder', (req, res, next) => {
+app.get('/MaterialPurchaseOrder', (req, res, next) => {
   db.query(`SELECT DISTINCT 
-  po.title
-  ,po.status
-  ,po.company_id_supplier
-  ,po.priority
-  ,po.notes
-  ,po.purchase_order_date
-  ,po.follow_up_date
-  ,po.delivery_terms
-  ,po.payment_terms
-  ,po.payment_status
-  ,po.supplier_inv_code
+  po.status
   ,po.po_code
+  ,po.title
+  ,po.mobile
+  ,po.contact
+  ,po.project
+  ,po.shipping_method
+  ,po.payment_terms
+  ,po.delivery_date
+  ,po.company_id_supplier
+  ,po.payment_terms
   ,s.company_name
   FROM purchase_order po 
   LEFT JOIN (supplier s) ON (po.company_id_supplier = s.supplier_id) WHERE po.project_id != '' ORDER BY po.purchase_order_id ASC;`,
@@ -53,16 +52,19 @@ app.get('/TabPurchaseOrder', (req, res, next) => {
   );
 });
 
-app.post('/editTabPurchaseOrder', (req, res, next) => {
+app.post('/editMaterialTabPurchaseOrder', (req, res, next) => {
   db.query(`UPDATE purchase_order
             SET title=${db.escape(req.body.title)}
-            ,company_id_supplier=${db.escape(req.body.company_id_supplier)}
-            ,notes=${db.escape(req.body.notes)}
-            ,purchase_order_date=${db.escape(req.body.purchase_order_date)}
-            ,follow_up_date=${db.escape(req.body.follow_up_date)}
+            ,mobile=${db.escape(req.body.mobile)}
+            ,contact=${db.escape(req.body.contact)}
+            ,project=${db.escape(req.body.project)}
+            ,shipping_method=${db.escape(req.body.shipping_method)}
             ,delivery_terms=${db.escape(req.body.delivery_terms)}
             ,payment_terms=${db.escape(req.body.payment_terms)}
-            ,supplier_inv_code=${db.escape(req.body.supplier_inv_code)}
+            ,delivery_date=${db.escape(req.body.delivery_date)}
+            ,company_id_supplier=${db.escape(req.body.company_id_supplier)}
+            ,delivery_date=${db.escape(req.body.delivery_date)}
+           ,payment_terms=${db.escape(req.body.payment_terms)}
             WHERE project_id = ${db.escape(req.body.project_id)}`,
     (err, result) => {
      
@@ -82,7 +84,7 @@ app.post('/editTabPurchaseOrder', (req, res, next) => {
 
 
   
-app.post('/insertPurchaseOrder', (req, res, next) => {
+app.post('/insertMaterialPurchaseOrder', (req, res, next) => {
 
   let data = {po_code:req.body.po_code
     ,company_id_supplier: req.body.company_id_supplier
@@ -166,7 +168,7 @@ app.get('/TabPurchaseOrderLineItem', (req, res, next) => {
   ,po.status
   ,po.modification_date
   ,po.creation_date
-  ,po.modified_by FROM po_product po WHERE po.purchase_order_id != '' ORDER BY po.item_title ASC`,
+  ,po.modified_by FROM po_product po WHERE po.purchase_order_id != '' AND project_id != '' ORDER BY po.item_title ASC`,
     (err, result) => {
        
       if (err) {
@@ -195,7 +197,7 @@ app.post('/editTabPurchaseOrderLineItem', (req, res, next) => {
             ,modification_date=${db.escape(req.body.modification_date)}
             ,creation_date=${db.escape(req.body.creation_date)}
             ,modified_by=${db.escape(req.body.modified_by)}
-            WHERE purchase_order_id = ${db.escape(req.body.purchase_order_id)}`,
+            WHERE purchase_order_id = ${db.escape(req.body.purchase_order_id)}AND project_id = ${db.escape(req.body.project_id)}`,
     (err, result) => {
      
       if (err) {

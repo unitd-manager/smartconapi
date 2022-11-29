@@ -80,6 +80,8 @@ const projecttabmaterialstransferredportal = require('./routes/projecttabmateria
 const projecttabdeliveryorder = require('./routes/projecttabdeliveryorder.js');
 const media = require('./routes/media.js');
 const projecttabmaterialrequest = require('./routes/projecttabmaterialrequest.js');
+const materialpurchaseorder = require('./routes/materialpurchaseorder.js');
+
 
 
 app.use('/project', project);
@@ -119,6 +121,8 @@ app.use('/projecttabmaterialstransferredportal',projecttabmaterialstransferredpo
 app.use('/projecttabdeliveryorder', projecttabdeliveryorder);
 app.use('/media', media);
 app.use('/projecttabmaterialrequest', projecttabmaterialrequest);
+app.use('/materialpurchaseorder', materialpurchaseorder);
+
 
 
 const indexRouter = require('./routes/fileUpload'); 
