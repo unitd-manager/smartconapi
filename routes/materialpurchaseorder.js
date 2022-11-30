@@ -160,15 +160,22 @@ app.delete('/deletePurchaseOrder', (req, res, next) => {
 
 app.get('/TabPurchaseOrderLineItem', (req, res, next) => {
   db.query(`SELECT
-  po.description
-  ,po.unit
-  ,po.amount
-  ,po.selling_price
-  ,po.cost_price
-  ,po.status
-  ,po.modification_date
-  ,po.creation_date
-  ,po.modified_by FROM po_product po WHERE po.purchase_order_id != '' AND project_id != '' ORDER BY po.item_title ASC`,
+  s.company_name
+     ,po.item_title
+    ,po.description
+    ,po.unit
+    ,po.amount
+    ,po.selling_price
+    ,po.cost_price
+    ,po.status
+    ,po.modification_date
+    ,po.creation_date
+    ,po.modified_by
+    FROM po_product po
+    LEFT JOIN (purchase_order p) ON (po.purchase_order_id =p.purchase_order_id)
+    LEFT JOIN (supplier s) ON (p.supplier_id = s.supplier_id)
+    WHERE po.purchase_order_id != '' ORDER BY po.item_title ASC;
+    `,
     (err, result) => {
        
       if (err) {

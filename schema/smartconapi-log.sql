@@ -7763,3 +7763,6 @@ ALTER TABLE `purchase_order` ADD `site_id` INT(11) NULL DEFAULT NULL AFTER `pro
 
 RENAME TABLE `smartcongen`.`leave`
  TO `smartcongen`.`empleave`;
+
+/* =================== MEERA - 30/11/2022 ===================== */
+ ALTER TABLE `purchase_order` CHANGE `company_id_supplier` `supplier_id` INT(11) NULL DEFAULT NULL;
