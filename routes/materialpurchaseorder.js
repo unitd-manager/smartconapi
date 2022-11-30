@@ -284,8 +284,8 @@ app.post('/editTabPurchaseOrderLineItem', (req, res, next) => {
   //for product title//
   app.get('/TabProduct', (req, res, next) => {
     db.query(`SELECT
-    po.item_title
-      FROM po_product po;
+    title
+      FROM product p;
       `,
       (err, result) => {
          
