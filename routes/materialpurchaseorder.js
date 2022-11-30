@@ -158,6 +158,7 @@ app.delete('/deletePurchaseOrder', (req, res, next) => {
   });
 });
 
+//purchase order line item//
 app.get('/TabPurchaseOrderLineItem', (req, res, next) => {
   db.query(`SELECT
   s.company_name
@@ -196,7 +197,8 @@ app.get('/TabPurchaseOrderLineItem', (req, res, next) => {
 
 app.post('/editTabPurchaseOrderLineItem', (req, res, next) => {
   db.query(`UPDATE po_product
-            SET description=${db.escape(req.body.description)}
+            SET item_title=${db.escape(req.body.item_title)}
+            ,description=${db.escape(req.body.description)}
             ,unit=${db.escape(req.body.unit)}
             ,amount=${db.escape(req.body.amount)}
             ,selling_price=${db.escape(req.body.selling_price)}
@@ -278,6 +280,32 @@ app.post('/editTabPurchaseOrderLineItem', (req, res, next) => {
       }
     });
   });
+
+  //for product title//
+  app.get('/TabProduct', (req, res, next) => {
+    db.query(`SELECT
+    po.item_title
+      FROM po_product po;
+      `,
+      (err, result) => {
+         
+        if (err) {
+          console.log("error: ", err);
+          return;
+        } else {
+              return res.status(200).send({
+                data: result,
+                msg:'Success'
+              
+              });
+  
+          }
+   
+      }
+    );
+  });
+
+  
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
