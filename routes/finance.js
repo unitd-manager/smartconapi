@@ -18,7 +18,8 @@ app.use(fileUpload({
 }));
 
 app.get('/getFinances', (req, res, next) => {
-  db.query(`SELECT o.project_id
+  db.query(`SELECT order_id
+  , o.project_id
   ,o.project_type
   ,o.creation_date
   ,o.order_status
