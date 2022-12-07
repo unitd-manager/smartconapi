@@ -102,7 +102,60 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
       });
     });
 
+    app.get('/TabDeliveryOrderHistory', (req, res, next) => {
+      db.query(`SELECT 
+                  p.product_id
+                  ,do.date
+                  ,doh.quantity
+                  ,doh.remarks
+                  ,doh.status
+            FROM delivery_order_history doh
+            LEFT JOIN (delivery_order do) ON (do.delivery_order_id = doh.delivery_order_id)
+            LEFT JOIN (product p) ON (p.product_id = doh.product_id)
+            WHERE do.delivery_order_id !=''
+            ORDER BY doh.delivery_order_history_id ASC
+      `,
+          (err, result) => {
+             
+            if (err) {
+              console.log("error: ", err);
+              return;
+            } else {
+                  return res.status(200).send({
+                    data: result,
+                    msg:'Tender has been removed successfully'
+                  });
+            }
+      
+              
+       
+          }
+        );
+      });
 
+      app.post('/editTabDeliveryOrderHistory', (req, res, next) => {
+        db.query(`UPDATE delivery_history_order
+                  SET product_id=${db.escape(req.body.date)}
+                  quantity=${db.escape(req.body.quantity)}
+                  remarks=${db.escape(req.body.remarks)}
+                  status=${db.escape(req.body.status)}
+                  date=${db.escape(req.body.date)}
+                  WHERE do.delivery_order_id=${db.escape(req.body.do.delivery_order_id)}`,
+          (err, result) => {
+           
+            if (err) {
+              console.log("error: ", err);
+              return;
+            } else {
+                  return res.status(200).send({
+                    data: result,
+                    msg:'Tender has been removed successfully'
+                  });
+            
+            }
+           }
+        );
+      });
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
     console.log(req.userData);
     res.send('This is the secret content. Only logged in users can see that!');
