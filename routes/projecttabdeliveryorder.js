@@ -134,7 +134,7 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
       });
 
       app.post('/editTabDeliveryOrderHistory', (req, res, next) => {
-        db.query(`UPDATE delivery_history_order
+        db.query(`UPDATE delivery_order_history
                   SET product_id=${db.escape(req.body.date)}
                   quantity=${db.escape(req.body.quantity)}
                   remarks=${db.escape(req.body.remarks)}
@@ -156,6 +156,34 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
            }
         );
       });
+
+      app.post('/insertDeliveryHistoryOrder', (req, res, next) => {
+  
+        let data = {product_id	: req.body.product_id	,
+                    purchase_order_id: req.body.purchase_order_id,
+                    delivery_order_id: req.body.delivery_order_id,
+                    status: req.body.status,
+                    quantity: req.body.quantity,
+                    creation_date	: req.body.creation_date	,
+                    modification_date: req.body.modification_date,
+                    remarks: req.body.remarks,
+                     };
+      
+        let sql = "INSERT INTO delivery_order_history SET ?";
+        let query = db.query(sql, data,(err, result) => {
+          if (err) {
+            console.log("error: ", err);
+            result(err, null);
+            return;
+          } else {
+                return res.status(200).send({
+                  data: result,
+                  msg:'New Tender has been created successfully'
+                });
+          }
+        });
+      });
+    
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
     console.log(req.userData);
     res.send('This is the secret content. Only logged in users can see that!');
