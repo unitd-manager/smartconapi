@@ -137,11 +137,39 @@ exports.removeFile = (req, res) => {
 
 exports.uploadMultiple = (req, res) => {
     if (req.files.length) {
-        console.log(req.files)
+      var arrayData = [];
+      req.files.forEach(f => {
+        console.log(f.filename);
+        let data = {creation_date: new Date()
+          , media_type: "attachment"
+          , actual_file_name: f.originalname
+          , display_title: f.originalname
+          , file_name: f.filename
+          , content_type: "attachment"
+          , media_size: f.size
+          , room_name: req.body.room_name
+          , record_type: "attachment"
+          , alt_tag_data: req.body.alt_tag_data
+          , external_link: ""
+          , caption: ""
+          , uploaded: ""
+          , record_id: req.body.record_id
+          , modification_date: new Date()
+          , description: req.body.description
+        };
+        arrayData.push(data);
+      })
 
-        req.flash('success', 'Files Uploaded.');
+      arrayData.forEach(data => {
+        db.query('INSERT INTO media SET ?', data, insertErr => {
+          if (insertErr) {
+            throw new Error("Error inserting..." + data.file_name + "! " + insertErr);
+          }
+          console.log(`Inserted ${data.file_name}!`);
+        });
+      });
+      res.status(200).send({message:"Successfully uploaded multiple file"});
     }
-    return res.redirect('/');
 }
 
 exports.uploadSingleV2 = async (req, res) => {
