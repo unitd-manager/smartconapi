@@ -81,6 +81,8 @@ const projecttabdeliveryorder = require('./routes/projecttabdeliveryorder.js');
 const media = require('./routes/media.js');
 const projecttabmaterialrequest = require('./routes/projecttabmaterialrequest.js');
 const materialpurchaseorder = require('./routes/materialpurchaseorder.js');
+const leave = require('./routes/leave.js');
+
 
 
 
@@ -122,6 +124,8 @@ app.use('/projecttabdeliveryorder', projecttabdeliveryorder);
 app.use('/media', media);
 app.use('/projecttabmaterialrequest', projecttabmaterialrequest);
 app.use('/materialpurchaseorder', materialpurchaseorder);
+app.use('/leave', leave);
+
 
 
 
