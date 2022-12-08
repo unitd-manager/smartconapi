@@ -17,21 +17,18 @@ app.use(fileUpload({
     createParentPath: true
 }));
 
-app.get('/WorkOrderPortal', (req, res, next) => {
+app.get('/SubConWorkOrderPortal', (req, res, next) => {
   db.query(`SELECT 
-  q.sub_con_work_order_id 
-  ,q.work_order_due_date 
-  ,q.completed_date 
-  ,q.sub_con_id 
-  ,q.status 
-  ,q.project_location 
-  ,q.project_reference 
-  ,q.quote_reference 
-  ,q.quote_date 
-  ,q.project_location 
-  ,s.company_name FROM sub_con_work_order q 
-  LEFT JOIN (project p) ON (p.project_id = q.project_id) 
-  LEFT JOIN (sub_con s) ON (s.sub_con_id = q.sub_con_id) WHERE p.project_id !=''`,
+  q.sub_con_work_order_id
+  ,q.work_order_date
+  ,q.sub_con_id
+  ,q.status
+  ,q.work_order_due_date
+  ,q.completed_date
+  ,s.company_name
+   FROM sub_con_work_order q 
+   LEFT JOIN (project p) ON (p.project_id = q.project_id) 
+   LEFT JOIN (sub_con s) ON (s.sub_con_id = q.sub_con_id) WHERE p.project_id !=''`,
     (err, result) => {
        
 
@@ -50,12 +47,18 @@ app.get('/WorkOrderPortal', (req, res, next) => {
     );
   });
 
+
+
   app.post('/editWorkOrderPortal', (req, res, next) => {
     db.query(`UPDATE sub_con_work_order
               SET work_order_due_date=${db.escape(req.body.work_order_due_date)}
               ,completed_date=${db.escape(req.body.completed_date)}
               ,project_location=${db.escape(req.body.project_location)}
               ,project_reference=${db.escape(req.body.project_reference)}
+              ,work_order_date=${db.escape(req.body.work_order_date)}
+              ,sub_con_id=${db.escape(req.body.sub_con_id)}
+              ,quote_reference=${db.escape(req.body.quote_reference)}
+              ,status=${db.escape(req.body.status)}
               ,quote_date=${db.escape(req.body.quote_date)}
               WHERE project_id = ${db.escape(req.body.project_id)}`,
       (err, result) => {
@@ -71,6 +74,55 @@ app.get('/WorkOrderPortal', (req, res, next) => {
         }
        }
     );
+  });
+
+  app.post('/insertsub_con_work_order', (req, res, next) => {
+
+    let data = {sub_con_worker_code: req.body.sub_con_worker_code,
+                work_order_date: req.body.work_order_date,
+                work_order_due_date: req.body.work_order_due_date,
+                completed_date: req.body.completed_date,
+                project_id: req.body.project_id,
+                sub_con_id: req.body.sub_con_id,
+                work_order: req.body.work_order,
+                status: req.body.status,
+                creation_date: req.body.creation_date,
+                modification_date: req.body.modification_date,
+                created_by: req.body.created_by,
+                modified_by: req.body.modified_by,
+                project_location: req.body.project_location,
+                project_reference: req.body.project_reference,
+                condition: req.body.condition,
+                quote_date: req.body.quote_date,
+                quote_reference: req.body.quote_reference,};
+    let sql = "INSERT INTO sub_con_work_order  SET ?";
+    let query = db.query(sql, data,(err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+    });
+  });
+  app.delete('/deletesub_con_work_order', (req, res, next) => {
+
+    let data = {sub_con_work_order_id : req.body.sub_con_work_order_id };
+    let sql = "DELETE FROM sub_con_work_order WHERE ?";
+    let query = db.query(sql, data,(err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+    });
   });
 
 app.get('/PaymentHistoryPortal', (req, res, next) => {
