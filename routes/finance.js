@@ -81,6 +81,8 @@ app.get('/getFinances', (req, res, next) => {
   ,o.order_status
   ,o.invoice_terms
   ,o.notes
+  ,o.creation_date
+  ,o.modification_date
   ,o.shipping_first_name
   ,o.shipping_address1
   ,o.shipping_address2
@@ -92,7 +94,7 @@ app.get('/getFinances', (req, res, next) => {
   ,o.cust_address2
   ,o.cust_address_country
   ,o.cust_address_po_code
-  ,gc2.name AS shipping_country_name
+  ,gc2.name AS shipping_country_namenode App.js
   ,c.company_name AS company_name
   ,c.website AS company_website
   ,c.fax AS company_fax
