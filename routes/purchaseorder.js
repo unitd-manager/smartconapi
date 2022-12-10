@@ -19,7 +19,7 @@ app.use(fileUpload({
 
 
 
-app.get('/TabPurchaseOrder', (req, res, next) => {
+app.post('/TabPurchaseOrder', (req, res, next) => {
   db.query(`SELECT DISTINCT 
   po.title
   ,po.status
@@ -35,7 +35,7 @@ app.get('/TabPurchaseOrder', (req, res, next) => {
   ,po.po_code
   ,s.company_name
   FROM purchase_order po 
-  LEFT JOIN (supplier s) ON (po.company_id_supplier = s.supplier_id) WHERE po.project_id != '' ORDER BY po.purchase_order_id ASC;`,
+  LEFT JOIN (supplier s) ON (po.company_id_supplier = s.supplier_id) WHERE po.project_id = ${db.escape(req.body.project_id)} ORDER BY po.purchase_order_id ASC;`,
     (err, result) => {
        
       if (err) {
@@ -67,8 +67,10 @@ app.post('/editTabPurchaseOrder', (req, res, next) => {
     (err, result) => {
      
       if (err) {
-        console.log("error: ", err);
-        return;
+        return res.status(400).send({
+            data: err,
+            msg:'Failed'
+          });
       } else {
             return res.status(200).send({
               data: result,
@@ -82,10 +84,12 @@ app.post('/editTabPurchaseOrder', (req, res, next) => {
 
 
   
+  
 app.post('/insertPurchaseOrder', (req, res, next) => {
 
-  let data = {po_code:req.body.po_code
-    ,company_id_supplier: req.body.company_id_supplier
+  let data = {
+    po_code:req.body.po_code
+    ,supplier_id: req.body.supplier_id
    , contact_id_supplier: req.body.contact_id_supplier
    , delivery_terms: req.body.delivery_terms
    , status: req.body.status
@@ -126,8 +130,10 @@ app.post('/insertPurchaseOrder', (req, res, next) => {
   let sql = "INSERT INTO purchase_order SET ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
-      console.log("error: ", err);
-      return;
+     return res.status(400).send({
+            data: err,
+            msg:'Failed'
+          });
     } else {
           return res.status(200).send({
             data: result,
@@ -139,9 +145,9 @@ app.post('/insertPurchaseOrder', (req, res, next) => {
 
 
 
-app.delete('/deletePurchaseOrder', (req, res, next) => {
+app.post('/deletePurchaseOrder', (req, res, next) => {
 
-  let data = {company_id_supplier: req.body.company_id_supplier};
+  let data = {purchase_order_id : req.body.purchase_order_id };
   let sql = "DELETE FROM purchase_order WHERE ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
@@ -157,21 +163,16 @@ app.delete('/deletePurchaseOrder', (req, res, next) => {
 });
 
 app.get('/TabPurchaseOrderLineItem', (req, res, next) => {
-  db.query(`SELECT
-  po.description
-  ,po.unit
-  ,po.amount
-  ,po.selling_price
-  ,po.cost_price
-  ,po.status
-  ,po.modification_date
-  ,po.creation_date
-  ,po.modified_by FROM po_product po WHERE po.purchase_order_id != '' ORDER BY po.item_title ASC`,
+    db.query(`SELECT * FROM product`,
     (err, result) => {
        
       if (err) {
-        console.log("error: ", err);
-        return;
+       return res.status(400).send({
+              data: err,
+              msg:'Success'
+            
+            });
+
       } else {
             return res.status(200).send({
               data: result,
@@ -183,8 +184,78 @@ app.get('/TabPurchaseOrderLineItem', (req, res, next) => {
  
     }
   );
-});
+//   db.query(`SELECT
+//   po.description
+//   ,po.unit
+//   ,po.amount
+//   ,po.selling_price
+//   ,po.cost_price
+//   ,po.status
+//   ,po.modification_date
+//   ,po.creation_date
+//   ,po.modified_by FROM po_product po ORDER BY po.item_title ASC`,
+//     (err, result) => {
+       
+//       if (err) {
+//         console.log("error: ", err);
+//         return;
+//       } else {
+//             return res.status(200).send({
+//               data: result,
+//               msg:'Success'
+            
+//             });
 
+//         }
+ 
+//     }
+//   );
+});
+app.post('/TabPurchaseOrderLineItemTable', (req, res, next) => {
+  db.query(`SELECT
+     s.company_name
+     ,po.item_title
+    ,po.description
+    ,po.purchase_order_id
+    ,po.unit
+    ,po.amount
+    ,po.selling_price
+    ,po.qty
+    ,po.cost_price
+    ,po.status
+    ,po.modification_date
+    ,po.creation_date
+    ,po.modified_by
+    FROM po_product po
+    LEFT JOIN (purchase_order p) ON (po.purchase_order_id =p.purchase_order_id)
+    LEFT JOIN (supplier s) ON (p.supplier_id = s.supplier_id)
+    WHERE po.purchase_order_id != '' AND p.project_id =${db.escape(req.body.project_id)}  ORDER BY po.item_title ASC`,
+    (err, result) => {
+       
+      if (err) {
+          return res.status(400).send({
+            data: err,
+            msg:'Failed'
+          });
+      } else {
+          
+          const groupByCategory = result.reduce((group, product) => {
+          const { purchase_order_id } = product;
+          group[purchase_order_id] = group[purchase_order_id] ?? [];
+          group[purchase_order_id].push(product);
+          return group;
+        }, {});
+           return res.status(200).send({
+              data: groupByCategory,
+              msg:'Success'
+            
+            });
+
+        }
+ 
+    }
+  );
+});
 app.post('/editTabPurchaseOrderLineItem', (req, res, next) => {
   db.query(`UPDATE po_product
             SET description=${db.escape(req.body.description)}
@@ -211,7 +282,7 @@ app.post('/editTabPurchaseOrderLineItem', (req, res, next) => {
   );
 });
 
-  app.post('/insertPoProduct', (req, res, next) => {
+app.post('/insertPoProduct', (req, res, next) => {
 
     let data = {
       purchase_order_id:req.body.purchase_order_id
@@ -242,17 +313,20 @@ app.post('/editTabPurchaseOrderLineItem', (req, res, next) => {
     let sql = "INSERT INTO po_product SET ?";
     let query = db.query(sql, data,(err, result) => {
       if (err) {
-        console.log("error: ", err);
-        return;
+         return res.status(400).send({
+              data: err,
+              msg:'Success'
+            
+            });
+
       } else {
             return res.status(200).send({
-              data: result,
+              data: '',
               msg:'Success'
             });
       }
     });
   });
-
   app.delete('/deletePoProduct', (req, res, next) => {
 
     let data = {purchase_order_id: req.body.purchase_order_id};
@@ -269,10 +343,27 @@ app.post('/editTabPurchaseOrderLineItem', (req, res, next) => {
       }
     });
   });
+app.get('/suppliers', (req, res, next) => {
+  db.query(`SELECT * FROM supplier`,
+    (err, result) => {
+       
+      if (err) {
+       return res.status(400).send({
+              data: err,
+              msg:'Failed'
+            
+            });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            
+            });
 
-app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
-  console.log(req.userData);
-  res.send('This is the secret content. Only logged in users can see that!');
+        }
+ 
+    }
+  );
 });
 
 module.exports = app;
