@@ -69,8 +69,8 @@ app.post('/getFinancesById', (req, res, next) => {
 
       }
 
-    }
-  );
+ }
+ );
 });
 
 app.get('/getFinances', (req, res, next) => {
@@ -159,7 +159,12 @@ app.post('/editFinances', (req, res, next) => {
 });
 
 app.get('/getTabOrderItemPanel', (req, res, next) => {
-  db.query(`SELECT order_item_id, unit_price,qty,discount_percentage,description,remarks FROM order_item WHERE order_id != '' ORDER BY order_item_id ASC;`,
+  db.query(`SELECT oi.order_item_id
+  , oi.unit_price
+  ,oi.qty
+  ,oi.discount_percentage
+  ,oi.description
+  ,oi.remarks FROM order_item oi WHERE oi.order_id != '' ORDER BY oi.order_item_id ASC`,
     (err, result) => {
      
       if (err) {
@@ -422,6 +427,92 @@ app.delete('/deleteorders', (req, res, next) => {
 });
 
 
+
+app.post('/insertInvoice', (req, res, next) => {
+
+  let data = {
+    invoice_code: req.body.invoice_code
+    , invoice_amount: req.body.invoice_amount
+    , invoice_date: req.body.invoice_date
+    , mode_of_payment: req.body.mode_of_payment
+    , status: req.body.status
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date
+    , flag: req.body.flag
+    , created_by: req.body.created_by
+    , invoice_type: req.body.invoice_type
+    , invoice_due_date: req.body.invoice_due_date
+    , invoice_terms: req.body.invoice_terms
+    , notes: req.body.notes
+    , cst: req.body.cst
+    , vat: req.body.vat
+    , cst_value: req.body.cst_value
+    , vat_value: req.body.vat_value
+    , frieght: req.body.frieght
+    , p_f: req.body.p_f
+    , discount: req.body.discount
+    , invoice_code_vat: req.body.invoice_code_vat
+    , invoice_used: req.body.invoice_used
+    , invoice_code_vat_quote: req.body.invoice_code_vat_quote
+    , site_id: req.body.site_id
+    , manual_invoice_seq: req.body.manual_invoice_seq
+    , apply_general_vat: req.body.apply_general_vat
+    , selling_company: req.body.selling_company
+    , project_id: req.body.project_id
+    , invoice_paid_date: req.body.invoice_paid_date
+    , modified_by: req.body.modified_by
+    , invoice_sent_out: req.body.invoice_sent_out
+    , gst_percentage: req.body.gst_percentage
+    , title: req.body.title
+    , rate_text: req.body.rate_text
+    , qty_text: req.body.qty_text
+    , start_date: req.body.start_date
+    , end_date: req.body.end_date
+    , reference_no: req.body.reference_no
+    , CBF_Ref_No: req.body.CBF_Ref_No
+    , invoice_code_user: req.body.invoice_code_user
+    , invoice_sent_out_date: req.body.invoice_sent_out_date
+    , payment_terms: req.body.payment_terms
+    , po_number: req.body.po_number
+    , project_location: req.body.project_location
+    , project_reference: req.body.project_reference
+    , quote_code: req.body.quote_code
+    , invoice_manual_code: req.body.invoice_manual_code
+    , code: req.body.code
+    , site_code: req.body.site_code
+    , attention: req.body.attention
+    , reference: req.body.reference
+ };
+  let sql = "INSERT INTO invoice SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Success'
+          });
+    }
+  });
+});
+
+app.delete('/deleteInvoice', (req, res, next) => {
+
+  let data = {invoice_id: req.body.invoice_id};
+  let sql = "DELETE FROM invoice WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Success'
+          });
+    }
+  });
+});
 
 app.post('/insertorder_item', (req, res, next) => {
 
