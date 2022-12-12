@@ -68,14 +68,15 @@ exports.getFileList = (req, res) => {
     
         let fileInfos = [];
     
-        files.forEach((file) => {
-          fileInfos.push({
-            name: file,
-            url: baseUrl + file,
+        if(files) {
+          files.forEach((file) => {
+            fileInfos.push({
+              name: file,
+              url: baseUrl + file,
+            });
           });
-        });
-    
-        res.status(200).send(fileInfos);
+          res.status(200).send(fileInfos);
+        }
       });    
 }
 

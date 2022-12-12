@@ -26,13 +26,13 @@ app.get('/getTimeSheet', (req, res, next) => {
   ,a.notes
   ,a.time_in
   ,a.leave_time
+  ,a.on_leave
   ,a.description
   ,a.created_by
   ,a.modified_by
   ,CONCAT_WS(' ', s.first_name, s.last_name) AS staff_name 
   ,s.team AS staff_team 
-  FROM attendance a LEFT JOIN (staff s) ON (a.staff_id = s.staff_id) 
-  WHERE attendance_id = ''`,
+  FROM attendance a LEFT JOIN (staff s) ON (a.staff_id = s.staff_id)`,
     (err, result) => {
        
       if (err) {
@@ -50,6 +50,38 @@ app.get('/getTimeSheet', (req, res, next) => {
   );
 });
 
+app.post('/getTimeSheetByAttendanceId', (req, res, next) => {
+  db.query(`SELECT a.staff_id
+  ,a.record_date
+  ,a.type_of_leave
+  ,a.latitude
+  ,a.longitude
+  ,a.notes
+  ,a.time_in
+  ,a.leave_time
+  ,a.description
+  ,a.created_by
+  ,a.modified_by
+  ,CONCAT_WS(' ', s.first_name, s.last_name) AS staff_name 
+  ,s.team AS staff_team 
+  FROM attendance a LEFT JOIN (staff s) ON (a.staff_id = s.staff_id) 
+  WHERE attendance_id = ${db.escape(req.body.attendance_id)}`,
+    (err, result) => {
+       
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
 
 app.post('/edit-timesheet', (req, res, next) => {
   db.query(`UPDATE attendance 
