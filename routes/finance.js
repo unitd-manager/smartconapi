@@ -17,6 +17,7 @@ app.use(fileUpload({
   createParentPath: true
 }));
 
+
 app.post('/getFinancesById', (req, res, next) => {
   db.query(`SELECT order_id
   , o.project_id
@@ -25,6 +26,8 @@ app.post('/getFinancesById', (req, res, next) => {
   ,o.order_status
   ,o.invoice_terms
   ,o.notes
+  ,o.created_by
+  ,o.modified_by
   ,o.shipping_first_name
   ,o.shipping_address1
   ,o.shipping_address2
@@ -32,6 +35,8 @@ app.post('/getFinancesById', (req, res, next) => {
   ,o.shipping_address_po_code 
   ,o.delivery_date
   ,o.delivery_terms
+  ,o.creation_date
+  ,o.modification_date
   ,o.cust_address1
   ,o.cust_address2
   ,o.cust_address_country
@@ -69,7 +74,7 @@ app.post('/getFinancesById', (req, res, next) => {
 
       }
 
- }
+  }
  );
 });
 
@@ -81,8 +86,6 @@ app.get('/getFinances', (req, res, next) => {
   ,o.order_status
   ,o.invoice_terms
   ,o.notes
-  ,o.creation_date
-  ,o.modification_date
   ,o.shipping_first_name
   ,o.shipping_address1
   ,o.shipping_address2
@@ -94,7 +97,11 @@ app.get('/getFinances', (req, res, next) => {
   ,o.cust_address2
   ,o.cust_address_country
   ,o.cust_address_po_code
-  ,gc2.name AS shipping_country_namenode App.js
+  ,o.creation_date
+  ,o.modification_date
+  ,o.created_by
+  ,o.modified_by
+  ,gc2.name AS shipping_country_name
   ,c.company_name AS company_name
   ,c.website AS company_website
   ,c.fax AS company_fax
@@ -131,7 +138,6 @@ app.get('/getFinances', (req, res, next) => {
 
 
 
-
 app.post('/editFinances', (req, res, next) => {
   db.query(`UPDATE orders
             SET invoice_terms=${db.escape(req.body.invoice_terms)}
@@ -159,12 +165,7 @@ app.post('/editFinances', (req, res, next) => {
 });
 
 app.get('/getTabOrderItemPanel', (req, res, next) => {
-  db.query(`SELECT oi.order_item_id
-  , oi.unit_price
-  ,oi.qty
-  ,oi.discount_percentage
-  ,oi.description
-  ,oi.remarks FROM order_item oi WHERE oi.order_id != '' ORDER BY oi.order_item_id ASC`,
+  db.query(`SELECT order_item_id, unit_price,qty,discount_percentage,description,remarks FROM order_item WHERE order_id != '' ORDER BY order_item_id ASC;`,
     (err, result) => {
      
       if (err) {
@@ -183,10 +184,12 @@ app.get('/getTabOrderItemPanel', (req, res, next) => {
 app.get('/getTabInvoicePortalDisplay', (req, res, next) => {
   db.query(`SELECT i.quote_code
                    ,i.po_number
+                   ,i.invoice_code
                    ,i.project_location
                    ,i.project_reference
                    ,i.discount
                    ,i.code
+                   ,i.status
                    ,i.so_ref_no
                    ,i.site_code
                    ,i.attention
