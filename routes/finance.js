@@ -429,7 +429,23 @@ app.delete('/deleteorders', (req, res, next) => {
   });
 });
 
-
+app.get('/getMaxInvoiceCode', (req, res, next) => {
+  db.query(`SELECT MAX(invoice_code) as inv_code FROM invoice`,
+    (err, result) => {
+     
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+        }
+ 
+    }
+  );
+}); 
 
 app.post('/insertInvoice', (req, res, next) => {
 
