@@ -22,8 +22,10 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
         (err, result) => {
            
           if (err) {
-            console.log("error: ", err);
-            return;
+             return res.status(400).send({
+                  data: err,
+                  msg:'Failed'
+                });
           } else {
                 return res.status(200).send({
                   data: result,
@@ -44,8 +46,10 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
         (err, result) => {
          
           if (err) {
-            console.log("error: ", err);
-            return;
+             return res.status(400).send({
+                  data: err,
+                  msg:'Failed'
+                });
           } else {
                 return res.status(200).send({
                   data: result,
@@ -72,9 +76,10 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
       let sql = "INSERT INTO delivery_order SET ?";
       let query = db.query(sql, data,(err, result) => {
         if (err) {
-          console.log("error: ", err);
-          result(err, null);
-          return;
+          return res.status(400).send({
+                  data: err,
+                  msg:'Failed'
+                });
         } else {
               return res.status(200).send({
                 data: result,
@@ -90,8 +95,10 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
       let sql = "DELETE FROM delivery_order WHERE ?";
       let query = db.query(sql, data,(err, result) => {
         if (err) {
-          console.log("error: ", err);
-          return;
+           return res.status(400).send({
+                  data: err,
+                  msg:'Failed'
+                });
         } else {
               return res.status(200).send({
                 data: result,
@@ -118,8 +125,10 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
           (err, result) => {
              
             if (err) {
-              console.log("error: ", err);
-              return;
+               return res.status(400).send({
+                  data: err,
+                  msg:'Failed'
+                });
             } else {
                   return res.status(200).send({
                     data: result,
@@ -144,8 +153,10 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
           (err, result) => {
            
             if (err) {
-              console.log("error: ", err);
-              return;
+               return res.status(400).send({
+                  data: err,
+                  msg:'Failed'
+                });
             } else {
                   return res.status(200).send({
                     data: result,
@@ -159,22 +170,24 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
 
       app.post('/insertDeliveryHistoryOrder', (req, res, next) => {
   
-        let data = {product_id	: req.body.product_id	,
+        let data = {
+            product_id	: req.body.product_id	,
                     purchase_order_id: req.body.purchase_order_id,
                     delivery_order_id: req.body.delivery_order_id,
                     status: req.body.status,
                     quantity: req.body.quantity,
                     creation_date	: req.body.creation_date	,
                     modification_date: req.body.modification_date,
-                    remarks: req.body.remarks,
+                    remarks: req.body.remarks
                      };
       
         let sql = "INSERT INTO delivery_order_history SET ?";
         let query = db.query(sql, data,(err, result) => {
           if (err) {
-            console.log("error: ", err);
-            result(err, null);
-            return;
+           return res.status(400).send({
+                  data: err,
+                  msg:'Failed'
+                });
           } else {
                 return res.status(200).send({
                   data: result,
@@ -201,9 +214,4 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
         });
       });
     
-app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
-    console.log(req.userData);
-    res.send('This is the secret content. Only logged in users can see that!');
-  });
-  
   module.exports = app;

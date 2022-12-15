@@ -16,6 +16,36 @@ app.use(cors());
 app.use(fileUpload({
     createParentPath: true
 }));
+
+
+app.get('/getTrainingById', (req, res, next) => {
+  db.query(`SELECT t.title
+  ,t.date
+  ,t.to_date
+  ,t.trainer
+  ,t.description
+  ,t.training_company_name
+  ,t.training_company_address
+  ,t.training_company_email
+  ,t.training_company_phone
+  FROM training t
+  WHERE t.training_id !=  ${db.escape(req.body.training_id)}`,
+    (err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
 app.get('/getTraining', (req, res, next) => {
   db.query(`SELECT t.title
   ,t.date

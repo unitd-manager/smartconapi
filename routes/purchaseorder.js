@@ -20,13 +20,15 @@ app.use(fileUpload({
 
 
 app.get('/TabPurchaseOrder', (req, res, next) => {
-  db.query(`SELECT DISTINCT 
-  po.title
+  db.query(`SELECT DISTINCT
+  po.purchase_order_id 
+  ,po.title
   ,po.status
   ,po.supplier_id
   ,po.priority
   ,po.notes
   ,po.purchase_order_date
+  ,po.creation_date
   ,po.follow_up_date
   ,po.delivery_terms
   ,po.payment_terms
@@ -52,6 +54,48 @@ app.get('/TabPurchaseOrder', (req, res, next) => {
     }
   );
 });
+
+app.post('/getPurchaseOrderByPurchaseOrderId', (req, res, next) => {
+  db.query(`SELECT DISTINCT
+  po.purchase_order_id 
+  ,po.title
+  ,po.status
+  ,po.company_id_supplier
+  ,po.priority
+  ,po.notes
+  ,po.purchase_order_date
+  ,po.creation_date
+  ,po.follow_up_date
+  ,po.delivery_terms
+  ,po.payment_terms
+  ,po.payment_status
+  ,po.supplier_inv_code
+  ,po.po_code
+  ,s.company_name
+  FROM purchase_order po 
+  LEFT JOIN (supplier s) ON (po.company_id_supplier = s.supplier_id) WHERE po.purchase_order_id = ${db.escape(req.body.purchase_order_id)}`,
+  (err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } 
+    if (result.length == 0) {
+      return res.status(400).send({
+        msg: 'No result found'
+      });
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Success'
+          });
+
+      }
+
+  }
+);
+});
+
 
 app.post('/editTabPurchaseOrder', (req, res, next) => {
   db.query(`UPDATE purchase_order

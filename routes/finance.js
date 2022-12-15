@@ -17,6 +17,67 @@ app.use(fileUpload({
   createParentPath: true
 }));
 
+
+app.post('/getFinancesById', (req, res, next) => {
+  db.query(`SELECT order_id
+  , o.project_id
+  ,o.project_type
+  ,o.creation_date
+  ,o.order_status
+  ,o.invoice_terms
+  ,o.notes
+  ,o.created_by
+  ,o.modified_by
+  ,o.shipping_first_name
+  ,o.shipping_address1
+  ,o.shipping_address2
+  ,o.shipping_address_country
+  ,o.shipping_address_po_code 
+  ,o.delivery_date
+  ,o.delivery_terms
+  ,o.creation_date
+  ,o.modification_date
+  ,o.cust_address1
+  ,o.cust_address2
+  ,o.cust_address_country
+  ,o.cust_address_po_code
+  ,gc2.name AS shipping_country_name
+  ,c.company_name AS company_name
+  ,c.website AS company_website
+  ,c.fax AS company_fax
+  ,c.phone AS company_phone
+  ,c.address_flat AS company_address_flat
+  ,c.address_street AS company_address_street
+  ,c.address_town AS company_address_town
+  ,c.address_state AS company_address_state
+  ,gc3.name AS company_country_name
+  ,(SELECT (SUM(oi.unit_price * oi.qty) + o.shipping_charge) 
+  FROM order_item oi 
+  WHERE oi.order_id = o.order_id) AS order_amount
+  ,q.quote_code,p.project_code FROM orders o 
+  LEFT JOIN geo_country gc2 ON (o.shipping_address_country_code = gc2.country_code) 
+  LEFT JOIN company c ON (o.company_id = c.company_id) 
+  LEFT JOIN geo_country gc3 ON (c.address_country = gc3.country_code) 
+  LEFT JOIN quote q ON o.quote_id = q.quote_id 
+  LEFT JOIN project p ON o.project_id = p.project_id WHERE o.order_id = ${db.escape(req.body.order_id)} `,
+    (err, result) => {
+      if (err) {
+         return res.status(400).send({
+              data: err,
+              msg:'Failed'
+            });
+      } else {
+            return res.status(200).send({
+              data: result[0],
+              msg:'Success'
+            });
+
+      }
+
+  }
+ );
+});
+
 app.get('/getFinances', (req, res, next) => {
   db.query(`SELECT order_id
   , o.project_id
@@ -29,12 +90,17 @@ app.get('/getFinances', (req, res, next) => {
   ,o.shipping_address1
   ,o.shipping_address2
   ,o.shipping_address_country
+  ,o.shipping_address_po_code 
   ,o.delivery_date
   ,o.delivery_terms
   ,o.cust_address1
   ,o.cust_address2
   ,o.cust_address_country
   ,o.cust_address_po_code
+  ,o.creation_date
+  ,o.modification_date
+  ,o.created_by
+  ,o.modified_by
   ,gc2.name AS shipping_country_name
   ,c.company_name AS company_name
   ,c.website AS company_website
@@ -118,10 +184,12 @@ app.get('/getTabOrderItemPanel', (req, res, next) => {
 app.get('/getTabInvoicePortalDisplay', (req, res, next) => {
   db.query(`SELECT i.quote_code
                    ,i.po_number
+                   ,i.invoice_code
                    ,i.project_location
                    ,i.project_reference
                    ,i.discount
                    ,i.code
+                   ,i.status
                    ,i.so_ref_no
                    ,i.site_code
                    ,i.attention
@@ -361,7 +429,109 @@ app.delete('/deleteorders', (req, res, next) => {
   });
 });
 
+app.get('/getMaxInvoiceCode', (req, res, next) => {
+  db.query(`SELECT MAX(invoice_code) as inv_code FROM invoice`,
+    (err, result) => {
+     
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+        }
+ 
+    }
+  );
+}); 
 
+app.post('/insertInvoice', (req, res, next) => {
+
+  let data = {
+    invoice_code: req.body.invoice_code
+    , invoice_amount: req.body.invoice_amount
+    , invoice_date: req.body.invoice_date
+    , mode_of_payment: req.body.mode_of_payment
+    , status: req.body.status
+    , creation_date: req.body.creation_date
+    , modification_date: req.body.modification_date
+    , flag: req.body.flag
+    , created_by: req.body.created_by
+    , invoice_type: req.body.invoice_type
+    , invoice_due_date: req.body.invoice_due_date
+    , invoice_terms: req.body.invoice_terms
+    , notes: req.body.notes
+    , cst: req.body.cst
+    , vat: req.body.vat
+    , cst_value: req.body.cst_value
+    , vat_value: req.body.vat_value
+    , frieght: req.body.frieght
+    , p_f: req.body.p_f
+    , discount: req.body.discount
+    , invoice_code_vat: req.body.invoice_code_vat
+    , invoice_used: req.body.invoice_used
+    , invoice_code_vat_quote: req.body.invoice_code_vat_quote
+    , site_id: req.body.site_id
+    , manual_invoice_seq: req.body.manual_invoice_seq
+    , apply_general_vat: req.body.apply_general_vat
+    , selling_company: req.body.selling_company
+    , project_id: req.body.project_id
+    , invoice_paid_date: req.body.invoice_paid_date
+    , modified_by: req.body.modified_by
+    , invoice_sent_out: req.body.invoice_sent_out
+    , gst_percentage: req.body.gst_percentage
+    , title: req.body.title
+    , rate_text: req.body.rate_text
+    , qty_text: req.body.qty_text
+    , start_date: req.body.start_date
+    , end_date: req.body.end_date
+    , reference_no: req.body.reference_no
+    , CBF_Ref_No: req.body.CBF_Ref_No
+    , invoice_code_user: req.body.invoice_code_user
+    , invoice_sent_out_date: req.body.invoice_sent_out_date
+    , payment_terms: req.body.payment_terms
+    , po_number: req.body.po_number
+    , project_location: req.body.project_location
+    , project_reference: req.body.project_reference
+    , quote_code: req.body.quote_code
+    , invoice_manual_code: req.body.invoice_manual_code
+    , code: req.body.code
+    , site_code: req.body.site_code
+    , attention: req.body.attention
+    , reference: req.body.reference
+ };
+  let sql = "INSERT INTO invoice SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Success'
+          });
+    }
+  });
+});
+
+app.delete('/deleteInvoice', (req, res, next) => {
+
+  let data = {invoice_id: req.body.invoice_id};
+  let sql = "DELETE FROM invoice WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Success'
+          });
+    }
+  });
+});
 
 app.post('/insertorder_item', (req, res, next) => {
 
