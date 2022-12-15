@@ -196,5 +196,22 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
           }
         });
       });
+      app.delete('/deletedeliveryOrder', (req, res, next) => {
+  
+        let data = {delivery_order_history_id : req.body.delivery_order_history_id};
+        let sql = "DELETE FROM delivery_order_history WHERE ?";
+        let query = db.query(sql, data,(err, result) => {
+          if (err) {
+            console.log("error: ", err);
+            return;
+          } else {
+                return res.status(200).send({
+                  data: result,
+                  msg:'Tender has been removed successfully'
+                });
+          
+          }
+        });
+      });
     
   module.exports = app;

@@ -24,7 +24,7 @@ app.get('/TabPurchaseOrder', (req, res, next) => {
   po.purchase_order_id 
   ,po.title
   ,po.status
-  ,po.company_id_supplier
+  ,po.supplier_id
   ,po.priority
   ,po.notes
   ,po.purchase_order_date
@@ -37,7 +37,7 @@ app.get('/TabPurchaseOrder', (req, res, next) => {
   ,po.po_code
   ,s.company_name
   FROM purchase_order po 
-  LEFT JOIN (supplier s) ON (po.company_id_supplier = s.supplier_id) WHERE po.project_id != '' ORDER BY po.purchase_order_id ASC;`,
+  LEFT JOIN (supplier s) ON (po.supplier_id = s.supplier_id) WHERE po.project_id != '' ORDER BY po.purchase_order_id ASC;`,
     (err, result) => {
        
       if (err) {
@@ -100,7 +100,7 @@ app.post('/getPurchaseOrderByPurchaseOrderId', (req, res, next) => {
 app.post('/editTabPurchaseOrder', (req, res, next) => {
   db.query(`UPDATE purchase_order
             SET title=${db.escape(req.body.title)}
-            ,company_id_supplier=${db.escape(req.body.company_id_supplier)}
+            ,supplier_id=${db.escape(req.body.supplier_id)}
             ,notes=${db.escape(req.body.notes)}
             ,purchase_order_date=${db.escape(req.body.purchase_order_date)}
             ,follow_up_date=${db.escape(req.body.follow_up_date)}
@@ -129,7 +129,7 @@ app.post('/editTabPurchaseOrder', (req, res, next) => {
 app.post('/insertPurchaseOrder', (req, res, next) => {
 
   let data = {po_code:req.body.po_code
-    ,company_id_supplier: req.body.company_id_supplier
+    ,supplier_id: req.body.supplier_id
    , contact_id_supplier: req.body.contact_id_supplier
    , delivery_terms: req.body.delivery_terms
    , status: req.body.status
@@ -185,7 +185,7 @@ app.post('/insertPurchaseOrder', (req, res, next) => {
 
 app.delete('/deletePurchaseOrder', (req, res, next) => {
 
-  let data = {company_id_supplier: req.body.company_id_supplier};
+  let data = {supplier_id: req.body.supplier_id};
   let sql = "DELETE FROM purchase_order WHERE ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
@@ -313,6 +313,8 @@ app.post('/editTabPurchaseOrderLineItem', (req, res, next) => {
       }
     });
   });
+
+  
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);

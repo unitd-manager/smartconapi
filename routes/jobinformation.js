@@ -21,6 +21,7 @@ app.use(fileUpload({
 
 app.get('/getjobinformation', (req, res, next) => {
   db.query(`SELECT j.act_join_date
+             ,j.job_information_id
             ,j.duty_responsibility
             ,j.duration_of_employment
             ,j.place_of_work
@@ -104,7 +105,93 @@ app.get('/getjobinformation', (req, res, next) => {
   );
 });
 
-app.post('/editjobinformation', (req, res, next) => {
+app.post('/EditjobinformationById', (req, res, next) => {
+  db.query(`SELECT j.act_join_date
+             ,j.job_information_id
+            ,j.duty_responsibility
+            ,j.duration_of_employment
+            ,j.place_of_work
+            ,j.work_hour_details
+            ,j.rest_day_per_week
+            ,j.paid_annual_leave_per_year
+            ,j.paid_outpatient_sick_leave_per_year
+            ,j.paid_hospitalisation_leave_per_year
+            ,j.paid_medical_examination_fee
+            ,j.other_type_of_leave
+            ,j.other_medical_benefits
+            ,j.probationary
+            ,j.emp_type
+            ,j.designation
+            ,j.department
+            ,j.join_date
+            ,j.status
+            ,j.payment_type
+            ,j.salary_payment_dates
+            ,j.overtime_payment_dates
+            ,j.working_days
+            ,j.basic_pay
+            ,j.overtime
+            ,j.overtime_pay_rate
+            ,j.allowance1
+            ,j.allowance2
+            ,j.allowance3
+            ,j.allowance4
+            ,j.allowance5
+            ,j.deduction1
+            ,j.deduction2
+            ,j.deduction3
+            ,j.levy_amount
+            ,j.cpf_applicable
+            ,j.govt_donation
+            ,j.income_tax_id
+            ,j.income_tax_amount
+            ,j.cpf_account_no
+            ,j.mode_of_payment
+            ,j.account_no
+            ,j.bank_name
+            ,j.bank_code
+            ,j.branch_code
+            ,j.notice_period_for_termination
+            ,j.resignation_notice_date
+            ,j.termination_date
+            ,j.termination_reason
+            ,j.departure_date
+            ,e.emp_code
+            ,CONCAT_WS(' ', e.first_name, e.last_name) AS employee_name
+            ,e.first_name
+            ,e.last_name
+            ,e.phone
+            ,e.email
+            ,e.salary
+            ,e.nric_no
+            ,e.position
+            ,e.date_of_expiry
+            ,e.spass_no
+            ,e.fin_no
+            ,e.employee_work_type
+            ,e.date_of_birth
+            ,e.citizen
+            FROM job_information j
+            LEFT JOIN (employee e) ON (e.employee_id = j.employee_id)
+            WHERE j.job_information_id=${db.escape(req.body.job_information_id)}
+            ORDER BY e.first_name ASC`,
+    (err, result) => {
+       
+      if (err) {
+          console.log("error: ", err);
+          return;
+        } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Tender has been removed successfully'
+            });
+      }
+ 
+    }
+  );
+});
+
+app.post('/edit-jobinformation', (req, res, next) => {
     db.query(`UPDATE job_information
               SET act_join_date=${db.escape(req.body.act_join_date)}
               ,duty_responsibility=${db.escape(req.body.duty_responsibility)}
@@ -269,6 +356,27 @@ app.post('/editjobinformation', (req, res, next) => {
                   }
                 });
               });      
+              app.get('/getEmployee', (req, res, next) => {
+                db.query(`SELECT 
+               e.employee_name
+                FROM employee e`,
+                  (err, result) => {
+                     
+                    if (err) {
+                      console.log("error: ", err);
+                      return;
+                    } else {
+                          return res.status(200).send({
+                            data: result,
+                            msg:'Success'
+                          });
+              
+                      }
+               
+                  }
+                );
+              });
+              
               
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
     console.log(req.userData);
