@@ -75,6 +75,25 @@ app.get('/getTraining', (req, res, next) => {
 });
 
 
+app.get('/getEmployeeName', (req, res, next) => {
+  db.query(`SELECT employee_name
+  FROM employee`,
+    (err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
 app.post('/edit-Training', (req, res, next) => {
   db.query(`UPDATE training  
             SET title=${db.escape(req.body.title)}
