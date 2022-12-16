@@ -358,6 +358,7 @@ app.get('/TabPurchaseOrderLineItem', (req, res, next) => {
  
     }
   );
+    });
     app.post('/TabPurchaseOrderLineItemTable', (req, res, next) => {
   db.query(`SELECT
      s.company_name
