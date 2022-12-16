@@ -200,34 +200,7 @@ app.delete('/deletePurchaseOrder', (req, res, next) => {
   });
 });
 
-app.get('/TabPurchaseOrderLineItem', (req, res, next) => {
-  db.query(`SELECT
-  po.description
-  ,po.unit
-  ,po.amount
-  ,po.selling_price
-  ,po.cost_price
-  ,po.status
-  ,po.modification_date
-  ,po.creation_date
-  ,po.modified_by FROM po_product po WHERE po.purchase_order_id != '' ORDER BY po.item_title ASC`,
-    (err, result) => {
-       
-      if (err) {
-        console.log("error: ", err);
-        return;
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            
-            });
 
-        }
- 
-    }
-  );
-});
 
 app.post('/editTabPurchaseOrderLineItem', (req, res, next) => {
   db.query(`UPDATE po_product
