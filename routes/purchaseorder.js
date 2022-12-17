@@ -200,34 +200,7 @@ app.delete('/deletePurchaseOrder', (req, res, next) => {
   });
 });
 
-app.get('/TabPurchaseOrderLineItem', (req, res, next) => {
-  db.query(`SELECT
-  po.description
-  ,po.unit
-  ,po.amount
-  ,po.selling_price
-  ,po.cost_price
-  ,po.status
-  ,po.modification_date
-  ,po.creation_date
-  ,po.modified_by FROM po_product po WHERE po.purchase_order_id != '' ORDER BY po.item_title ASC`,
-    (err, result) => {
-       
-      if (err) {
-        console.log("error: ", err);
-        return;
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            
-            });
 
-        }
- 
-    }
-  );
-});
 
 app.post('/editTabPurchaseOrderLineItem', (req, res, next) => {
   db.query(`UPDATE po_product
@@ -314,8 +287,96 @@ app.post('/editTabPurchaseOrderLineItem', (req, res, next) => {
     });
   });
 
-  
+  app.get('/suppliers', (req, res, next) => {
+  db.query(`SELECT * FROM supplier`,
+    (err, result) => {
+       
+      if (err) {
+       return res.status(400).send({
+              data: err,
+              msg:'Failed'
+            
+            });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            
+            });
 
+        }
+ 
+    }
+  );
+});
+app.get('/TabPurchaseOrderLineItem', (req, res, next) => {
+    db.query(`SELECT * FROM product`,
+    (err, result) => {
+       
+      if (err) {
+       return res.status(400).send({
+              data: err,
+              msg:'Success'
+            
+            });
+
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            
+            });
+
+        }
+ 
+    }
+  );
+    });
+    app.post('/TabPurchaseOrderLineItemTable', (req, res, next) => {
+  db.query(`SELECT
+     s.company_name
+     ,po.item_title
+    ,po.description
+    ,po.purchase_order_id
+    ,po.unit
+    ,po.amount
+    ,po.selling_price
+    ,po.qty
+    ,po.cost_price
+    ,po.status
+    ,po.modification_date
+    ,po.creation_date
+    ,po.modified_by
+    FROM po_product po
+    LEFT JOIN (purchase_order p) ON (po.purchase_order_id =p.purchase_order_id)
+    LEFT JOIN (supplier s) ON (p.supplier_id = s.supplier_id)
+    WHERE po.purchase_order_id != '' AND p.project_id =${db.escape(req.body.project_id)}  ORDER BY po.item_title ASC`,
+    (err, result) => {
+       
+      if (err) {
+          return res.status(400).send({
+            data: err,
+            msg:'Failed'
+          });
+      } else {
+          
+          const groupByCategory = result.reduce((group, product) => {
+          const { purchase_order_id } = product;
+          group[purchase_order_id] = group[purchase_order_id] ?? [];
+          group[purchase_order_id].push(product);
+          return group;
+        }, {});
+           return res.status(200).send({
+              data: groupByCategory,
+              msg:'Success'
+            
+            });
+
+        }
+ 
+    }
+  );
+});
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');

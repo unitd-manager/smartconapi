@@ -17,7 +17,7 @@ app.use(fileUpload({
     createParentPath: true
 }));
 
-app.get('/SubConWorkOrderPortal', (req, res, next) => {
+app.post('/SubConWorkOrderPortal', (req, res, next) => {
   db.query(`SELECT 
   q.sub_con_work_order_id
   ,q.work_order_date
@@ -28,7 +28,7 @@ app.get('/SubConWorkOrderPortal', (req, res, next) => {
   ,s.company_name
    FROM sub_con_work_order q 
    LEFT JOIN (project p) ON (p.project_id = q.project_id) 
-   LEFT JOIN (sub_con s) ON (s.sub_con_id = q.sub_con_id) WHERE p.project_id !=''`,
+   LEFT JOIN (sub_con s) ON (s.sub_con_id = q.sub_con_id) WHERE p.project_id =${db.escape(req.body.project_id)}`,
     (err, result) => {
        
 
@@ -150,15 +150,6 @@ app.get('/PaymentHistoryPortal', (req, res, next) => {
  
     }
   );
-});
-
-
-
-
-
-app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
-  console.log(req.userData);
-  res.send('This is the secret content. Only logged in users can see that!');
 });
 
 module.exports = app;
