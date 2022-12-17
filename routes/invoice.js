@@ -19,6 +19,7 @@ app.use(fileUpload({
 
 app.get('/getMainInvoice', (req, res, next) => {
   db.query(`SELECT i.invoice_code
+  ,i.invoice_id
   ,i.invoice_date
   ,i.invoice_amount
   ,i.invoice_due_date
@@ -47,7 +48,17 @@ app.get('/getMainInvoice', (req, res, next) => {
   ,ca.address_state AS comp_mul_address_state 
   ,ca.address_country AS comp_mul_address_country 
   ,DATEDIFF(Now() ,i.invoice_due_date) AS age 
-  ,(IF(ISNULL(( SELECT FORMAT(SUM(invoice_amount), 0) FROM invoice WHERE project_id = i.project_id AND invoice_code < i.invoice_code AND status != LOWER('Cancelled') )), 0, ( SELECT FORMAT(SUM(invoice_amount), 0) FROM invoice WHERE project_id = i.project_id AND invoice_code < i.invoice_code AND status != LOWER('Cancelled') ))) AS prior_invoice_billed ,b.title AS branch_name FROM invoice i LEFT JOIN (project p) ON (i.project_id = p.project_id) LEFT JOIN (contact cont) ON (p.contact_id = cont.contact_id) LEFT JOIN (company c) ON (p.company_id = c.company_id) LEFT JOIN (company_address ca)ON (cont.company_address_id = ca.company_address_id) LEFT JOIN branch b ON(p.branch_id = b.branch_id) WHERE i.invoice_id != '' ORDER BY i.invoice_code DESC`,
+  ,(IF(ISNULL(( SELECT FORMAT(SUM(invoice_amount), 0) 
+  FROM invoice 
+  WHERE project_id = i.project_id AND invoice_code < i.invoice_code AND status != LOWER('Cancelled') )), 0, ( SELECT FORMAT(SUM(invoice_amount), 0) 
+  FROM invoice 
+  WHERE project_id = i.project_id AND invoice_code < i.invoice_code AND status != LOWER('Cancelled') ))) AS prior_invoice_billed ,b.title AS branch_name 
+  FROM invoice i LEFT JOIN (project p) ON (i.project_id = p.project_id) 
+  LEFT JOIN (contact cont) ON (p.contact_id = cont.contact_id) 
+  LEFT JOIN (company c) ON (p.company_id = c.company_id) 
+  LEFT JOIN (company_address ca)ON (cont.company_address_id = ca.company_address_id) 
+  LEFT JOIN branch b ON(p.branch_id = b.branch_id)
+   WHERE i.invoice_id != '' ORDER BY i.invoice_code DESC`,
     (err, result) => {
 
       if (err) {
