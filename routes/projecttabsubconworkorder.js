@@ -17,7 +17,7 @@ app.use(fileUpload({
     createParentPath: true
 }));
 
-app.get('/SubConWorkOrderPortal', (req, res, next) => {
+app.post('/SubConWorkOrderPortal', (req, res, next) => {
   db.query(`SELECT 
   q.sub_con_work_order_id
   ,q.work_order_date
