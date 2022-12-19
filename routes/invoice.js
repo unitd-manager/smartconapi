@@ -18,13 +18,13 @@ app.use(fileUpload({
 }));
 
 app.get('/getMainInvoice', (req, res, next) => {
-  db.query(`SELECT i.invoice_code
-  ,i.invoice_id
+  db.query(`SELECT 
+  i.invoice_id
+  ,i.invoice_code
   ,i.invoice_date
   ,i.invoice_amount
   ,i.invoice_due_date
   ,i.title
-  ,c.company_name
   ,i.status
   ,i.invoice_type 
   ,cont.contact_id 
