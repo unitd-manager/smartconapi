@@ -51,20 +51,19 @@ app.get('/MaterialPurchaseOrder', (req, res, next) => {
     }
   );
 });
-
+//for EDIT po
 app.post('/editMaterialTabPurchaseOrder', (req, res, next) => {
   db.query(`UPDATE purchase_order
-            SET title=${db.escape(req.body.title)}
-            ,mobile=${db.escape(req.body.mobile)}
+            SET supplier_id=${db.escape(req.body.supplier_id)}
+            ,po_date=${db.escape(req.body.po_date)}
+            ,delivery_date=${db.escape(req.body.delivery_date)}
+            ,delivery_to=${db.escape(req.body.delivery_to)}
             ,contact=${db.escape(req.body.contact)}
+            ,mobile=${db.escape(req.body.mobile)}
+            ,payment_terms=${db.escape(req.body.payment_terms)}
+            ,payment=${db.escape(req.body.payment)}
             ,project=${db.escape(req.body.project)}
             ,shipping_method=${db.escape(req.body.shipping_method)}
-            ,delivery_terms=${db.escape(req.body.delivery_terms)}
-            ,payment_terms=${db.escape(req.body.payment_terms)}
-            ,delivery_date=${db.escape(req.body.delivery_date)}
-            ,company_id_supplier=${db.escape(req.body.company_id_supplier)}
-            ,delivery_date=${db.escape(req.body.delivery_date)}
-           ,payment_terms=${db.escape(req.body.payment_terms)}
             WHERE project_id = ${db.escape(req.body.project_id)}`,
     (err, result) => {
      
@@ -200,6 +199,7 @@ app.post('/editTabPurchaseOrderLineItem', (req, res, next) => {
             SET item_title=${db.escape(req.body.item_title)}
             ,description=${db.escape(req.body.description)}
             ,unit=${db.escape(req.body.unit)}
+            ,quantity=${db.escape(req.body.quantity)}
             ,amount=${db.escape(req.body.amount)}
             ,selling_price=${db.escape(req.body.selling_price)}
             ,cost_price=${db.escape(req.body.cost_price)}
@@ -283,6 +283,29 @@ app.post('/editTabPurchaseOrderLineItem', (req, res, next) => {
 
   //for product title//
   app.get('/TabProduct', (req, res, next) => {
+    db.query(`SELECT
+    title
+      FROM product p;
+      `,
+      (err, result) => {
+         
+        if (err) {
+          console.log("error: ", err);
+          return;
+        } else {
+              return res.status(200).send({
+                data: result,
+                msg:'Success'
+              
+              });
+  
+          }
+   
+      }
+    );
+  });
+
+  app.get('/insertProduct', (req, res, next) => {
     db.query(`SELECT
     title
       FROM product p;
