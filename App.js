@@ -82,7 +82,7 @@ const media = require('./routes/media.js');
 const projecttabmaterialrequest = require('./routes/projecttabmaterialrequest.js');
 const materialpurchaseorder = require('./routes/materialpurchaseorder.js');
 const leave = require('./routes/leave.js');
-
+const Auth = require('./routes/auth.js');
 
 
 
@@ -125,7 +125,7 @@ app.use('/media', media);
 app.use('/projecttabmaterialrequest', projecttabmaterialrequest);
 app.use('/materialpurchaseorder', materialpurchaseorder);
 app.use('/leave', leave);
-
+app.use('/api', Auth);
 
 
 
