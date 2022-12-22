@@ -18,8 +18,32 @@ app.use(fileUpload({
 }));
 app.get('/getExpenseHead', (req, res, next) => {
   db.query(`select title
-  From expense_sub_group
-  Where expense_sub_group_id  !=''`,
+            ,expense_group_id
+            ,CONCAT_WS(' ', created_by, creation_date) AS updated_by
+            From expense_group
+            where expense_group_id  !=''`,
+    (err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
+
+app.post('/getExpenseHeadByid', (req, res, next) => {
+  db.query(`select title
+            ,expense_group_id
+            From expense_group
+            where expense_group_id  =  ${db.escape(req.body.expense_group_id)}`,
     (err, result) => {
       if (err) {
         console.log("error: ", err);
@@ -38,9 +62,9 @@ app.get('/getExpenseHead', (req, res, next) => {
 
 
 app.post('/editExpenseHead', (req, res, next) => {
-  db.query(`UPDATE expense_sub_group 
-            SET title=${db.escape(req.body.title)}
-            WHERE expense_sub_group_id = ${db.escape(req.body.expense_sub_group_id)}`,
+  db.query(`UPDATE expense_group 
+            SET title = ${db.escape(req.body.title)}
+            WHERE expense_group_id = ${db.escape(req.body.expense_group_id)}`,
     (err, result) => {
      
       if (err) {
@@ -81,7 +105,7 @@ app.post('/insertExpGroup', (req, res, next) => {
   });
 });
 
-app.delete('/deleteExpGroup', (req, res, next) => {
+app.post('/deleteExpGroup', (req, res, next) => {
 
   let data = {expense_group_id: req.body.expense_group_id};
   let sql = "DELETE FROM expense_sub_group WHERE ?";
@@ -102,8 +126,8 @@ app.delete('/deleteExpGroup', (req, res, next) => {
 
 app.get('/getExpenseSubHeadLinked', (req, res, next) => {
   db.query(`select title
-  From expense_group
-  Where expense_group_id  !=''`,
+  From expense_sub_group_id
+  Where expense_sub_group  !=''`,
     (err, result) => {
       if (err) {
         console.log("error: ", err);
@@ -120,10 +144,49 @@ app.get('/getExpenseSubHeadLinked', (req, res, next) => {
   );
 });
 
+app.get('/getExpenseSubHeadLinkedById', (req, res, next) => {
+  db.query(`select title
+  From expense_sub_group
+  Where expense_group_id = ${db.escape(req.body.expense_group_id)}`,
+    (err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
+app.post('/editsubExpenseHead', (req, res, next) => {
+  db.query(`UPDATE expense_sub_group 
+            SET title=${db.escape(req.body.title)}
+            WHERE expense_sub_group_id = ${db.escape(req.body.expense_sub_group_id)}`,
+    (err, result) => {
+     
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
+
 app.post('/insertExp', (req, res, next) => {
 
-  let data = {
-     title	: req.body.title	
+  let data = {expense_sub_group_id	:req.body.expense_sub_group_id	
+     ,title	: req.body.title	
    , created_by: req.body.created_by
    , creation_date: req.body.creation_date
    , modified_by: req.body.modified_by
@@ -148,7 +211,7 @@ app.post('/insertExp', (req, res, next) => {
 
 app.delete('/deleteExp', (req, res, next) => {
 
-  let data = {site_id: req.body.site_id};
+  let data = {expense_sub_group_id: req.body.expense_sub_group_id};
   let sql = "DELETE FROM expense_group WHERE ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {

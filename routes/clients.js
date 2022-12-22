@@ -18,9 +18,11 @@ app.use(fileUpload({
 }));
 app.get('/getClients', (req, res, next) => {
   db.query(`Select c.company_name
+  ,c.company_id
   ,c.phone
   ,c.website
   ,c.email
+  ,c.status
   ,c.fax
   ,c.address_flat
   ,c.address_street
@@ -47,6 +49,38 @@ app.get('/getClients', (req, res, next) => {
   );
 });
 
+app.post('/getClientsById', (req, res, next) => {
+  db.query(`Select c.company_name
+  ,c.company_id
+  ,c.phone
+  ,c.website
+  ,c.email
+  ,c.status
+  ,c.fax
+  ,c.address_flat
+  ,c.address_street
+  ,c.address_country
+  ,c.address_po_code
+  ,c.retention
+  ,c.created_by
+  ,c.modified_by
+  From company c 
+  Where c.company_id =${db.escape(req.body.company_id)}`,
+    (err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
 
 
 app.post('/editClients', (req, res, next) => {
@@ -132,9 +166,9 @@ app.post('/insertCompany', (req, res, next) => {
   });
 });
 
-app.delete('/deleteCompany', (req, res, next) => {
+app.post('/deleteCompany', (req, res, next) => {
 
-  let data = {company_name: req.body.company_name};
+  let data = {company_id: req.body.company_id};
   let sql = "DELETE FROM company WHERE ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
@@ -152,14 +186,15 @@ app.delete('/deleteCompany', (req, res, next) => {
 
 app.get('/getContactLinked', (req, res, next) => {
   db.query(`SELECT 
-  c.first_name
+   c.contact_id 
+  ,c.first_name
   ,c.email
   ,c.phone
   ,c.mobile
   ,c.position
   ,c.department 
-
-  FROM contact c WHERE c.contact_id = ''`,
+   ,c.salutation
+  FROM contact c WHERE c.company_id != ''`,
     (err, result) => {
       if (err) {
         console.log("error: ", err);
@@ -175,6 +210,121 @@ app.get('/getContactLinked', (req, res, next) => {
     }
   );
 });
+
+app.post('/getContactLinkedByCompanyId', (req, res, next) => {
+  db.query(`SELECT 
+   c.contact_id 
+  ,c.first_name
+  ,c.email
+  ,c.phone
+  ,c.phone_direct
+  ,c.fax
+  ,c.mobile
+  ,c.position
+  ,c.department 
+   ,c.salutation
+  FROM contact c WHERE company_id =  ${db.escape(req.body.company_id)}`,
+    (err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
+app.post('/getContactLinkedByContactId', (req, res, next) => {
+  db.query(`SELECT c.company_id
+  ,c.contact_id 
+  ,c.first_name
+  ,c.email
+  ,c.phone
+  ,c.phone_direct
+  ,c.fax
+  ,c.mobile
+  ,c.position
+  ,c.department 
+   ,c.salutation
+  FROM contact c WHERE company_id =  ${db.escape(req.body.company_id)}`,
+    (err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
+app.post('/editContact', (req, res, next) => {
+  db.query(`UPDATE contact
+            SET 
+            first_name=${db.escape(req.body.first_name)}
+            ,email=${db.escape(req.body.email)}
+            ,phone_direct=${db.escape(req.body.phone_direct)}
+            ,phone=${db.escape(req.body.phone)}
+            ,mobile=${db.escape(req.body.mobile)}
+            ,fax=${db.escape(req.body.fax)}
+            ,position=${db.escape(req.body.position)}
+            ,department=${db.escape(req.body.department)}
+            ,salutation=${db.escape(req.body.salutation)}
+            WHERE contact_id = ${db.escape(req.body.contact_id)}`,
+    (err, result) => {
+     
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
+
+app.post('/getContactLinkedById', (req, res, next) => {
+  db.query(`SELECT 
+   c.contact_id 
+  ,c.first_name
+  ,c.email
+  ,c.phone
+  ,c.mobile
+  ,c.position
+  ,c.department 
+  ,c.salutation
+  FROM contact c WHERE company_id =  ${db.escape(req.body.company_id)}`,
+    (err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
+
 app.post('/insertContact', (req, res, next) => {
 
   let data = {company_name	:req.body.company_name	
@@ -213,6 +363,7 @@ app.post('/insertContact', (req, res, next) => {
    , member_type	: req.body.member_type
    , address_flat	: req.body.address_flat
    , phone_direct: req.body.phone_direct
+   , company_id : req.body.company_id 
    , salutation: req.body.salutation
    , department: req.body.department
    , created_by: req.body.created_by
@@ -249,9 +400,9 @@ app.post('/insertContact', (req, res, next) => {
   });
 });
 
-app.delete('/deleteContact', (req, res, next) => {
+app.post('/deleteContact', (req, res, next) => {
 
-  let data = {company_name: req.body.company_name};
+  let data = {contact_id: req.body.contact_id};
   let sql = "DELETE FROM contact WHERE ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
