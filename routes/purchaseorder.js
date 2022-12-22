@@ -60,7 +60,7 @@ app.post('/getPurchaseOrderByPurchaseOrderId', (req, res, next) => {
   po.purchase_order_id 
   ,po.title
   ,po.status
-  ,po.company_id_supplier
+  ,po.supplier_id
   ,po.priority
   ,po.notes
   ,po.purchase_order_date
@@ -73,7 +73,7 @@ app.post('/getPurchaseOrderByPurchaseOrderId', (req, res, next) => {
   ,po.po_code
   ,s.company_name
   FROM purchase_order po 
-  LEFT JOIN (supplier s) ON (po.company_id_supplier = s.supplier_id) WHERE po.purchase_order_id = ${db.escape(req.body.purchase_order_id)}`,
+  LEFT JOIN (supplier s) ON (po.supplier_id = s.supplier_id) WHERE po.purchase_order_id = ${db.escape(req.body.purchase_order_id)}`,
   (err, result) => {
     if (err) {
       console.log("error: ", err);

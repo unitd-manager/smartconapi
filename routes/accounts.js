@@ -138,7 +138,7 @@ app.post('/insertexpense', (req, res, next) => {
 
 app.delete('/deleteExpense', (req, res, next) => {
 
-  let data = {group: req.body.group};
+  let data = {expense_id: req.body.expense_id};
   let sql = "DELETE FROM expense WHERE ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
