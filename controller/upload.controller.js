@@ -137,11 +137,10 @@ exports.removeFile = (req, res) => {
 }
 
 exports.uploadMultiple = (req, res) => {
-    
     if (req.files.length) {
       var arrayData = [];
       req.files.forEach(f => {
-       
+        console.log(f.filename);
         let data = {creation_date: new Date()
           , media_type: "attachment"
           , actual_file_name: f.originalname
@@ -154,26 +153,25 @@ exports.uploadMultiple = (req, res) => {
           , alt_tag_data: req.body.alt_tag_data
           , external_link: ""
           , caption: ""
-          , uploaded: 1
+          , uploaded: ""
           , record_id: req.body.record_id
           , modification_date: new Date()
           , description: req.body.description
         };
         arrayData.push(data);
       })
+
       arrayData.forEach(data => {
-          
-        db.query('INSERT INTO media SET ?', data,(err, result) => {
-          if (err) {
-          return res.status(400).send({message:err});
+        db.query('INSERT INTO media SET ?', data, insertErr => {
+          if (insertErr) {
+            throw new Error("Error inserting..." + data.file_name + "! " + insertErr);
           }
-          
+          console.log(`Inserted ${data.file_name}!`);
         });
       });
-       return res.status(200).send({message:'success'});
+      res.status(200).send({message:"Successfully uploaded multiple file"});
     }
 }
-
 
 exports.uploadSingleV2 = async (req, res) => {
     const uploadFile = util.promisify(upload.single('file'));

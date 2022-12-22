@@ -17,17 +17,20 @@ app.use(fileUpload({
     createParentPath: true
 }));
 app.get('/getAccounts', (req, res, next) => {
-  db.query(`Select e.date 
+  db.query(`Select e.date
+  ,e.expense_id 
   ,e.group
   ,e.sub_group 
   ,e.amount 
   ,e.gst_amount 
   ,e.service_charge 
   ,e.total_amount 
-  ,e.description 
+  ,e.description
+  ,e.type
   ,e.invoice_code 
   ,e.invoice_date 
-  ,e.payment_ref_no 
+  ,e.payment_ref_no
+  ,e.payment_status 
   ,e.job_id 
   ,e.remarks 
   FROM expense e 
@@ -49,6 +52,43 @@ app.get('/getAccounts', (req, res, next) => {
   );
 });
 
+app.post('/getAccountsById', (req, res, next) => {
+  db.query(`Select  e.date 
+  ,e.expense_id
+  ,e.group
+  ,e.sub_group 
+  ,e.amount 
+  ,e.gst_amount 
+  ,e.service_charge 
+  ,e.total_amount 
+  ,e.description 
+  ,e.invoice_code 
+  ,e.invoice_date 
+  ,e.payment_ref_no
+  ,e.payment_status 
+  ,e.job_id 
+  ,e.remarks 
+  FROM expense e 
+  WHERE expense_id = ${db.escape(req.body.expense_id)}`,
+    (err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      
+
+        }
+ 
+    }
+  );
+});
+
+
+
 app.post('/editAccounts', (req, res, next) => {
   db.query(`UPDATE expense
             SET date=${db.escape(req.body.date)}
@@ -59,6 +99,7 @@ app.post('/editAccounts', (req, res, next) => {
             ,invoice_code=${db.escape(req.body.invoice_code)}
             ,invoice_date=${db.escape(req.body.invoice_date)}
             ,payment_ref_no=${db.escape(req.body.payment_ref_no)}
+            ,payment_status=${db.escape(req.body.payment_status)}
             ,job_id=${db.escape(req.body.job_id)}
             ,remarks=${db.escape(req.body.remarks)}
             WHERE expense_id = ${db.escape(req.body.expense_id)}`,
@@ -136,7 +177,7 @@ app.post('/insertexpense', (req, res, next) => {
   });
 });
 
-app.delete('/deleteExpense', (req, res, next) => {
+app.post('/deleteExpense', (req, res, next) => {
 
   let data = {expense_id: req.body.expense_id};
   let sql = "DELETE FROM expense WHERE ?";
@@ -152,7 +193,6 @@ app.delete('/deleteExpense', (req, res, next) => {
     }
   });
 });
-
 
 
 

@@ -82,7 +82,10 @@ const media = require('./routes/media.js');
 const projecttabmaterialrequest = require('./routes/projecttabmaterialrequest.js');
 const materialpurchaseorder = require('./routes/materialpurchaseorder.js');
 const leave = require('./routes/leave.js');
-
+<<<<<<< HEAD
+=======
+const Auth = require('./routes/auth.js');
+>>>>>>> 4f60107321a7fbe0c332ae7ef51c4978aed05a9e
 
 
 
@@ -125,7 +128,10 @@ app.use('/media', media);
 app.use('/projecttabmaterialrequest', projecttabmaterialrequest);
 app.use('/materialpurchaseorder', materialpurchaseorder);
 app.use('/leave', leave);
-
+<<<<<<< HEAD
+=======
+app.use('/api', Auth);
+>>>>>>> 4f60107321a7fbe0c332ae7ef51c4978aed05a9e
 
 
 
