@@ -22,8 +22,10 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
         (err, result) => {
            
           if (err) {
-            console.log("error: ", err);
-            return;
+             return res.status(400).send({
+                  data: err,
+                  msg:'Failed'
+                });
           } else {
                 return res.status(200).send({
                   data: result,
@@ -44,8 +46,10 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
         (err, result) => {
          
           if (err) {
-            console.log("error: ", err);
-            return;
+             return res.status(400).send({
+                  data: err,
+                  msg:'Failed'
+                });
           } else {
                 return res.status(200).send({
                   data: result,
@@ -72,9 +76,10 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
       let sql = "INSERT INTO delivery_order SET ?";
       let query = db.query(sql, data,(err, result) => {
         if (err) {
-          console.log("error: ", err);
-          result(err, null);
-          return;
+          return res.status(400).send({
+                  data: err,
+                  msg:'Failed'
+                });
         } else {
               return res.status(200).send({
                 data: result,
@@ -90,8 +95,10 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
       let sql = "DELETE FROM delivery_order WHERE ?";
       let query = db.query(sql, data,(err, result) => {
         if (err) {
-          console.log("error: ", err);
-          return;
+           return res.status(400).send({
+                  data: err,
+                  msg:'Failed'
+                });
         } else {
               return res.status(200).send({
                 data: result,
@@ -102,10 +109,109 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
       });
     });
 
+    app.get('/TabDeliveryOrderHistory', (req, res, next) => {
+      db.query(`SELECT 
+                  p.product_id
+                  ,do.date
+                  ,doh.quantity
+                  ,doh.remarks
+                  ,doh.status
+            FROM delivery_order_history doh
+            LEFT JOIN (delivery_order do) ON (do.delivery_order_id = doh.delivery_order_id)
+            LEFT JOIN (product p) ON (p.product_id = doh.product_id)
+            WHERE do.delivery_order_id !=''
+            ORDER BY doh.delivery_order_history_id ASC
+      `,
+          (err, result) => {
+             
+            if (err) {
+               return res.status(400).send({
+                  data: err,
+                  msg:'Failed'
+                });
+            } else {
+                  return res.status(200).send({
+                    data: result,
+                    msg:'Tender has been removed successfully'
+                  });
+            }
+      
+              
+       
+          }
+        );
+      });
 
-app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
-    console.log(req.userData);
-    res.send('This is the secret content. Only logged in users can see that!');
-  });
+      app.post('/editTabDeliveryOrderHistory', (req, res, next) => {
+        db.query(`UPDATE delivery_order_history
+                  SET product_id=${db.escape(req.body.date)}
+                  quantity=${db.escape(req.body.quantity)}
+                  remarks=${db.escape(req.body.remarks)}
+                  status=${db.escape(req.body.status)}
+                  date=${db.escape(req.body.date)}
+                  WHERE do.delivery_order_id=${db.escape(req.body.do.delivery_order_id)}`,
+          (err, result) => {
+           
+            if (err) {
+               return res.status(400).send({
+                  data: err,
+                  msg:'Failed'
+                });
+            } else {
+                  return res.status(200).send({
+                    data: result,
+                    msg:'Tender has been removed successfully'
+                  });
+            
+            }
+           }
+        );
+      });
+
+      app.post('/insertDeliveryHistoryOrder', (req, res, next) => {
   
+        let data = {
+            product_id	: req.body.product_id	,
+                    purchase_order_id: req.body.purchase_order_id,
+                    delivery_order_id: req.body.delivery_order_id,
+                    status: req.body.status,
+                    quantity: req.body.quantity,
+                    creation_date	: req.body.creation_date	,
+                    modification_date: req.body.modification_date,
+                    remarks: req.body.remarks
+                     };
+      
+        let sql = "INSERT INTO delivery_order_history SET ?";
+        let query = db.query(sql, data,(err, result) => {
+          if (err) {
+           return res.status(400).send({
+                  data: err,
+                  msg:'Failed'
+                });
+          } else {
+                return res.status(200).send({
+                  data: result,
+                  msg:'New Tender has been created successfully'
+                });
+          }
+        });
+      });
+      app.delete('/deletedeliveryOrder', (req, res, next) => {
+  
+        let data = {delivery_order_history_id : req.body.delivery_order_history_id};
+        let sql = "DELETE FROM delivery_order_history WHERE ?";
+        let query = db.query(sql, data,(err, result) => {
+          if (err) {
+            console.log("error: ", err);
+            return;
+          } else {
+                return res.status(200).send({
+                  data: result,
+                  msg:'Tender has been removed successfully'
+                });
+          
+          }
+        });
+      });
+    
   module.exports = app;

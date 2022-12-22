@@ -20,13 +20,15 @@ app.use(fileUpload({
 
 
 app.get('/TabPurchaseOrder', (req, res, next) => {
-  db.query(`SELECT DISTINCT 
-  po.title
+  db.query(`SELECT DISTINCT
+  po.purchase_order_id 
+  ,po.title
   ,po.status
   ,po.company_id_supplier
   ,po.priority
   ,po.notes
   ,po.purchase_order_date
+  ,po.creation_date
   ,po.follow_up_date
   ,po.delivery_terms
   ,po.payment_terms
@@ -52,6 +54,48 @@ app.get('/TabPurchaseOrder', (req, res, next) => {
     }
   );
 });
+
+app.post('/getPurchaseOrderByPurchaseOrderId', (req, res, next) => {
+  db.query(`SELECT DISTINCT
+  po.purchase_order_id 
+  ,po.title
+  ,po.status
+  ,po.company_id_supplier
+  ,po.priority
+  ,po.notes
+  ,po.purchase_order_date
+  ,po.creation_date
+  ,po.follow_up_date
+  ,po.delivery_terms
+  ,po.payment_terms
+  ,po.payment_status
+  ,po.supplier_inv_code
+  ,po.po_code
+  ,s.company_name
+  FROM purchase_order po 
+  LEFT JOIN (supplier s) ON (po.company_id_supplier = s.supplier_id) WHERE po.purchase_order_id = ${db.escape(req.body.purchase_order_id)}`,
+  (err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    } 
+    if (result.length == 0) {
+      return res.status(400).send({
+        msg: 'No result found'
+      });
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Success'
+          });
+
+      }
+
+  }
+);
+});
+
 
 app.post('/editTabPurchaseOrder', (req, res, next) => {
   db.query(`UPDATE purchase_order
@@ -195,6 +239,36 @@ app.post('/editTabPurchaseOrderLineItem', (req, res, next) => {
             ,modification_date=${db.escape(req.body.modification_date)}
             ,creation_date=${db.escape(req.body.creation_date)}
             ,modified_by=${db.escape(req.body.modified_by)}
+            WHERE purchase_order_id = ${db.escape(req.body.purchase_order_id)}`,
+    (err, result) => {
+     
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
+
+app.post('/editPurchaseOrderDetails', (req, res, next) => {
+  db.query(`UPDATE purchase_order
+            SET title=${db.escape(req.body.title)}
+            ,company_id_supplier=${db.escape(req.body.company_id_supplier)}
+            ,status=${db.escape(req.body.status)}
+            ,priority=${db.escape(req.body.priority)}
+            ,flag=${db.escape(req.body.flag)}
+            ,po_date=${db.escape(req.body.po_date)}
+            ,follow_up_date=${db.escape(req.body.follow_up_date)}
+            ,notes=${db.escape(req.body.notes)}
+            ,delivery_terms=${db.escape(req.body.delivery_terms)}
+            ,payment_terms=${db.escape(req.body.payment_terms)}
+            ,payment_status=${db.escape(req.body.payment_status)}
+            ,supplier_inv_code=${db.escape(req.body.supplier_inv_code)}
             WHERE purchase_order_id = ${db.escape(req.body.purchase_order_id)}`,
     (err, result) => {
      

@@ -20,6 +20,7 @@ app.get('/getClients', (req, res, next) => {
   db.query(`Select c.company_name
   ,c.company_id
   ,c.phone
+  ,c.status
   ,c.website
   ,c.email
   ,c.status
