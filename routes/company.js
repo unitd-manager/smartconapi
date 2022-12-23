@@ -58,6 +58,24 @@ app.post('/insertCompany', (req, res, next) => {
     }
   });
 });
+app.post('/getContactByCompanyId', (req, res, next) => {
+  db.query(`SELECT * FROM contact WHERE company_id =${db.escape(req.body.company_id)}`,
+    (err, result) => {
+     
+      if (result.length == 0) {
+        return res.status(400).send({
+          msg: 'No result found'
+        });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+        }
+ 
+    }
+  );
+});
 
 
 
