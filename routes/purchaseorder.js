@@ -392,6 +392,29 @@ app.post('/getPurchaseOrderById', (req, res, next) => {
     }
   );
 });
+app.get('/suppliers', (req, res, next) => {
+  db.query(`SELECT * FROM supplier`,
+    (err, result) => {
+       
+      if (err) {
+       return res.status(400).send({
+              data: err,
+              msg:'Failed'
+            
+            });
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            
+            });
+
+        }
+ 
+    }
+  );
+});
+
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');
