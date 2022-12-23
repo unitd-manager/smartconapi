@@ -17,7 +17,7 @@ app.use(fileUpload({
     createParentPath: true
 }));
 
-app.get('/getTabCostingSummary', (req, res, next) => {
+app.post('/getTabCostingSummary', (req, res, next) => {
     db.query(`SELECT 
     c.no_of_worker_useds
     ,c.no_of_days_worked
@@ -33,16 +33,24 @@ app.get('/getTabCostingSummary', (req, res, next) => {
     ,c.finance_charges
     ,c.office_overheads
     ,c.other_charges
-    ,c.total_cost of FROM costing_summary c WHERE c.project_id != '' ORDER BY c.costing_summary_id DESC`,
+    ,c.total_cost of FROM costing_summary c WHERE c.project_id =${db.escape(req.body.project_id)} ORDER BY c.costing_summary_id DESC`,
       (err, result) =>{
         if (err) {
-            console.log("error: ", err);
-            return;
+             return res.status(400).send({
+                  data: err,
+                  msg:'err'
+                });
           } else {
-                return res.status(200).send({
+              if(result.length == 0){
+                return res.status(400).send({
+                  msg:'err'
+                });
+              }else{
+                    return res.status(200).send({
                   data: result,
                   msg:'Success'
                 });
+              }
   
           }
    
