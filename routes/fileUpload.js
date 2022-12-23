@@ -6,7 +6,7 @@ const maxFiles = 5;
 
 router.get('/',uploadController.index);
 router.post('/uploadFile',upload.single('file'),uploadController.uploadFile);
-router.get('/getFileList',uploadController.getFileList);
+router.post('/getFileList',uploadController.getFileList);
 // router.get('/getFile/:name',uploadController.getFile);
 router.post('/downloadFile',uploadController.downloadFile);
 router.delete('/deleteFile',uploadController.removeFile);
