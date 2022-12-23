@@ -17,8 +17,8 @@ app.use(fileUpload({
     createParentPath: true
 }));
 
-app.get('/TabDeliveryOrder', (req, res, next) => {
-    db.query(`SELECT do.date FROM delivery_order do WHERE project_id != ''`,
+app.post('/TabDeliveryOrder', (req, res, next) => {
+    db.query(`SELECT do.date,do.delivery_order_id  FROM delivery_order do WHERE project_id = ${db.escape(req.body.project_id)}`,
         (err, result) => {
            
           if (err) {
@@ -70,7 +70,7 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
                   creation_date: req.body.creation_date,
                   modified_by: req.body.modified_by,
                   modification_date: req.body.modification_date,
-                  purchase_order_id: req.body.purchase_order_id,
+                  
                    };
     
       let sql = "INSERT INTO delivery_order SET ?";
@@ -89,7 +89,7 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
       });
     });
   
-    app.delete('/deletedelivery_order', (req, res, next) => {
+    app.post('/deletedelivery_order', (req, res, next) => {
   
       let data = {delivery_order_id : req.body.delivery_order_id};
       let sql = "DELETE FROM delivery_order WHERE ?";
@@ -102,26 +102,26 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
         } else {
               return res.status(200).send({
                 data: result,
-                msg:'Tender has been removed successfully'
+                msg:'Delivery Order has been removed successfully'
               });
         
         }
       });
     });
 
-    app.get('/TabDeliveryOrderHistory', (req, res, next) => {
+    app.post('/TabDeliveryOrderHistory', (req, res, next) => {
+        
       db.query(`SELECT 
-                  p.product_id
+                p.item_title,
+                  doh.product_id
                   ,do.date
                   ,doh.quantity
                   ,doh.remarks
                   ,doh.status
             FROM delivery_order_history doh
             LEFT JOIN (delivery_order do) ON (do.delivery_order_id = doh.delivery_order_id)
-            LEFT JOIN (product p) ON (p.product_id = doh.product_id)
-            WHERE do.delivery_order_id !=''
-            ORDER BY doh.delivery_order_history_id ASC
-      `,
+            LEFT JOIN (po_product p) ON (p.po_product_id = doh.product_id)
+            WHERE do.delivery_order_id=${db.escape(req.body.delivery_order_id)}`,
           (err, result) => {
              
             if (err) {
@@ -132,7 +132,7 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
             } else {
                   return res.status(200).send({
                     data: result,
-                    msg:'Tender has been removed successfully'
+                    msg:'Success'
                   });
             }
       
@@ -196,6 +196,7 @@ app.get('/TabDeliveryOrder', (req, res, next) => {
           }
         });
       });
+    
       app.delete('/deletedeliveryOrder', (req, res, next) => {
   
         let data = {delivery_order_history_id : req.body.delivery_order_history_id};
