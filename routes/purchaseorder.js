@@ -343,7 +343,29 @@ app.post('/editPurchaseOrderDetails', (req, res, next) => {
       }
     });
   });
+app.post('/getPurchaseOrderById', (req, res, next) => {
+    db.query(`SELECT * FROM purchase_order WHERE purchase_order_id=${db.escape(req.body.purchase_order_id)}`,
+    (err, result) => {
+       
+      if (err) {
+       return res.status(400).send({
+              data: err,
+              msg:'Success'
+            
+            });
 
+      } else {
+            return res.status(200).send({
+              data: result[0],
+              msg:'Success'
+            
+            });
+
+        }
+ 
+    }
+  );
+});
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
   console.log(req.userData);
   res.send('This is the secret content. Only logged in users can see that!');
