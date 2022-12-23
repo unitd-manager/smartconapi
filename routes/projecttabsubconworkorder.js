@@ -125,7 +125,7 @@ app.post('/SubConWorkOrderPortal', (req, res, next) => {
     });
   });
 
-app.get('/PaymentHistoryPortal', (req, res, next) => {
+app.post('/PaymentHistoryPortal', (req, res, next) => {
   db.query(`SELECT 
   sr.amount
   ,sr.creation_date AS date
@@ -133,7 +133,7 @@ app.get('/PaymentHistoryPortal', (req, res, next) => {
   ,sr.sub_con_payments_id
   ,sr.sub_con_id
   ,srh.sub_con_work_order_id
-  ,sc.company_name FROM sub_con_payments_history srh LEFT JOIN (sub_con_payments sr) ON (sr.sub_con_payments_id = srh.sub_con_payments_id) LEFT JOIN (sub_con sc) ON (sc.sub_con_id = sr.sub_con_id) WHERE sr.project_id != '' AND sr.status != 'Cancelled'
+  ,sc.company_name FROM sub_con_payments_history srh LEFT JOIN (sub_con_payments sr) ON (sr.sub_con_payments_id = srh.sub_con_payments_id) LEFT JOIN (sub_con sc) ON (sc.sub_con_id = sr.sub_con_id) WHERE sr.project_id = ${db.escape(req.body.project_id)} AND sr.status != 'Cancelled'
   ORDER BY srh.sub_con_payments_history_id`,
     (err, result) => {
        
