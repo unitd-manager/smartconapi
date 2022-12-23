@@ -30,7 +30,7 @@ app.post('/TabMaterialUsedPortal', (req, res, next) => {
   LEFT JOIN (product p) ON (p.product_id = pm.product_id) WHERE pm.project_id =${db.escape(req.body.project_id)} ORDER BY pm.project_materials_id ASC`,
     (err, result) => {
        
-      if (result.length == 0) {
+      if (err) {
         return res.status(400).send({
           msg: 'No result found'
         });
