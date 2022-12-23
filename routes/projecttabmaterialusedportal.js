@@ -17,15 +17,17 @@ app.use(fileUpload({
     createParentPath: true
 }));
 
-app.get('/TabMaterialUsedPortal', (req, res, next) => {
+app.post('/TabMaterialUsedPortal', (req, res, next) => {
   db.query(`SELECT pm.title
   ,pm.description
   ,pm.unit
   ,pm.quantity
+  ,pm.status
+  ,pm.remark
   ,project_materials_id
   ,project_id
   ,p.product_type FROM project_materials pm 
-  LEFT JOIN (product p) ON (p.product_id = pm.product_id) WHERE pm.project_id != '' ORDER BY pm.project_materials_id ASC`,
+  LEFT JOIN (product p) ON (p.product_id = pm.product_id) WHERE pm.project_id =${db.escape(req.body.project_id)} ORDER BY pm.project_materials_id ASC`,
     (err, result) => {
        
       if (result.length == 0) {
