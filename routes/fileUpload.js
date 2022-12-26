@@ -8,7 +8,7 @@ router.get('/',uploadController.index);
 router.post('/uploadFile',upload.single('file'),uploadController.uploadFile);
 router.post('/getFileList',uploadController.getFileList);
 // router.get('/getFile/:name',uploadController.getFile);
-router.post('/downloadFile',uploadController.downloadFile);
+// router.post('/downloadFile',uploadController.downloadFile);
 router.delete('/deleteFile',uploadController.removeFile);
 //router.post('/upload-single',upload.single('file'),uploadController.uploadSingle);
 router.post('/uploadFiles',upload.array('files', maxFiles), uploadController.uploadMultiple);

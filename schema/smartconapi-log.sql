@@ -7766,3 +7766,9 @@ RENAME TABLE `smartcongen`.`leave`
 
 /* =================== MEERA - 30/11/2022 ===================== */
  ALTER TABLE `purchase_order` CHANGE `company_id_supplier` `supplier_id` INT(11) NULL DEFAULT NULL;
+
+/* =================== SULFIYA - 19/12/2022 ===================== */
+ALTER TABLE `training` CHANGE `date` `from_date` DATE NULL DEFAULT NULL; 
+
+/* =================== SULFIYA - 20/12/2022 ===================== */
+ALTER TABLE `training_staff` ADD `employee_id` INT NOT NULL AFTER `to_date`; 
