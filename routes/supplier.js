@@ -18,7 +18,7 @@ app.use(fileUpload({
 }));
 
 app.get('/getSupplier', (req, res, next) => {
-  db.query(`SELECT s.company_name
+  db.query(`SELECT s.supplier_id, s.company_name
   ,s.email
   ,s.fax
   ,s.mobile

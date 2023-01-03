@@ -3,9 +3,9 @@ const util = require("util");
 const db = require('../config/Database.js');
 const uniqid = require('uniqid');
 const fs = require("fs");
-const baseUrl = "http://43.228.126.245/smartco-api/storage/uploads/";
-const directoryPath = __dirname + "/storage/uploads/"
 const path = require('path');
+const baseUrl = "http://localhost:3001/file/getFile/";
+const directoryPath = __basedir + "/storage/uploads/"
 
 exports.index = (req, res) => {
     return res.render('index', { message: req.flash() });
@@ -20,42 +20,6 @@ exports.uploadSingle = (req, res) => {
     return res.redirect('/');
 }
 
-// exports.uploadFile = (req, res) => {
-
-//     if (req.file == undefined) {
-//         return res.status(400).send({message:"Please upload a file..."});
-//     }
-
-//     if (req.file) {
-//         let filenameh = req.file.originalname
-//         let filenames = filenameh.split(" ").join("")
-//         let data = {creation_date: new Date()
-//             , media_type: "attachment"
-//             , actual_file_name:filenames
-//             , display_title:filenames
-//             , file_name: filenames
-//             , content_type: "attachment"
-//             , media_size: req.file.size
-//             , room_name: req.body.room_name
-//             , record_type: "attachment"
-//             , alt_tag_data: req.body.alt_tag_data
-//             , external_link: ""
-//             , caption: ""
-//             , record_id: req.body.record_id
-//             , modification_date: new Date()
-//             , description: req.body.description
-//           };
-//         console.log(req.file)
-//         let sql = "INSERT INTO media SET ?";
-//         let query = db.query(sql, data,(err, result) => {
-//             if (err) {
-//               res.status(400).send({message:err});
-//             } else {
-//                 res.status(200).send({message:"Uploaded the file successfully : " + req.file.originalname});
-//             }
-//           });
-//     }
-// }
 exports.uploadFile = (req, res) => {
 
     if (req.file == undefined) {
@@ -63,7 +27,6 @@ exports.uploadFile = (req, res) => {
     }
 
     if (req.file) {
-         
         let data = {creation_date: new Date()
             , media_type: "attachment"
             , actual_file_name: req.file.originalname
@@ -76,60 +39,45 @@ exports.uploadFile = (req, res) => {
             , alt_tag_data: req.body.alt_tag_data
             , external_link: ""
             , caption: ""
-            , uploaded: 1
+            , uploaded: ""
             , record_id: req.body.record_id
             , modification_date: new Date()
             , description: req.body.description
           };
-       
+        console.log(req.file)
         let sql = "INSERT INTO media SET ?";
-        
         let query = db.query(sql, data,(err, result) => {
             if (err) {
-              res.status(400).send({message:err});
+              console.log("error: ", err);
+              return;
             } else {
                 res.status(200).send({message:"Uploaded the file successfully : " + req.file.originalname});
             }
           });
     }
 }
+
 exports.getFileList = (req, res) => {
- let data = {record_id: req.body.record_id};
-  let sql = "SELECT file_name,media_id FROM media WHERE ?";
-  let query = db.query(sql, data,(err, result) => {
-    // const fileName = result[0].file_name;
-    // const filePath = path.resolve(directoryPath + result[0].file_name);
-    // console.log("fileName : ",fileName);
-    // console.log("filePath : ",filePath);
-        if(err){
-             res.status(400).send({
-                    message: err,
-                  });   
-        }else{
-              res.status(200).send({
-                    data: result,
-                    message:"Success"
-                  });   
+
+    fs.readdir(directoryPath, function (err, files) {
+        if (err) {
+          res.status(500).send({
+            message: "Unable to scan files!",
+          });
         }
-  });
-    // fs.readdir("/www/wwwroot/43.228.126.245/smartco-api/storage/uploads/", function (err, files) {
-    //     if (err) {
-    //       res.status(500).send({
-    //         message: err,
-    //       });
-    //     }
     
-    //     let fileInfos = [];
+        let fileInfos = [];
     
-    //     files.forEach((file) => {
-    //       fileInfos.push({
-    //         name: file,
-    //         url: baseUrl + file,
-    //       });
-    //     });
-    
-    //     res.status(200).send(fileInfos);
-    //   });    
+        if(files) {
+          files.forEach((file) => {
+            fileInfos.push({
+              name: file,
+              url: baseUrl + file,
+            });
+          });
+          res.status(200).send(fileInfos);
+        }
+      });    
 }
 
 exports.getFile = (req, res) => {
@@ -143,17 +91,70 @@ exports.getFile = (req, res) => {
     });
 }
 
+exports.downloadFile = (req, res) => {
+  let data = {record_id: req.body.record_id};
+  let sql = "SELECT file_name FROM media WHERE ?";
+  let query = db.query(sql, data,(err, result) => {
+    const fileName = result[0].file_name;
+    const filePath = path.resolve(directoryPath + result[0].file_name);
+    console.log("fileName : ",fileName);
+    console.log("filePath : ",filePath);
+
+    fs.readdir(filePath, function (err, files) {
+      if (err) {
+        res.status(500).send({
+          message: "Unable to scan files!",
+        });
+      }
+  
+      let fileInfos = [];
+  
+      if(files) {
+        files.forEach((file) => {
+          fileInfos.push({
+            name: file,
+            url: baseUrl + file,
+          });
+        });
+        res.status(200).send(fileInfos);
+      }
+    });
+
+  });
+}
+
+exports.getFilesByRecordIdAndRoomName = (req, res) => {
+  let query = db.query(`SELECT file_name FROM media WHERE record_id = ${db.escape(req.body.record_id)} AND room_name = ${db.escape(req.body.room_name)}`, (err, result) => {
+    let fileInfos = [];
+    {result ? result.map(resu => {
+      const fileName = resu.file_name;
+      console.log("fileName : ",fileName);
+      const filePath = path.resolve(directoryPath + resu.file_name);
+      console.log("filePath : ",filePath);
+      fileInfos.push({
+        name: fileName,
+        url: filePath,
+      });      
+      fs.readdir(filePath, function (err, files) {
+
+      });
+    }) : (res.status(500).send({
+      message: "Could not find the file. ",
+    }))}
+    console.log("fileInfos : ",fileInfos);
+    res.status(200).send(fileInfos);
+
+  });
+}
+
 exports.removeFile = (req, res) => {
-      
-    let data = {media_id: req.body.media_id};
+    let data = {record_id: req.body.record_id};
     let select_sql = "SELECT file_name FROM media WHERE ?";
     let query = db.query(select_sql, data,(err, result) => {
-       
-      const filePath = 'storage/uploads/' + result[0].file_name;
-     
+      const filePath = path.resolve(directoryPath + result[0].file_name);
       fs.unlink(filePath, (err) => {
         if (err) {
-          res.status(400).send({
+          res.status(500).send({
             message: "Could not delete the file. " + err,
           });
         } else {
@@ -174,11 +175,10 @@ exports.removeFile = (req, res) => {
 }
 
 exports.uploadMultiple = (req, res) => {
-    
     if (req.files.length) {
       var arrayData = [];
       req.files.forEach(f => {
-       
+        console.log(f.filename);
         let data = {creation_date: new Date()
           , media_type: "attachment"
           , actual_file_name: f.originalname
@@ -191,26 +191,25 @@ exports.uploadMultiple = (req, res) => {
           , alt_tag_data: req.body.alt_tag_data
           , external_link: ""
           , caption: ""
-          , uploaded: 1
+          , uploaded: ""
           , record_id: req.body.record_id
           , modification_date: new Date()
           , description: req.body.description
         };
         arrayData.push(data);
       })
+
       arrayData.forEach(data => {
-          
-        db.query('INSERT INTO media SET ?', data,(err, result) => {
-          if (err) {
-          return res.status(400).send({message:err});
+        db.query('INSERT INTO media SET ?', data, insertErr => {
+          if (insertErr) {
+            throw new Error("Error inserting..." + data.file_name + "! " + insertErr);
           }
-          
+          console.log(`Inserted ${data.file_name}!`);
         });
       });
-       return res.status(200).send({message:'success'});
+      res.status(200).send({message:"Successfully uploaded multiple file"});
     }
 }
-
 
 exports.uploadSingleV2 = async (req, res) => {
     const uploadFile = util.promisify(upload.single('file'));
