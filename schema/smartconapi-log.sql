@@ -7772,3 +7772,13 @@ ALTER TABLE `training` CHANGE `date` `from_date` DATE NULL DEFAULT NULL;
 
 /* =================== SULFIYA - 20/12/2022 ===================== */
 ALTER TABLE `training_staff` ADD `employee_id` INT NOT NULL AFTER `to_date`; 
+
+/* =================== SULFIYA - 30/12/2022 ===================== */
+ALTER TABLE `invoice` ADD `gst_value` FLOAT(11) NOT NULL AFTER `reference`; 
+
+/* =================== SULFIYA - 31/12/2022 ===================== */
+ALTER TABLE `category` CHANGE `title` `category_title` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL; 
+
+ALTER TABLE `section` CHANGE `title` `section_title` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL; 
+
+ALTER TABLE `sub_category` CHANGE `title` `sub_category_title` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL; 

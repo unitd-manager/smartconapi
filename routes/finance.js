@@ -515,7 +515,6 @@ app.post('/insertInvoice', (req, res, next) => {
     }
   });
 });
-
 app.delete('/deleteInvoice', (req, res, next) => {
 
   let data = {invoice_id: req.body.invoice_id};
@@ -799,7 +798,6 @@ app.delete('/deletecredit_note', (req, res, next) => {
     }
   });
 });
-
 
 
 
