@@ -18,7 +18,7 @@ app.use(fileUpload({
 }));
 
 
-app.get('/TabMaterialTransferred', (req, res, next) => {
+app.post('/TabMaterialTransferred', (req, res, next) => {
   db.query(`SELECT 
   st.quantity
   ,st.to_project_id
