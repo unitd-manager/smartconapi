@@ -48,7 +48,7 @@ app.post('/editTabMaterialTransferred', (req, res, next) => {
             SET quantity=${db.escape(req.body.quantity)}
             ,title=${db.escape(req.body.title)}
             ,price=${db.escape(req.body.price)}
-            WHERE project_id=${db.escape(req.body.project_id)}`,
+            WHERE stock_transfer_id=${db.escape(req.body.stock_transfer_id)}`,
     (err, result) => {
      
       if (result.length == 0) {
@@ -107,14 +107,4 @@ app.delete('/deletestock_transfer', (req, res, next) => {
     }
   });
 });
-
-
-
-
-
-app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
-  console.log(req.userData);
-  res.send('This is the secret content. Only logged in users can see that!');
-});
-
 module.exports = app;
