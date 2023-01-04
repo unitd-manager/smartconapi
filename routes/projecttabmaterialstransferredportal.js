@@ -23,13 +23,14 @@ app.post('/TabMaterialTransferred', (req, res, next) => {
   st.quantity
   ,st.to_project_id
   ,p.title
+  ,pro.title AS pro_name
   ,p.price FROM stock_transfer st 
-  LEFT JOIN (product p) ON (p.product_id = st.product_id) WHERE st.to_project_id = ${db.escape(req.body.project_id)} ORDER BY st.creation_date ASC`,
+  LEFT JOIN (product p) ON (p.product_id = st.product_id) LEFT JOIN (project pro) ON (pro.project_id = st.from_project_id) WHERE st.to_project_id = ${db.escape(req.body.project_id)} ORDER BY st.creation_date ASC`,
     (err, result) => {
        
       if (result.length == 0) {
         return res.status(400).send({
-          msg: 'No result found'
+          msg: `No result found`
         });
       } else {
             return res.status(200).send({
@@ -42,6 +43,7 @@ app.post('/TabMaterialTransferred', (req, res, next) => {
     }
   );
 });
+
 
 app.post('/editTabMaterialTransferred', (req, res, next) => {
   db.query(`UPDATE stock_transfer
