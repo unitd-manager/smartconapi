@@ -24,7 +24,7 @@ app.get('/TabMaterialTransferred', (req, res, next) => {
   ,st.to_project_id
   ,p.title
   ,p.price FROM stock_transfer st 
-  LEFT JOIN (product p) ON (p.product_id = st.product_id) WHERE st.to_project_id != '' ORDER BY st.creation_date ASC`,
+  LEFT JOIN (product p) ON (p.product_id = st.product_id) WHERE st.to_project_id = ${db.escape(req.body.project_id)} ORDER BY st.creation_date ASC`,
     (err, result) => {
        
       if (result.length == 0) {
@@ -78,9 +78,9 @@ app.post('/insertstock_transfer', (req, res, next) => {
   let sql = "INSERT INTO stock_transfer  SET ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
+       return res.status(400).send({
+          msg: 'No result found'
+        });
     } else {
           return res.status(200).send({
             data: result,
@@ -96,8 +96,9 @@ app.delete('/deletestock_transfer', (req, res, next) => {
   let sql = "DELETE FROM stock_transfer WHERE ?";
   let query = db.query(sql, data,(err, result) => {
     if (err) {
-      console.log("error: ", err);
-      return;
+       return res.status(400).send({
+          msg: 'No result found'
+        });
     } else {
           return res.status(200).send({
             data: result,
