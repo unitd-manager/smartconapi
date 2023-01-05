@@ -286,9 +286,7 @@ app.post('/insertTrainingStaff', (req, res, next) => {
   let data = {training_id: req.body.training_id
     ,employee_id: req.body.employee_id
     , staff_id: req.body.staff_id
-    , creation_date: req.body.creation_date
-    , modification_date: req.body.modification_date
-    , created_by: req.body.created_by
+     , created_by: req.body.created_by
     ,  modified_by : req.body. modified_by 
     , from_date: req.body.from_date
     , to_date: req.body.to_date};
