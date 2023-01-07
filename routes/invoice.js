@@ -51,7 +51,7 @@ app.get('/getMainInvoice', (req, res, next) => {
   ,(IF(ISNULL(( SELECT FORMAT(SUM(invoice_amount), 0) 
   FROM invoice 
   WHERE project_id = i.project_id AND invoice_code < i.invoice_code AND status != LOWER('Cancelled') )), 0, ( SELECT FORMAT(SUM(invoice_amount), 0) 
-  FROM invoice 
+  FROM invoice i
   WHERE project_id = i.project_id AND invoice_code < i.invoice_code AND status != LOWER('Cancelled') ))) AS prior_invoice_billed ,b.title AS branch_name 
   FROM invoice i LEFT JOIN (project p) ON (i.project_id = p.project_id) 
   LEFT JOIN (contact cont) ON (p.contact_id = cont.contact_id) 
@@ -76,6 +76,29 @@ app.get('/getMainInvoice', (req, res, next) => {
   );
 });
 
+
+app.get('/getInvoice', (req, res, next) => {
+  db.query(`SELECT i.invoice_id 
+  ,i.qty 
+  ,i.unit_price 
+  ,(SELECT (SUM(i.qty * i.unit_price) + 70) )
+  FROM invoice_item i WHERE i.invoice_id  = ''`,
+    (err, result) => {
+
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+      }
+
+    }
+  );
+});
 
 app.post('/insertInvoice', (req, res, next) => {
 

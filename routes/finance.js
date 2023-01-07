@@ -412,7 +412,7 @@ app.post('/insertOrder', (req, res, next) => {
 });
 
 
-app.delete('/deleteorders', (req, res, next) => {
+app.post('/deleteorders', (req, res, next) => {
 
   let data = {order_id  : req.body.order_id,};
   let sql = "DELETE FROM orders WHERE ?";
@@ -515,7 +515,6 @@ app.post('/insertInvoice', (req, res, next) => {
     }
   });
 });
-
 app.delete('/deleteInvoice', (req, res, next) => {
 
   let data = {invoice_id: req.body.invoice_id};
@@ -532,6 +531,49 @@ app.delete('/deleteInvoice', (req, res, next) => {
     }
   });
 });
+
+
+
+app.post('/insertInvoiceItem', (req, res, next) => {
+
+  let data = {
+       qty: req.body.qty
+    , unit_price: req.body.unit_price
+    , item_title: req.body.item_title
+    , model: req.body.model
+    , module: req.body.module
+    , cost_price: req.body.cost_price
+    , item_code: req.body.item_code
+    , vat: req.body.vat
+    , discount_percentage: req.body.discount_percentage
+    , discount_type: req.body.discount_type
+    , amount: req.body.amount
+    , s_no: req.body.s_no
+    , site_id: req.body.site_id
+    , item_code_backup: req.body.item_code_backup
+    , unit: req.body.unit
+    , description: req.body.description
+    , remarks: req.body.remarks
+    , modification_date: req.body.modification_date
+    , modified_by: req.body.modified_by
+    , month: req.body.month
+    , year: req.body.year
+    , total_cost: req.body.total_cost
+ };
+  let sql = "INSERT INTO invoice_item SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Success'
+          });
+    }
+  });
+});
+
 
 app.post('/insertorder_item', (req, res, next) => {
 
@@ -756,7 +798,6 @@ app.delete('/deletecredit_note', (req, res, next) => {
     }
   });
 });
-
 
 
 

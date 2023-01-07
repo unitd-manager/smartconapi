@@ -18,9 +18,10 @@ app.use(fileUpload({
 }));
 
 
-app.get('/getTrainingById', (req, res, next) => {
+app.post('/getTrainingById', (req, res, next) => {
   db.query(`SELECT t.title
-  ,t.date
+  ,t.training_id
+  ,t.from_date
   ,t.to_date
   ,t.trainer
   ,t.description
@@ -29,7 +30,7 @@ app.get('/getTrainingById', (req, res, next) => {
   ,t.training_company_email
   ,t.training_company_phone
   FROM training t
-  WHERE t.training_id !=  ${db.escape(req.body.training_id)}`,
+  WHERE t.training_id=${db.escape(req.body.training_id)}`,
     (err, result) => {
       if (err) {
         console.log("error: ", err);
@@ -46,9 +47,14 @@ app.get('/getTrainingById', (req, res, next) => {
   );
 });
 
+
+
+
+
 app.get('/getTraining', (req, res, next) => {
   db.query(`SELECT t.title
-  ,t.date
+  ,t.from_date
+  ,t.training_id
   ,t.to_date
   ,t.trainer
   ,t.description
@@ -76,7 +82,7 @@ app.get('/getTraining', (req, res, next) => {
 
 
 app.get('/getEmployeeName', (req, res, next) => {
-  db.query(`SELECT employee_name
+  db.query(`SELECT employee_id,first_name
   FROM employee`,
     (err, result) => {
       if (err) {
@@ -94,10 +100,32 @@ app.get('/getEmployeeName', (req, res, next) => {
   );
 });
 
+
+
+app.post('/editEmployeeName', (req, res, next) => {
+  db.query(`UPDATE employee 
+            SET first_name=${db.escape(req.body.first_name)}
+            WHERE employee_id = ${db.escape(req.body.training_staff_id)}`,
+    (err, result) => {
+     
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+      }
+     }
+  );
+});
+
+
 app.post('/edit-Training', (req, res, next) => {
   db.query(`UPDATE training  
             SET title=${db.escape(req.body.title)}
-            ,date=${db.escape(req.body.title)}
+            ,from_date=${db.escape(req.body.from_date)}
             ,to_date=${db.escape(req.body.to_date)}
             ,trainer=${db.escape(req.body.trainer)}
             ,description=${db.escape(req.body.description)}
@@ -126,7 +154,7 @@ app.post('/edit-Training', (req, res, next) => {
 
 app.post('/insertTraining', (req, res, next) => {
 
-  let data = {date: req.body.date
+  let data = {from_date: req.body.from_date
     , title: req.body.title
     , trainer: req.body.trainer
     , description: req.body.description
@@ -154,7 +182,7 @@ app.post('/insertTraining', (req, res, next) => {
   });
 });
 
-app.delete('/deleteTraining', (req, res, next) => {
+app.post('/deleteTraining', (req, res, next) => {
 
   let data = {training_id :req.body.training_id  };
   let sql = "DELETE FROM training WHERE ?";
@@ -172,8 +200,38 @@ app.delete('/deleteTraining', (req, res, next) => {
 });
 
 
+
+app.post('/getTabEmployeeLinkedById', (req, res, next) => {
+  db.query(`SELECT 
+  ts.employee_id 
+  ,ts.from_date
+  ,ts.to_date
+  ,CONCAT_WS(' ', e.first_name, e.last_name) AS employee_name
+  ,ji.designation
+  FROM training_staff ts
+  LEFT JOIN (employee e) ON (ts.staff_id = e.employee_id)
+   LEFT JOIN (job_information ji) ON (e.employee_id = ji.employee_id)
+   WHERE training_id = ${db.escape(req.body.training_id)}
+  ORDER BY training_staff_id DESC`,
+    (err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
 app.get('/getTabEmployeeLinked', (req, res, next) => {
-  db.query(` SELECT ts.training_staff_id 
+  db.query(`SELECT 
+  ts.employee_id 
   ,ts.from_date
   ,ts.to_date
   ,CONCAT_WS(' ', e.first_name, e.last_name) AS employee_name
@@ -202,10 +260,10 @@ app.get('/getTabEmployeeLinked', (req, res, next) => {
 
 
 app.post('/edit-TabEmployeeLinked', (req, res, next) => {
-  db.query(`UPDATE training_staff 
-            SET training_staff_id=${db.escape(req.body.training_staff_id)}
-            ,from_date=${db.escape(req.body.from_date)}
-            ,to_date=${db.escape(req.body.to_date)}
+  db.query(`UPDATE training_staff ts
+            SET ts.employee_id=${db.escape(req.body.employee_id)}
+            ,ts.from_date=${db.escape(req.body.from_date)}
+            ,ts.to_date=${db.escape(req.body.to_date)}
             WHERE training_id = ${db.escape(req.body.training_id)}`,
     (err, result) => {
      
@@ -226,10 +284,9 @@ app.post('/edit-TabEmployeeLinked', (req, res, next) => {
 app.post('/insertTrainingStaff', (req, res, next) => {
 
   let data = {training_id: req.body.training_id
+    ,employee_id: req.body.employee_id
     , staff_id: req.body.staff_id
-    , creation_date: req.body.creation_date
-    , modification_date: req.body.modification_date
-    , created_by: req.body.created_by
+     , created_by: req.body.created_by
     ,  modified_by : req.body. modified_by 
     , from_date: req.body.from_date
     , to_date: req.body.to_date};
@@ -246,6 +303,8 @@ app.post('/insertTrainingStaff', (req, res, next) => {
     }
   });
 });
+
+
 
 
 

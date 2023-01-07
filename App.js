@@ -71,6 +71,7 @@ const employeeModule = require('./routes/employeeModule.js');
 const jobinformation = require('./routes/jobinformation.js');
 const accounts = require('./routes/accounts.js');
 const clients = require('./routes/clients.js');
+const content = require('./routes/content.js');
 const expensehead = require('./routes/expensehead.js');
 const setting = require('./routes/setting.js');
 const valuelist = require('./routes/valuelist.js');
@@ -83,7 +84,10 @@ const projecttabmaterialrequest = require('./routes/projecttabmaterialrequest.js
 const materialpurchaseorder = require('./routes/materialpurchaseorder.js');
 const leave = require('./routes/leave.js');
 const Auth = require('./routes/auth.js');
+<<<<<<< HEAD
 const actualcostingsummary = require('./routes/actualcostingsummary.js');
+=======
+>>>>>>> d2001e805dff84a375b3ed0e0d6719a6c65b7e1f
 
 
 
@@ -119,6 +123,7 @@ app.use('/expensehead', expensehead);
 app.use('/setting', setting);
 app.use('/valuelist', valuelist);
 app.use('/staff', staff);
+app.use('/content', content);
 app.use('/projecttabmaterialusedportal',projecttabmaterialusedportal);
 app.use('/projecttabmaterialstransferredportal',projecttabmaterialstransferredportal);
 app.use('/projecttabdeliveryorder', projecttabdeliveryorder);
@@ -127,7 +132,10 @@ app.use('/projecttabmaterialrequest', projecttabmaterialrequest);
 app.use('/materialpurchaseorder', materialpurchaseorder);
 app.use('/leave', leave);
 app.use('/api', Auth);
+<<<<<<< HEAD
 app.use('/actualcostingsummary', actualcostingsummary);
+=======
+>>>>>>> d2001e805dff84a375b3ed0e0d6719a6c65b7e1f
 
 
 

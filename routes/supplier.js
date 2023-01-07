@@ -18,8 +18,12 @@ app.use(fileUpload({
 }));
 
 app.get('/getSupplier', (req, res, next) => {
+<<<<<<< HEAD
   db.query(`SELECT s.company_name
   ,s.supplier_id
+=======
+  db.query(`SELECT s.supplier_id, s.company_name
+>>>>>>> d2001e805dff84a375b3ed0e0d6719a6c65b7e1f
   ,s.email
   ,s.fax
   ,s.supplier_id

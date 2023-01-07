@@ -38,8 +38,10 @@ app.get('/getInvoiceTab', (req, res, next) => {
     (err, result) => {
      
       if (err) {
-        console.log("error: ", err);
-        return;
+          return res.status(400).send({
+                  data: err,
+                  msg:'err'
+                });
       } else {
             return res.status(200).send({
               data: result,
@@ -69,8 +71,10 @@ app.post('/editInvoiceTab', (req, res, next) => {
              WHERE order_id =  ${db.escape(req.body.order_id)}`,
     (err, result) => {
       if (err) {
-        console.log("error: ", err);
-        return;
+          return res.status(400).send({
+                  data: err,
+                  msg:'err'
+                });
       } else {
             return res.status(200).send({
               data: result,
@@ -101,8 +105,10 @@ app.get('/getReceiptTab', (req, res, next) => {
     (err, result) => {
      
       if (err) {
-        console.log("error: ", err);
-        return;
+          return res.status(400).send({
+                  data: err,
+                  msg:'err'
+                });
       } else {
             return res.status(200).send({
               data: result,
@@ -131,8 +137,10 @@ app.post('/editReceiptTab', (req, res, next) => {
     (err, result) => {
      
       if (err) {
-        console.log("error: ", err);
-        return;
+         return res.status(400).send({
+                  data: err,
+                  msg:'err'
+                });
       } else {
             return res.status(200).send({
               data: result,
