@@ -17,6 +17,37 @@ app.use(fileUpload({
     createParentPath: true
 }));
 
+app.get('/getjobinformationforList', (req, res, next) => {
+  db.query(`SELECT 
+  j.job_information_id
+ ,j.department
+ ,j.basic_pay
+ ,e.emp_code
+ ,e.first_name
+ ,e.nric_no
+ ,e.spass_no
+ ,e.fin_no
+ ,e.date_of_birth
+ ,e.citizen
+ FROM job_information j
+ LEFT JOIN (employee e) ON (e.employee_id = j.employee_id)
+ WHERE j.job_information_id != '';`,
+    (err, result) => {
+       
+      if (err) {
+          console.log("error: ", err);
+          return;
+        } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Tender has been removed successfully'
+            });
+      }
+ 
+    }
+  );
+});
+
 
 
 app.get('/getjobinformation', (req, res, next) => {
@@ -85,6 +116,7 @@ app.get('/getjobinformation', (req, res, next) => {
             ,e.employee_work_type
             ,e.date_of_birth
             ,e.citizen
+            ,e.employee_id
             FROM job_information j
             LEFT JOIN (employee e) ON (e.employee_id = j.employee_id)
             WHERE j.job_information_id != ''
@@ -225,6 +257,7 @@ app.post('/edit-jobinformation', (req, res, next) => {
               ,deduction1=${db.escape(req.body.deduction1)}
               ,deduction2=${db.escape(req.body.deduction2)}
               ,deduction3=${db.escape(req.body.deduction3)}
+              ,deduction4=${db.escape(req.body.deduction4)}
               ,levy_amount=${db.escape(req.body.levy_amount)}
               ,govt_donation=${db.escape(req.body.govt_donation)}
               ,income_tax_id=${db.escape(req.body.income_tax_id)}
@@ -240,6 +273,7 @@ app.post('/edit-jobinformation', (req, res, next) => {
               ,termination_date=${db.escape(req.body.termination_date)}
               ,termination_reason=${db.escape(req.body.termination_reason)}
               ,departure_date=${db.escape(req.body.departure_date)}
+              ,cpf_applicable=${db.escape(req.body.cpf_applicable)}
               WHERE job_information_id  = ${db.escape(req.body.job_information_id )}`,
               (err, result) => {
        
@@ -325,6 +359,7 @@ app.post('/edit-jobinformation', (req, res, next) => {
                   allowance5: req.body.allowance5,
                   allowance6: req.body.allowance6,
                   site_id: req.body.site_id,
+                  cpf_applicable: req.body.cpf_applicable,
                   over_time_rate: req.body.over_time_rate};
                 let sql = "INSERT INTO job_information SET ?";
                 let query = db.query(sql, data,(err, result) => {
@@ -340,7 +375,7 @@ app.post('/edit-jobinformation', (req, res, next) => {
                 });
               });
               
-              app.delete('/deletejob_information', (req, res, next) => {
+              app.post('/deletejob_information', (req, res, next) => {
 
                 let data = {job_information_id : req.body.job_information_id };
                 let sql = "DELETE FROM job_information WHERE ?";
@@ -358,7 +393,9 @@ app.post('/edit-jobinformation', (req, res, next) => {
               });      
               app.get('/getEmployee', (req, res, next) => {
                 db.query(`SELECT 
-               e.employee_name
+                e.employee_id
+               ,e.first_name
+               ,e.nric_no
                 FROM employee e`,
                   (err, result) => {
                      
@@ -376,6 +413,8 @@ app.post('/edit-jobinformation', (req, res, next) => {
                   }
                 );
               });
+
+              
               
               
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {

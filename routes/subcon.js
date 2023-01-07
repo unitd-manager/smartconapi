@@ -17,16 +17,48 @@ app.use(fileUpload({
     createParentPath: true
 }));
 
-app.get('/getSubcon', (req, res, next) => {
+app.get('/getSubconById', (req, res, next) => {
   db.query(`SELECT s.company_name
-  ,s.email,
-  s.fax
+  ,s.sub_con_id
+  ,s.email
+  ,s.fax
   ,s.mobile
   ,s.status
   ,s.address_flat
   ,s.address_street
   ,s.address_state
   ,s.address_country
+  ,s.phone
+  ,gc.name AS country_name 
+  FROM sub_con s LEFT JOIN (geo_country gc) ON (s.address_country = gc.country_code) WHERE s.sub_con_id=${db.escape(req.body.sub_con_id)}`,
+    (err, result) => {
+       
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+app.get('/getSubcon', (req, res, next) => {
+  db.query(`SELECT s.company_name
+  ,s.sub_con_id
+  ,s.email
+  ,s.fax
+  ,s.mobile
+  ,s.status
+  ,s.address_flat
+  ,s.address_street
+  ,s.address_state
+  ,s.address_country
+  ,s.phone
   ,gc.name AS country_name 
   FROM sub_con s LEFT JOIN (geo_country gc) ON (s.address_country = gc.country_code) WHERE s.sub_con_id != ''`,
     (err, result) => {
@@ -45,6 +77,7 @@ app.get('/getSubcon', (req, res, next) => {
     }
   );
 });
+
 
 
 app.post('/edit-Subcon', (req, res, next) => {
@@ -129,7 +162,7 @@ app.post('/insertsub_con', (req, res, next) => {
 
 
 
-app.delete('/deleteSub_Con', (req, res, next) => {
+app.post('/deleteSub_Con', (req, res, next) => {
 
   let data = {sub_con_id   : req.body.sub_con_id    };
   let sql = "DELETE FROM sub_con WHERE ?";
@@ -148,7 +181,8 @@ app.delete('/deleteSub_Con', (req, res, next) => {
 
 
 app.get('/getTabWorkOrder', (req, res, next) => {
-  db.query(`SELECT p.sub_con_work_order_id FROM sub_con_work_order p 
+  db.query(`SELECT p.sub_con_work_order_id
+  FROM sub_con_work_order p 
             WHERE p.sub_con_id != '' AND (p.status != 'Cancelled' OR p.status IS NULL)`,
     (err, result) => {
      
@@ -264,6 +298,7 @@ app.delete('/deletesub_con_payments_history', (req, res, next) => {
   });
 });
 
+
 app.post('/insertsub_con_payments', (req, res, next) => {
 
   let data = {project_id: req.body.project_id,
@@ -307,6 +342,124 @@ app.delete('/deletesub_con_payments', (req, res, next) => {
     }
   });
 });
+app.post('/getSubMakePayment', (req, res, next) => {
+  db.query(`SELECT i.sub_con_worker_code,
+  i.sub_con_work_order_id
+  ,(
+  SELECT SUM(subHist.amount) AS prev_sum
+  FROM sub_con_payments_history subHist
+  LEFT JOIN sub_con_payments r ON (r.sub_con_payments_id = subHist.sub_con_payments_id)
+  WHERE subHist.sub_con_work_order_id =  i.sub_con_work_order_id
+  AND r.status != 'Cancelled'
+  ) as prev_amount
+FROM sub_con_work_order i
+LEFT JOIN sub_con o ON (i.sub_con_id = o.sub_con_id)
+WHERE i.sub_con_id =${db.escape(req.body.sub_con_id)}
+;`,
+    (err, result) => {
+       
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
+app.post('/getWorkOrderLinkedss', (req, res, next) => {
+  db.query(`SELECT p.sub_con_worker_code,
+  p.work_order_date,
+  p.status,
+  p.sub_con_work_order_id,
+ pr.title
+    ,(
+    SELECT SUM(w.unit_rate*w.quantity) AS amount
+    FROM work_order_line_items w
+    WHERE w.sub_con_work_order_id =  p.sub_con_work_order_id) as amount
+  FROM sub_con_work_order p
+  LEFT JOIN project pr ON (p.project_id = pr.project_id)
+  LEFT JOIN sub_con o ON (p.sub_con_id = o.sub_con_id)
+  WHERE p.sub_con_id=${db.escape(req.body.sub_con_id)};`,
+    (err, result) => {
+       
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
+app.get('/PaymentHistoryPortal', (req, res, next) => {
+  db.query(`SELECT 
+  sr.amount
+  ,sr.creation_date AS date
+  ,sr.mode_of_payment
+  ,sr.sub_con_payments_id
+  ,sr.sub_con_id
+  ,srh.sub_con_work_order_id
+  ,sc.company_name FROM sub_con_payments_history srh LEFT JOIN (sub_con_payments sr) ON (sr.sub_con_payments_id = srh.sub_con_payments_id) LEFT JOIN (sub_con sc) ON (sc.sub_con_id = sr.sub_con_id) WHERE sr.project_id != '' AND sr.status != 'Cancelled'
+  ORDER BY srh.sub_con_payments_history_id`,
+    (err, result) => {
+       
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
+app.post('/SubConPayment', (req, res, next) => {
+  db.query(`SELECT sr.amount
+  ,sr.creation_date AS date
+  ,sr.mode_of_payment
+  ,sr.status
+  ,sr.sub_con_payments_id
+  ,sr.sub_con_id
+  ,srh.sub_con_work_order_id
+FROM sub_con_payments_history srh
+LEFT JOIN (sub_con_payments sr) ON (sr.sub_con_payments_id = srh.sub_con_payments_id)
+WHERE srh.sub_con_work_order_id =${db.escape(req.body.sub_con_work_order_id)}
+ORDER BY srh.sub_con_payments_history_id;`,
+    (err, result) => {
+       
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
 
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {

@@ -230,30 +230,7 @@ app.get('/TabPurchaseOrderLineItem', (req, res, next) => {
   );
 });
 
-app.get('/TabPurchaseOrderLineItemTable', (req, res, next) => {
-  db.query(`SELECT
-  po.project_id
-  ,po.supplier_id
-  ,s.company_name
-   FROM purchase_order po
-   LEFT JOIN (supplier s) ON (po.supplier_id = s.supplier_id) WHERE po.purchase_order_id != ''`,
-    (err, result) => {
-       
-      if (err) {
-        console.log("error: ", err);
-        return;
-      } else {
-            return res.status(200).send({
-              data: result,
-              msg:'Success'
-            
-            });
 
-        }
- 
-    }
-  );
-});
 
 app.post('/editTabPurchaseOrderLineItem', (req, res, next) => {
   db.query(`UPDATE po_product

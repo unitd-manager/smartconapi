@@ -19,8 +19,10 @@ app.use(fileUpload({
 
 app.get('/getSupplier', (req, res, next) => {
   db.query(`SELECT s.company_name
+  ,s.supplier_id
   ,s.email
   ,s.fax
+  ,s.supplier_id
   ,s.mobile
   ,s.status
   ,s.gst_no
@@ -32,6 +34,7 @@ app.get('/getSupplier', (req, res, next) => {
   ,s.address_po_code
   ,s.payment_details
   ,s.terms
+  ,s.phone
   ,gc.name AS country_name 
   FROM supplier s LEFT JOIN (geo_country gc) ON (s.address_country = gc.country_code) WHERE s.supplier_id != ''`,
     (err, result) => {
@@ -51,8 +54,44 @@ app.get('/getSupplier', (req, res, next) => {
   );
 });
 
+app.post('/get-SupplierById', (req, res, next) => {
+  db.query(`SELECT s.company_name
+  ,s.supplier_id
+  ,s.email
+  ,s.fax
+  ,s.mobile
+  ,s.status
+  ,s.gst_no
+  ,s.contact_person
+  ,s.address_flat
+  ,s.address_street
+  ,s.address_state
+  ,s.address_country
+  ,s.address_po_code
+  ,s.payment_details
+  ,s.terms
+  ,s.phone
+  ,gc.name AS country_name 
+  FROM supplier s LEFT JOIN (geo_country gc) ON (s.address_country = gc.country_code) WHERE s.supplier_id=${db.escape(req.body.supplier_id)}`,
+    (err, result) => {
+       
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
 
-app.post('/editSupplier', (req, res, next) => {
+        }
+ 
+    }
+  );
+});
+
+
+app.post('/edit-Supplier', (req, res, next) => {
   db.query(`UPDATE supplier 
             SET company_name=${db.escape(req.body.company_name)}
             ,email=${db.escape(req.body.email)}
@@ -68,7 +107,7 @@ app.post('/editSupplier', (req, res, next) => {
             ,address_po_code=${db.escape(req.body.address_po_code)}
             ,payment_details=${db.escape(req.body.payment_details)}
             ,terms=${db.escape(req.body.terms)}
-            WHERE supplier_id =  ${db.escape(req.body.supplier_id)}`,
+            WHERE supplier_id =${db.escape(req.body.supplier_id)}`,
     (err, result) => {
      
       if (err) {
@@ -85,7 +124,7 @@ app.post('/editSupplier', (req, res, next) => {
 });
 
 
-app.post('/insertSupplier', (req, res, next) => {
+app.post('/insert-Supplier', (req, res, next) => {
 
   let data = {company_name: req.body.company_name,
               email: req.body.email,
@@ -100,10 +139,10 @@ app.post('/insertSupplier', (req, res, next) => {
               creation_date: req.body.creation_date,
               modification_date: req.body.modification_date,
               mobile: req.body.mobile,
-              flag: req.body.email,
-              address_flat: req.body.address_street,
+              flag: req.body.flag,
+              address_flat: req.body.address_flat,
               status: req.body.status,
-              website: req.body.address_state,
+              website: req.body.website,
               category: req.body.category,
               comment_by: req.body.comment_by,
               company_size: req.body.company_size,
@@ -138,10 +177,54 @@ app.post('/insertSupplier', (req, res, next) => {
   });
 });
 
+app.post('/insert-SupplierReceipt', (req, res, next) => {
+
+  let data = {receipt_code: req.body.receipt_code,
+              amount: req.body.amount,
+              mode_of_payment: req.body.mode_of_payment,
+              remarks: req.body.remarks,
+              date: req.body.date,
+              published: req.body.published,
+              flag: req.body.flag,
+              creation_date: req.body.creation_date,
+              supplier_id: req.body.supplier_id,
+              created_by: req.body.created_by,
+              modified_by: req.body.modified_by,
+              receipt_status: req.body.receipt_status,
+              type: req.body.type,
+              cheque_date: req.body.cheque_date,
+              bank_name: req.body.bank_name,
+              issued_by: req.body.issued_by,
+              cheque_no: req.body.cheque_no,
+              coi_no: req.body.coi_no,
+              company_contact_salutation: req.body.company_contact_salutation,
+              company_contact_name: req.body.company_contact_name,
+              cust_first_name: req.body.cust_first_name,
+              cust_email: req.body.cust_email,
+              cust_address1: req.body.cust_address1,
+              cust_address2: req.body.cust_address2,
+              cust_address_po_code: req.body.cust_address_po_code,
+              cust_address_country_code: req.body.cust_address_country_code,
+              site_id: req.body.site_id,
+              advance_payment_used: req.body.advance_payment_used};
+  let sql = "INSERT INTO supplier_receipt SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Success'
+          });
+    }
+  });
+});
 
 
 
-app.delete('/deleteSupplier', (req, res, next) => {
+
+app.post('/deleteSupplier', (req, res, next) => {
 
   let data = {supplier_id : req.body.supplier_id  };
   let sql = "DELETE FROM supplier WHERE ?";
@@ -203,7 +286,7 @@ app.delete('/deleteGeo_country', (req, res, next) => {
 app.get('/getTabPurchaseOrderLinked', (req, res, next) => {
   db.query(`SELECT p.purchase_order_id 
             FROM purchase_order p 
-            WHERE p.company_id_supplier != '' AND (p.payment_status != 'Cancelled' OR p.payment_status IS NULL)`,
+            WHERE p.supplier_id != '' AND (p.payment_status != 'Cancelled' OR p.payment_status IS NULL)`,
     (err, result) => {
      
       if (err) {
@@ -220,6 +303,143 @@ app.get('/getTabPurchaseOrderLinked', (req, res, next) => {
   );
 }); 
 
+app.post('/getMakePayment', (req, res, next) => {
+  db.query(`SELECT i.po_code,
+  i.purchase_order_id,
+  i.supplier_id
+  ,(
+  SELECT SUM(supHist.amount) AS prev_sum
+  FROM supplier_receipt_history supHist
+  LEFT JOIN supplier_receipt r ON (r.supplier_receipt_id = supHist.supplier_receipt_id)
+  WHERE supHist.purchase_order_id =  i.purchase_order_id
+  AND r.receipt_status != 'Cancelled'
+  ) as prev_inv_amount
+FROM purchase_order i
+LEFT JOIN supplier o ON (i.supplier_id = o.supplier_id)
+WHERE i.supplier_id =${db.escape(req.body.supplier_id)}
+AND (i.payment_status = 'Due' || i.payment_status = 'Partially Paid' || i.payment_status IS NULL)
+`,
+    (err, result) => {
+       
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
+app.post('/getPurchaseOrderLinkedss', (req, res, next) => {
+  db.query(`SELECT p.po_code,
+  p.po_date,
+  p.payment_status,
+  p.purchase_order_id
+    ,(
+    SELECT SUM(pop.cost_price*pop.quantity) AS po_value
+    FROM po_product pop
+    WHERE pop.purchase_order_id =  p.purchase_order_id) as po_value
+  FROM purchase_order p
+  LEFT JOIN supplier o ON (p.supplier_id = o.supplier_id)
+  WHERE p.supplier_id=${db.escape(req.body.supplier_id)};`,
+    (err, result) => {
+       
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
+app.post('/SupplierPayment', (req, res, next) => {
+  db.query(`SELECT sr.amount
+  ,sr.date
+  ,sr.mode_of_payment
+  ,sr.receipt_status
+  ,sr.supplier_receipt_id
+  ,sr.supplier_id
+  ,srh.purchase_order_id
+FROM supplier_receipt_history srh
+LEFT JOIN (supplier_receipt sr) ON (sr.supplier_receipt_id = srh.supplier_receipt_id)
+WHERE srh.purchase_order_id =${db.escape(req.body.purchase_order_id)}
+ORDER BY srh.supplier_receipt_history_id;`,
+    (err, result) => {
+       
+      if (err) {
+        console.log("error: ", err);
+        return;
+      } else {
+            return res.status(200).send({
+              data: result,
+              msg:'Success'
+            });
+
+        }
+ 
+    }
+  );
+});
+
+
+
+app.post('/insert-SupplierReceipt', (req, res, next) => {
+
+  let data = {receipt_code: req.body.receipt_code,
+              amount: req.body.amount,
+              mode_of_payment: req.body.mode_of_payment,
+              remarks: req.body.remarks,
+              date: req.body.date,
+              published: req.body.published,
+              flag: req.body.flag,
+              creation_date: req.body.creation_date,
+              modification_date: req.body.modification_date,
+              created_by: req.body.created_by,
+              modified_by: req.body.modified_by,
+              supplier_id: req.body.supplier_id,
+              receipt_status: req.body.receipt_status,
+              type: req.body.type,
+              cheque_date: req.body.cheque_date,
+              bank: req.body.bank,
+              issued_by: req.body.issued_by,
+              cheque_no: req.body.cheque_no,
+              coi_no: req.body.coi_no,
+              company_contact_salutation: req.body.company_contact_salutation,
+              company_contact_name: req.body.company_contact_name,
+              cust_first_name: req.body.cust_first_name,
+              cust_email: req.body.cust_email,
+              cust_address1: req.body.cust_address1,
+              cust_address2: req.body.cust_address2,
+              cust_address_po_code: req.body.cust_address_po_code,
+              cust_address_country_code: req.body.cust_address_country_code,
+              site_id: req.body.site_id,
+              advance_payment_used: req.body.advance_payment_used,};
+  let sql = "INSERT INTO supplier_receipt SET ?";
+  let query = db.query(sql, data,(err, result) => {
+    if (err) {
+      console.log("error: ", err);
+      return;
+    } else {
+          return res.status(200).send({
+            data: result,
+            msg:'Success'
+          });
+    }
+  });
+});
 
 
 app.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
